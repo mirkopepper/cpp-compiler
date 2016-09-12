@@ -4,11 +4,11 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp \
-    lexicalanalizer.cpp
+    lexicalanalyzer.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
 
 HEADERS += \
-    lexicalanalizer.h
+    lexicalanalyzer.h
 
