@@ -1,7 +1,7 @@
 #include "lexicalanalyzer.h"
 #include <fstream>
 
-LexicalAnalyzer::LexicalAnalyzer(const char * textFile, list<String> * warnings, list<String> * errors, SymbolsTable * symbolsTable) {
+LexicalAnalyzer::LexicalAnalyzer(const char * textFile, list<string> * warnings, list<string> * errors, SymbolsTable * symbolsTable) {
     lines=1;
     file.clear();
     recognizedTokens.clear();
@@ -639,7 +639,7 @@ void LexicalAnalyzer::initState(){
 /* Devuelve el siguiente token */
  int LexicalAnalyzer::yylex () {
 
-    String * buffer = new String;
+    string * buffer = new string;
     int token = INVALID;
     char c=0;
     int actualState = 0;
@@ -697,10 +697,10 @@ void LexicalAnalyzer::initState(){
          return 7;
      else if(c=='_') //guion bajo
          return 8;
-     else if(c==' ' || c=='') //tab o blanco
-         return 9;
-     else if(c=='') //salto de linea
-         return 10;
+//     else if(c==' ' || c=='') //tab o blanco
+//         return 9;
+//     else if(c=='') //salto de linea
+//         return 10;
      else if(c=='+') //suma
          return 11;
      else if(c=='(' || c==')' || c=='[' || c==']' || c=='{' || c=='}'
@@ -732,7 +732,7 @@ void LexicalAnalyzer::initState(){
 
 
 /*Accion semántica que acumula el char en el buffer */
-int LexicalAnalyzer::ASA (String * buffer, char c) {
+int LexicalAnalyzer::ASA (string * buffer, char c) {
     buffer->push_back(c);
 
     //caso especial: cuando el elemento a almacenar es un salto de linea (para cadenas)
@@ -743,40 +743,40 @@ int LexicalAnalyzer::ASA (String * buffer, char c) {
 }
 
 /*Accion semántica de token invalido */
-int LexicalAnalyzer::ASTI (String * buffer, char c) {
-    String msg = "\nError lexico: Token invalido en linea: ";
-    msg.append(String::number(lines));
+int LexicalAnalyzer::ASTI (string * buffer, char c) {
+    string msg = "\nError lexico: Token invalido en linea: ";
+    msg.append(string::number(lines));
     msg.append(".");
     errors->push_back(msg);
     return INVALID;
 }
 
 /*Accion semántica vacia*/
-int LexicalAnalyzer::ASV (String * buffer, char c) {
+int LexicalAnalyzer::ASV (string * buffer, char c) {
     return INVALID;
 }
 
 /*Accion semantica que suma las lineas*/
-int LexicalAnalyzer::ASL (String * buffer, char c) {
+int LexicalAnalyzer::ASL (string * buffer, char c) {
     lines++;
     return INVALID;
 }
 
 /*Accion que reconoce operador simple, pero consume el char*/
-int LexicalAnalyzer::AS_opSimple(String * buffer, char c) {
+int LexicalAnalyzer::AS_opSimple(string * buffer, char c) {
     buffer->push_back(c);
     return ASOP_EOF(buffer, c);
 
 }
 
 /*Reconoce operador simple pero devuelve el char*/
-int LexicalAnalyzer::ASOP (String * buffer, char c) {
+int LexicalAnalyzer::ASOP (string * buffer, char c) {
     file.push_front(c);
     return ASOP_EOF(buffer, c);
 }
 
 /*Reconoce operador simple sin almacenar ni descartar el char (para EOF)*/
-int LexicalAnalyzer::ASOP_EOF (String * buffer, char c) {
+int LexicalAnalyzer::ASOP_EOF (string * buffer, char c) {
     int token = INVALID;
 
     if(*buffer == "+")
@@ -818,13 +818,13 @@ int LexicalAnalyzer::ASOP_EOF (String * buffer, char c) {
 }
 
 /*Accion semantica que reconoce identificadores y palabras reservadas*/
-int LexicalAnalyzer::AS_id_pr(String * buffer, char c) {
+int LexicalAnalyzer::AS_id_pr(string * buffer, char c) {
     file.push_front(c); //devuelve char a la entrada
     return AS_id_pr_EOF(buffer,c);
 }
 
 /*Accion semantica que reconoce id y pr al final del archivo*/
-int LexicalAnalyzer::AS_id_pr_EOF(String * buffer, char c) {
+int LexicalAnalyzer::AS_id_pr_EOF(string * buffer, char c) {
 
     if (reservedWords.contains(*buffer))
         return (reservedWords.value(*buffer));
@@ -832,8 +832,8 @@ int LexicalAnalyzer::AS_id_pr_EOF(String * buffer, char c) {
     //Es un identificador
 
     if (buffer->size()>20) {
-        String msg = "\n Warning: identificador demasiado largo. Truncado. Linea: ";
-        msg.append(String::number(lines));
+        string msg = "\n Warning: identificador demasiado largo. Truncado. Linea: ";
+        msg.append(string::number(lines));
         msg.append(".");
         warnings->push_back(msg);
         buffer->truncate(20);
@@ -851,9 +851,9 @@ int LexicalAnalyzer::AS_id_pr_EOF(String * buffer, char c) {
 }
 
 /*Accion semantica de error de prefijo numerico*/
-int LexicalAnalyzer::ASEPN(String * buffer, char c) {
-    String msg = "\nError lexico: prefijo numerico erroneo en linea: ";
-    msg.append(String::number(lines));
+int LexicalAnalyzer::ASEPN(string * buffer, char c) {
+    string msg = "\nError lexico: prefijo numerico erroneo en linea: ";
+    msg.append(string::number(lines));
     msg.append(".");
     errors->push_back(msg);
     return INVALID;
@@ -861,31 +861,31 @@ int LexicalAnalyzer::ASEPN(String * buffer, char c) {
 }
 
 /*Accion semantica de entero mal escrito*/
-int LexicalAnalyzer::ASEE(String * buffer, char c) {
-    String msg = "\nError lexico: numero entero mal escrito en linea: ";
-    msg.append(String::number(lines));
+int LexicalAnalyzer::ASEE(string * buffer, char c) {
+    string msg = "\nError lexico: numero entero mal escrito en linea: ";
+    msg.append(string::number(lines));
     msg.append(".");
     errors->push_back(msg);
     return INVALID;
 }
 
 /*Accion semantica que reconoce entero*/
-int LexicalAnalyzer::ASE(String * buffer, char c) {
+int LexicalAnalyzer::ASE(string * buffer, char c) {
     file.push_front(c);
     return ASE_EOF(buffer,c);
 }
 
-int LexicalAnalyzer::ASE_EOF (String * buffer, char c) {
+int LexicalAnalyzer::ASE_EOF (string * buffer, char c) {
 
-    String aux(*buffer);
+    string aux(*buffer);
     aux.remove(0,2);
 
     int value = aux.toInt();
 
     //VERIFICAR BIEN QUE LOS NUMEROS COINCIDAN CON EL PRACTICO
     if (value < -32768 || value > 32768) {
-        String msg = "\nError lexico: constante entera fuera de rango en linea: ";
-        msg.append(String::number(lines));
+        string msg = "\nError lexico: constante entera fuera de rango en linea: ";
+        msg.append(string::number(lines));
         msg.append(".");
         errors->push_back(msg);
         return INVALID;
@@ -906,10 +906,10 @@ int LexicalAnalyzer::ASE_EOF (String * buffer, char c) {
 }
 
 /*Accion semantica de error de double*/
-int LexicalAnalyzer::ASED (String * buffer, char c) {
+int LexicalAnalyzer::ASED (string * buffer, char c) {
     file.push_front(c);
-    String msg = "\nError lexico: double mal escrito en linea: ";
-    msg.append(String::number(lines));
+    string msg = "\nError lexico: double mal escrito en linea: ";
+    msg.append(string::number(lines));
     msg.append(".");
     errors->push_back(msg);
     return INVALID;
@@ -917,13 +917,13 @@ int LexicalAnalyzer::ASED (String * buffer, char c) {
 }
 
 /*Accion semantica que reconoce constante double*/
-int LexicalAnalyzer::ASD (String * buffer, char c) {
+int LexicalAnalyzer::ASD (string * buffer, char c) {
     file.push_front(c);
     return ASD_EOF(buffer,c);
 }
 
 /*Accion semantica que reconoce constante double en EOF*/
-int LexicalAnalyzer::ASD_EOF (String * buffer, char c) {
+int LexicalAnalyzer::ASD_EOF (string * buffer, char c) {
     //VERIFICAR RANGO
 
     //VERIFICAR TS
@@ -934,7 +934,7 @@ int LexicalAnalyzer::ASD_EOF (String * buffer, char c) {
 }
 
 /*Accion semantica que reconoce operadores dobles*/
-int LexicalAnalyzer::ASOPD (String * buffer, char c) {
+int LexicalAnalyzer::ASOPD (string * buffer, char c) {
     buffer->push_back(c);
      int token =-1;
 
@@ -953,7 +953,7 @@ int LexicalAnalyzer::ASOPD (String * buffer, char c) {
 }
 
 /*Accion semantica que reconoce cadena*/
-int LexicalAnalyzer::ASCAD (String * buffer, char c) {
+int LexicalAnalyzer::ASCAD (string * buffer, char c) {
     buffer->push_back(c);
 
     //VERIFICAR TS
@@ -964,32 +964,32 @@ int LexicalAnalyzer::ASCAD (String * buffer, char c) {
 }
 
 /*Accion semantica de error de cadena*/
-int LexicalAnalyzer::ASEC (String * buffer, char c) {
+int LexicalAnalyzer::ASEC (string * buffer, char c) {
     file.push_front(c);
-    String msg = "\nError lexico: Cadena mal escrita en linea: ";
-    msg.append(String::number(lines));
+    string msg = "\nError lexico: Cadena mal escrita en linea: ";
+    msg.append(string::number(lines));
     msg.append(". Falta el simbolo '+' antes del salto de linea");
     errors->push_back(msg);
     return INVALID;
 }
 
 /*Accion de error de cadena al final del archivo*/
-int LexicalAnalyzer::ASEC_EOF (String * buffer, char c) {
-    String msg = "\nError lexico: Cadena mal escrita en linea: ";
-    msg.append(String::number(lines));
+int LexicalAnalyzer::ASEC_EOF (string * buffer, char c) {
+    string msg = "\nError lexico: Cadena mal escrita en linea: ";
+    msg.append(string::number(lines));
     msg.append(". Debe cerrarse con comillas. ");
     errors->push_back(msg);
     return INVALID;
 }
 
 /*Accion que reconoce anotacion */
-int LexicalAnalyzer::ASAN (String * buffer, char c) {
+int LexicalAnalyzer::ASAN (string * buffer, char c) {
     file.push_front(c);
     ASAN_EOF(buffer,c);
 }
 
 /*Accion que reconoce anotacion en EOF */
-int LexicalAnalyzer::ASAN_EOF (String * buffer, char c) {
+int LexicalAnalyzer::ASAN_EOF (string * buffer, char c) {
     int token = INVALID;
     if (*buffer ==  "@F")
         token = ARROBA_F;
@@ -1000,15 +1000,15 @@ int LexicalAnalyzer::ASAN_EOF (String * buffer, char c) {
 }
 
 /**/
-int LexicalAnalyzer::ASECOM(String *buffer, char c) {
+int LexicalAnalyzer::ASECOM(string *buffer, char c) {
     file.push_front(c);
     return ASECOM_EOF(buffer,c);
 }
 
 /**/
-int LexicalAnalyzer::ASECOM_EOF(String *buffer, char c) {
-    String msg = "\nError lexico: Comentario mal escrita en linea: ";
-    msg.append(String::number(lines));
+int LexicalAnalyzer::ASECOM_EOF(string *buffer, char c) {
+    string msg = "\nError lexico: Comentario mal escrita en linea: ";
+    msg.append(string::number(lines));
     msg.append(". Falto otro caracter '&'. ");
     errors->push_back(msg);
     return INVALID;
@@ -1019,8 +1019,8 @@ int LexicalAnalyzer::ASECOM_EOF(String *buffer, char c) {
 
 /* Modificar cuando se usen las constantes dadas por el parser */
 
-void LexicalAnalyzer::addRecognized(String * buffer, int token) {
-    String description = "";
+void LexicalAnalyzer::addRecognized(string * buffer, int token) {
+    string description = "";
     if (token >= 300) //ACA IRIA 257 CON YACC CREO
     {
         if (token >=310)
