@@ -56,6 +56,7 @@ class LexicalAnalyzer
 public:
     LexicalAnalyzer(const char * textfile, list<string> * warnings, list<string> * errors, SymbolsTable * symbolsTable);
     int yylex();
+    list <string> getTokens();
 
 private:
     SymbolsTable * symbolsTable;
@@ -82,8 +83,6 @@ private:
     void initState();
     void initReservedWords();
     void error(string str);
-
-    list<string> getTokens();
 
     /** Acciones semanticas **/
 
