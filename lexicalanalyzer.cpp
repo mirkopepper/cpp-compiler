@@ -39,16 +39,16 @@ void LexicalAnalyzer::error(string str) {
 }
 
 void LexicalAnalyzer::initReservedWords() {
-    reservedWords.insert("if", IF);
-    reservedWords.insert("else", ELSE);
-    reservedWords.insert("endif", ENDIF);
-    reservedWords.insert("print", PRINT);
-    reservedWords.insert("integer", INTEGER);
-    reservedWords.insert("double", DOUBLE);
-    reservedWords.insert("matrix", matrix);
-    reservedWords.insert("while", WHILE);
-    reservedWords.insert("allow", allow);
-    reservedWords.insert("to", TO);
+    reservedWords.insert(std::map<string,int>::value_type("if", IF));
+    reservedWords.insert(std::map<string,int>::value_type("else", ELSE));
+    reservedWords.insert(std::map<string,int>::value_type("endif", ENDIF));
+    reservedWords.insert(std::map<string,int>::value_type("print", PRINT));
+    reservedWords.insert(std::map<string,int>::value_type("integer", INTEGER));
+    reservedWords.insert(std::map<string,int>::value_type("double", DOUBLE));
+    reservedWords.insert(std::map<string,int>::value_type("matrix", matrix));
+    reservedWords.insert(std::map<string,int>::value_type("while", WHILE));
+    reservedWords.insert(std::map<string,int>::value_type("allow", allow));
+    reservedWords.insert(std::map<string,int>::value_type("to", TO));
 }
 
 
@@ -678,8 +678,9 @@ void LexicalAnalyzer::initState(){
 
 /*Dado un char, devuelve la columna en la matriz*/
  int LexicalAnalyzer::getColumn(char c) {
-     if(c!='C' && c!='D' && c!='F' && c>='A' && c<='Z'
-        || c!='d' && c!='i' && c>='a' && c<='z') //letra
+     int ascci=c;
+     if((c!='C' && c!='D' && c!='F' && c>='A' && c<='Z')
+        || (c!='d' && c!='i' && c>='a' && c<='z')) //letra
          return 0;
      else if(c-'0'>=0 && c-'9'<=9) //digito
          return 1;
@@ -697,10 +698,10 @@ void LexicalAnalyzer::initState(){
          return 7;
      else if(c=='_') //guion bajo
          return 8;
-//     else if(c==' ' || c=='') //tab o blanco
-//         return 9;
-//     else if(c=='') //salto de linea
-//         return 10;
+     else if(c==9 || ascci==32) //tab o blanco
+         return 9;
+     else if(ascci==10) //salto de linea
+         return 10;
      else if(c=='+') //suma
          return 11;
      else if(c=='(' || c==')' || c=='[' || c==']' || c=='{' || c=='}'
@@ -745,8 +746,7 @@ int LexicalAnalyzer::ASA (string * buffer, char c) {
 /*Accion semántica de token invalido */
 int LexicalAnalyzer::ASTI (string * buffer, char c) {
     string msg = "\nError lexico: Token invalido en linea: ";
-    msg.append(string::number(lines));
-    msg.append(".");
+    msg+=std::to_string(lines)+".";
     errors->push_back(msg);
     return INVALID;
 }
@@ -826,17 +826,18 @@ int LexicalAnalyzer::AS_id_pr(string * buffer, char c) {
 /*Accion semantica que reconoce id y pr al final del archivo*/
 int LexicalAnalyzer::AS_id_pr_EOF(string * buffer, char c) {
 
-    if (reservedWords.contains(*buffer))
-        return (reservedWords.value(*buffer));
+    std::map<string,int>::iterator it=reservedWords.find(*buffer);
+    if (it != reservedWords.end())
+        return it->second;
 
     //Es un identificador
 
     if (buffer->size()>20) {
         string msg = "\n Warning: identificador demasiado largo. Truncado. Linea: ";
-        msg.append(string::number(lines));
+        msg=msg+std::to_string(lines);
         msg.append(".");
         warnings->push_back(msg);
-        buffer->truncate(20);
+        *buffer=buffer->substr(0,19);
     }
 
     if (!symbolsTable->contains(*buffer)) {
@@ -853,7 +854,7 @@ int LexicalAnalyzer::AS_id_pr_EOF(string * buffer, char c) {
 /*Accion semantica de error de prefijo numerico*/
 int LexicalAnalyzer::ASEPN(string * buffer, char c) {
     string msg = "\nError lexico: prefijo numerico erroneo en linea: ";
-    msg.append(string::number(lines));
+    msg+=std::to_string(lines);
     msg.append(".");
     errors->push_back(msg);
     return INVALID;
@@ -863,7 +864,7 @@ int LexicalAnalyzer::ASEPN(string * buffer, char c) {
 /*Accion semantica de entero mal escrito*/
 int LexicalAnalyzer::ASEE(string * buffer, char c) {
     string msg = "\nError lexico: numero entero mal escrito en linea: ";
-    msg.append(string::number(lines));
+    msg+=std::to_string(lines);
     msg.append(".");
     errors->push_back(msg);
     return INVALID;
@@ -878,15 +879,14 @@ int LexicalAnalyzer::ASE(string * buffer, char c) {
 int LexicalAnalyzer::ASE_EOF (string * buffer, char c) {
 
     string aux(*buffer);
-    aux.remove(0,2);
+    aux=aux.substr(2,aux.size()-1);
 
-    int value = aux.toInt();
+    int value = atoi(aux.c_str());
 
     //VERIFICAR BIEN QUE LOS NUMEROS COINCIDAN CON EL PRACTICO
     if (value < -32768 || value > 32768) {
         string msg = "\nError lexico: constante entera fuera de rango en linea: ";
-        msg.append(string::number(lines));
-        msg.append(".");
+        msg+=std::to_string(lines)+".";
         errors->push_back(msg);
         return INVALID;
     }
@@ -909,8 +909,7 @@ int LexicalAnalyzer::ASE_EOF (string * buffer, char c) {
 int LexicalAnalyzer::ASED (string * buffer, char c) {
     file.push_front(c);
     string msg = "\nError lexico: double mal escrito en linea: ";
-    msg.append(string::number(lines));
-    msg.append(".");
+    msg+=std::to_string(lines)+".";
     errors->push_back(msg);
     return INVALID;
 
@@ -967,7 +966,7 @@ int LexicalAnalyzer::ASCAD (string * buffer, char c) {
 int LexicalAnalyzer::ASEC (string * buffer, char c) {
     file.push_front(c);
     string msg = "\nError lexico: Cadena mal escrita en linea: ";
-    msg.append(string::number(lines));
+    msg+=std::to_string(lines);
     msg.append(". Falta el simbolo '+' antes del salto de linea");
     errors->push_back(msg);
     return INVALID;
@@ -976,7 +975,7 @@ int LexicalAnalyzer::ASEC (string * buffer, char c) {
 /*Accion de error de cadena al final del archivo*/
 int LexicalAnalyzer::ASEC_EOF (string * buffer, char c) {
     string msg = "\nError lexico: Cadena mal escrita en linea: ";
-    msg.append(string::number(lines));
+    msg+=std::to_string(lines);
     msg.append(". Debe cerrarse con comillas. ");
     errors->push_back(msg);
     return INVALID;
@@ -985,7 +984,7 @@ int LexicalAnalyzer::ASEC_EOF (string * buffer, char c) {
 /*Accion que reconoce anotacion */
 int LexicalAnalyzer::ASAN (string * buffer, char c) {
     file.push_front(c);
-    ASAN_EOF(buffer,c);
+    return ASAN_EOF(buffer,c);
 }
 
 /*Accion que reconoce anotacion en EOF */
@@ -1008,7 +1007,7 @@ int LexicalAnalyzer::ASECOM(string *buffer, char c) {
 /**/
 int LexicalAnalyzer::ASECOM_EOF(string *buffer, char c) {
     string msg = "\nError lexico: Comentario mal escrita en linea: ";
-    msg.append(string::number(lines));
+    msg+=std::to_string(lines);
     msg.append(". Falto otro caracter '&'. ");
     errors->push_back(msg);
     return INVALID;
