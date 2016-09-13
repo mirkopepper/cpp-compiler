@@ -83,6 +83,8 @@ private:
     void initReservedWords();
     void error(string str);
 
+    list<string> getTokens();
+
     /** Acciones semanticas **/
 
     //Accion semantica de acumulación: agrega char a la entrada.

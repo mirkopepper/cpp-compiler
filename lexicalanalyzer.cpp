@@ -1014,6 +1014,10 @@ int LexicalAnalyzer::ASECOM_EOF(string *buffer, char c) {
     return INVALID;
 }
 
+list<string> LexicalAnalyzer::getTokens()
+{
+return recognizedTokens;
+}
 
 /**********IMPORTANTE ***********/
 
