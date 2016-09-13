@@ -3,24 +3,23 @@
 #include "symbolstable.h"
 using namespace std;
 
-static list<String> warnings, errors, tokens;
+static list<string> warnings, errors, tokens;
 static SymbolsTable symbolsTable;
 
 void printTokens() {
     cout << "\n\nTokens identificados: \n";
     cout <<     "****** ************** \n\n";
     if (tokens.size()>0) {
-        for (list<String>::iterator it = tokens.begin(); it!= tokens.end(); it++) {
-            cout << it->toStdString();
+        for (list<string>::iterator it = tokens.begin(); it!= tokens.end(); it++) {
+            cout << it->c_str();
         }
     }
     cout << "\n";
 }
 
-
-int main()
+int main(int argc, char *argv[])
 {
-    LexicalAnalyzer * lex = new LexicalAnalyzer (argv[1], &warnings, &errors, &symbolsTable);
+    LexicalAnalyzer * lex = new LexicalAnalyzer(argv[1], &warnings, &errors, &symbolsTable);
 
     //Parser * parser = new Parser (&tablaDeSimbolos,lex, &errores);
     /*Se ejecuta el yyparse*/
