@@ -4,6 +4,7 @@
 #include "entry.h"
 #include "list"
 #include "map"
+#include <vector>
 
 class SymbolsTable
 {
@@ -37,8 +38,7 @@ public:
 private:
 
     map<string, Entry*> entries;
-    list <string> index;
-
+    vector <string> index;
 };
 
 #endif // SYMBOLSTABLE_H

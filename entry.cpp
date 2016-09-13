@@ -1,5 +1,5 @@
 #include "entry.h"
-
+#include <string>
 Entry::Entry(string lexeme, string token,int token_id)
 {
     this->lexeme=lexeme;
@@ -15,9 +15,9 @@ string Entry::toString(){
     if (this->token!="CADENA") {
         toString.append(" | Valor: ");
         if (this->type=="integer")
-            toString.append(string::number(this->intValue));
+            toString.append(std::to_string(this->intValue));
         else if (this->type=="double")
-            toString.append(string::number(this->doubleValue));
+            toString.append(std::to_string(this->doubleValue));
     }
     return toString;
 }

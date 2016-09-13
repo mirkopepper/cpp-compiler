@@ -4,20 +4,22 @@
 SymbolsTable::SymbolsTable()
 {
     entries.clear();
-    index.clear();
+//    index.clear();
 }
 
 void SymbolsTable::put(string lexeme, Entry *e) {
-    this->entries.insert(std::map<string,*Entry>::value_type(lexeme, e));
-    this->index.push_back(lexeme);
+    this->entries.insert(std::pair<string,Entry*>(lexeme,e));
+//    this->index.push_back(lexeme);
 }
 
 int SymbolsTable::indexOf(string lexeme) {
-    return this->index.indexOf(lexeme);
+        return 0;
+//    return this->index.indexOf(lexeme);
 }
 
 bool SymbolsTable::contains(string lexeme) {
-   return this->entries.contains(lexeme);
+    std::map<string,Entry*>::iterator it=entries.find(lexeme);
+    return it!=entries.end();
 }
 
 bool SymbolsTable::contains(int key) {
@@ -27,16 +29,15 @@ bool SymbolsTable::contains(int key) {
 int SymbolsTable::size() {
     return this->entries.size();
 }
-
+/*
 list<string> SymbolsTable::getKeys() {
-    return this->entries.keys();
-}
-
+    return index;
+} */
+/*
 Entry * SymbolsTable::getEntry(const int index) {
     return this->entries.value(this->index.value(index));
 }
-
+*/
 Entry * SymbolsTable::getEntry(const string lexeme) {
-    return this->entries.value(lexeme);
+    return entries.find(lexeme)->second;
 }
-

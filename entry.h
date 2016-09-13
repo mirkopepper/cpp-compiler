@@ -9,7 +9,7 @@ class Entry
 {
 public:
     Entry(string lexeme, string token, int token_id);
-    string tostring();
+    string toString();
     string lexeme;
     string type; /*integer o double*/
     string token; /* Si es un ID, o una cadena, una CTE, etc */
