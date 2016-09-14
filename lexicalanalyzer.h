@@ -11,7 +11,7 @@ using namespace std;
 
 #define F -2 //estado final
 #define FE -3 //Final con error. Para cuando hay errores. También para los comentarios (se vuelve al estado 0)
-#define EOFILE 21 //columna de fin de archivo
+#define EOF 22 //columna de fin de archivo
 #define INVALID -4 //para devolver cuando el token no es valido, o en pasos intermedios
 
 
@@ -57,6 +57,9 @@ public:
     LexicalAnalyzer(const char * textfile, list<string> * warnings, list<string> * errors, SymbolsTable * symbolsTable);
     int yylex();
     list <string> getTokens();
+
+    //ESTA ES SOLO PARA TESTEO, DE ESTO SE ENCARGA EL PARSER,LLAMO A YYLEX
+    void reconocerTokens();
 
 private:
     SymbolsTable * symbolsTable;

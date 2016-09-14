@@ -1,0 +1,25 @@
+&&cadena:antes de saltar de linea debe haber un +.
+"1er renglon, sin + al final
+ultimo renglon"
+
+&&cadena:debe encerrarse entre comillas.Si no tiene comillas de entrada es otro tipo de error.
+&&Si no tiene comillas al final,(no lo pongo porque se come toda la muestra), si se tomaria como error de cadena.
+
+&&anotaciones bien escritas
+&&@F	&&@C	&&@F este comentario termina con el salto de linea
+
+&&comentario/anotacion:prefijo mal escrito
+&
+
+&&identificadores de tamaio razonable
+identificador	variable	variable2	VaRiAbLe
+
+&&palabras reservadas con °mayusculas y minusculas
+if wHIle ALOW matriX	
+
+&&identificador truncado
+EsteIdentificadorDeberiaSerTruncado
+
+&&los comentarios no toman la enie, o las comillas simples
+
+

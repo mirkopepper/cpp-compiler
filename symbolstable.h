@@ -28,10 +28,13 @@ public:
     int indexOf(string lexeme);
 
     //Devuelve las claves que contiene la tabla
-    list<string> getKeys();
+    vector<string> getKeys();
 
     Entry * getEntry (const string lexeme);
     Entry * getEntry (const int index);
+
+    //imprime los elementos de la tabla
+    list<string> getSymbolsToPrint();
 
     list<string> toListString();
 

@@ -1,5 +1,6 @@
 #include "lexicalanalyzer.h"
 #include <fstream>
+#include <cmath>
 
 LexicalAnalyzer::LexicalAnalyzer(const char * textFile, list<string> * warnings, list<string> * errors, SymbolsTable * symbolsTable) {
     lines=1;
@@ -519,7 +520,7 @@ void LexicalAnalyzer::initState(){
         semanticActions[18][10]=&LexicalAnalyzer::ASECOM;
         semanticActions[18][11]=&LexicalAnalyzer::ASECOM;
         semanticActions[18][12]=&LexicalAnalyzer::ASECOM;
-        semanticActions[18][13]=&LexicalAnalyzer::ASECOM;
+        semanticActions[18][13]=&LexicalAnalyzer::ASA;
         semanticActions[18][14]=&LexicalAnalyzer::ASECOM;
         semanticActions[18][15]=&LexicalAnalyzer::ASECOM;
         semanticActions[18][16]=&LexicalAnalyzer::ASECOM;
@@ -653,7 +654,6 @@ void LexicalAnalyzer::initState(){
             c = file.front();
             file.pop_front();
             column = this->getColumn(c);
-
         }
 
         //Ejecuta la accion semantica
@@ -668,6 +668,7 @@ void LexicalAnalyzer::initState(){
     } /*End While. Aca hay dos posibilidades: se llego a estado final con token valido,
        o se llego a fin de archivo*/
 
+
     if (actualState==F) {
         addRecognized(buffer, token); //lo agrega a la lista de tokens reconocidos
         return token;
@@ -676,13 +677,19 @@ void LexicalAnalyzer::initState(){
     }
 }
 
+void LexicalAnalyzer::reconocerTokens(){
+        int i=yylex();
+        while(i!=0)
+            i=yylex();
+}
+
 /*Dado un char, devuelve la columna en la matriz*/
  int LexicalAnalyzer::getColumn(char c) {
      int ascci=c;
      if((c!='C' && c!='D' && c!='F' && c>='A' && c<='Z')
         || (c!='d' && c!='i' && c>='a' && c<='z')) //letra
          return 0;
-     else if(c-'0'>=0 && c-'9'<=9) //digito
+     else if(ascci>=48 && ascci<=57) //digito
          return 1;
      else if(c=='F' || c=='C') //F o C
          return 2;
@@ -723,7 +730,7 @@ void LexicalAnalyzer::initState(){
          return 19;
      else if(c=='=') //igual
          return 20;
-     else if(c=='$') //fin archivo
+     else if(ascci==3) //fin archivo
          return 22;
      else
          return 21; //otro
@@ -921,13 +928,57 @@ int LexicalAnalyzer::ASD (string * buffer, char c) {
     return ASD_EOF(buffer,c);
 }
 
+/*Obtiene el double*/
+double getDouble(string number){
+
+    string mantisse="";
+    string exponent="0";
+    int i=0;
+    i=number.find('D');
+    if(i==std::string::npos){//exponente no empieza con D
+        i=number.find('d');
+        if(i==std::string::npos){//tampoco con d -> no hay exponente
+            mantisse=number;
+        }
+        else{//el exponnte empieza con d
+            mantisse=number.substr(2,i-2);
+            exponent=number.substr(i+1,number.size()-1);
+        }
+    }
+    else{//el exponente empieza con D
+        mantisse=number.substr(2,i-2);
+        exponent=number.substr(i+1,number.size()-1);
+    }
+    return atof(mantisse.c_str()) * (pow (10, atoi(exponent.c_str())));
+}
+
 /*Accion semantica que reconoce constante double en EOF*/
 int LexicalAnalyzer::ASD_EOF (string * buffer, char c) {
-    //VERIFICAR RANGO
 
-    //VERIFICAR TS
+    double aux=-1;
 
-    //YYLVAL = Index en la tabla
+    /*tranforma el string a double, por parametro:string sin prefijo*/
+    aux = getDouble(buffer->substr(2,buffer->size()-1));
+
+    double maximum = 1.7976931348623157 * (pow(10.0,308.0));
+    double minimum = -1.7976931348623157 * (pow(10.0,308.0));
+    if (aux > maximum || aux < minimum) {
+        string lexicalError = "\nError lexico: Constante flotante fuera de rango (Linea: ";
+        lexicalError.append(std::to_string(lines));
+        lexicalError.append(").");
+        errors->push_back(lexicalError);
+        return INVALID;
+    }
+
+    /*Chequea si está en TS. Si no, lo da de alta */
+    if (!symbolsTable->contains(*buffer)) {
+        Entry * e = new Entry(*buffer, "CTE", CTE);
+        e->type="DOUBLE";
+        e->doubleValue=aux;
+        symbolsTable->put(*buffer,e);
+    }
+
+//    yylval = symbolsTable->indexOf(*buffer);
 
     return CTE;
 }
@@ -959,6 +1010,14 @@ int LexicalAnalyzer::ASCAD (string * buffer, char c) {
 
     //YYLVAL = Index
 
+    /*Chequea si está en TS. Si no, lo da de alta */
+    if (!symbolsTable->contains(*buffer)) {
+        Entry * e = new Entry(*buffer, "CADENA", CADENA);
+        e->type="CADENA";
+        symbolsTable->put(*buffer,e);
+    }
+
+//    yylval = symbolsTable->indexOf(*buffer);
     return CADENA;
 }
 
@@ -990,9 +1049,9 @@ int LexicalAnalyzer::ASAN (string * buffer, char c) {
 /*Accion que reconoce anotacion en EOF */
 int LexicalAnalyzer::ASAN_EOF (string * buffer, char c) {
     int token = INVALID;
-    if (*buffer ==  "@F")
+    if (*buffer ==  "&&@F")
         token = ARROBA_F;
-    else if (*buffer == "@C")
+    else if (*buffer == "&&@C")
         token = ARROBA_C;
 
     return token;
