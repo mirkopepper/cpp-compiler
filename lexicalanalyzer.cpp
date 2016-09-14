@@ -712,7 +712,7 @@ void LexicalAnalyzer::reconocerTokens(){
      else if(c=='+') //suma
          return 11;
      else if(c=='(' || c==')' || c=='[' || c==']' || c=='{' || c=='}'
-         || c==',' || c==';' || c=='/') //paretensis, llaves, corchetes,punto y coma,coma
+         || c==',' || c==';' || c=='/' || c=='*') //paretensis, llaves, corchetes,punto y coma,coma
          return 12;
      else if(c=='&') //ampersant
          return 13;
@@ -752,6 +752,7 @@ int LexicalAnalyzer::ASA (string * buffer, char c) {
 
 /*Accion semántica de token invalido */
 int LexicalAnalyzer::ASTI (string * buffer, char c) {
+    file.push_front(c);
     string msg = "\nError lexico: Token invalido en linea: ";
     msg+=std::to_string(lines)+".";
     errors->push_back(msg);
@@ -870,6 +871,7 @@ int LexicalAnalyzer::ASEPN(string * buffer, char c) {
 
 /*Accion semantica de entero mal escrito*/
 int LexicalAnalyzer::ASEE(string * buffer, char c) {
+    file.push_front(c);
     string msg = "\nError lexico: numero entero mal escrito en linea: ";
     msg+=std::to_string(lines);
     msg.append(".");

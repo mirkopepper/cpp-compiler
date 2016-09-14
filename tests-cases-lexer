@@ -28,7 +28,7 @@ _d1.2d+3    _d4.D-5 _d.6    _d-7.8
 
 &&doubles que se van de rango
 _d1.7976931348623157D400
-_d1.-7976931348623157D400
+_d-1.7976931348623157D400
 
 &&doubles mal escritos, no tienen el punto
 _d12
@@ -41,6 +41,12 @@ _d12
 
 &&comparadores bien escritos
 <   >   =   !=  <= >=
+
+&&operandos
++   -   *   /
+
+&&caracteres especiales
+(   )   [   ]   {   }   ,   ;
 
 &&comparador distinto mal escrito, despues del ! siempre va el igual
 !
