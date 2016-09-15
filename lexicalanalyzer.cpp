@@ -58,12 +58,12 @@ void LexicalAnalyzer::initState(){
 
     /* Fila 0 */
         semanticActions[0][0]=&LexicalAnalyzer::ASA;
-        semanticActions[0][1]=&LexicalAnalyzer::ASTI;
+        semanticActions[0][1]=&LexicalAnalyzer::ASTI_EOF;
         semanticActions[0][2]=&LexicalAnalyzer::ASA;
         semanticActions[0][3]=&LexicalAnalyzer::ASA;
         semanticActions[0][4]=&LexicalAnalyzer::ASA;
         semanticActions[0][5]=&LexicalAnalyzer::ASA;
-        semanticActions[0][6]=&LexicalAnalyzer::ASTI;
+        semanticActions[0][6]=&LexicalAnalyzer::ASTI_EOF;
         semanticActions[0][7]=&LexicalAnalyzer::ASA;
         semanticActions[0][8]=&LexicalAnalyzer::ASA;
         semanticActions[0][9]=&LexicalAnalyzer::ASV;
@@ -71,14 +71,14 @@ void LexicalAnalyzer::initState(){
         semanticActions[0][11]=&LexicalAnalyzer::AS_opSimple;
         semanticActions[0][12]=&LexicalAnalyzer::AS_opSimple;
         semanticActions[0][13]=&LexicalAnalyzer::ASA;
-        semanticActions[0][14]=&LexicalAnalyzer::ASTI;
+        semanticActions[0][14]=&LexicalAnalyzer::ASTI_EOF;
         semanticActions[0][15]=&LexicalAnalyzer::ASA;
         semanticActions[0][16]=&LexicalAnalyzer::ASA;
         semanticActions[0][17]=&LexicalAnalyzer::ASA;
         semanticActions[0][18]=&LexicalAnalyzer::ASA;
         semanticActions[0][19]=&LexicalAnalyzer::ASA;
         semanticActions[0][20]=&LexicalAnalyzer::AS_opSimple;
-        semanticActions[0][21]=&LexicalAnalyzer::ASTI;
+        semanticActions[0][21]=&LexicalAnalyzer::ASTI_EOF;
         semanticActions[0][22]=&LexicalAnalyzer::AS_opSimple;
 
     /* Fila 1 */
@@ -428,8 +428,8 @@ void LexicalAnalyzer::initState(){
         semanticActions[14][18]=&LexicalAnalyzer::ASTI;
         semanticActions[14][19]=&LexicalAnalyzer::ASTI;
         semanticActions[14][20]=&LexicalAnalyzer::ASOPD;
-        semanticActions[13][21]=&LexicalAnalyzer::ASTI;
-        semanticActions[13][22]=&LexicalAnalyzer::ASTI;
+        semanticActions[14][21]=&LexicalAnalyzer::ASTI;
+        semanticActions[14][22]=&LexicalAnalyzer::ASTI;
 
     /* Fila 15 */
         semanticActions[15][0]=&LexicalAnalyzer::ASTI;
@@ -663,6 +663,8 @@ void LexicalAnalyzer::initState(){
 
         if (actualState==FE || (actualState==F && token==INVALID)) {
             actualState=0;
+            int k=c;
+            cout<<"valor de token invalido: "<<*buffer<<", char: "<<c<<", ascci: "<<k<<", column: "<<column<<", linea: "<<lines<<endl;
             buffer->clear();
         }
     } /*End While. Aca hay dos posibilidades: se llego a estado final con token valido,
@@ -752,7 +754,12 @@ int LexicalAnalyzer::ASA (string * buffer, char c) {
 
 /*Accion semántica de token invalido */
 int LexicalAnalyzer::ASTI (string * buffer, char c) {
-    //file.push_front(c);
+    file.push_front(c);
+    return ASTI_EOF(buffer,c);
+}
+
+/*Accion semántica de token invalido */
+int LexicalAnalyzer::ASTI_EOF(string * buffer, char c) {
     string msg = "\nError lexico: Token invalido en linea: ";
     msg+=std::to_string(lines)+".";
     errors->push_back(msg);

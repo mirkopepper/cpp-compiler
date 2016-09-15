@@ -95,6 +95,9 @@ private:
     //Accion semantica para token invalido
     int ASTI(string * buffer, char c);
 
+    //Accion semantica para token invalido
+    int ASTI_EOF(string * buffer, char c);
+
     //Accion semantica para cuando no se tiene que almacenar ni descartar
     int ASV(string * buffer, char c);
 

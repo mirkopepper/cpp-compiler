@@ -1,4 +1,4 @@
-&&caracteres que no sirven para inicio de token
+﻿&&caracteres que no sirven para inicio de token
 .
 @
 1
@@ -38,7 +38,7 @@ _d12
 
 &&asignacion mal escrita, despues del dos puntos siempre tiene que ir el igual
 :
-&
+
 &&comparadores bien escritos
 <   >   =   !=  <= >=.
 
@@ -50,7 +50,7 @@ _d12
 
 &&comparador distinto mal escrito, despues del ! siempre va el igual
 !
-&
+
 &&cadena bien escritas
 "1er renglon de cadena multilinea con mas al final +
 ultimo renglon de cadena, no nesecita el mas"

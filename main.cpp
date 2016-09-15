@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     LexicalAnalyzer * lex = new LexicalAnalyzer(argv[1], &warnings, &errors, &symbolsTable);
     lex->reconocerTokens();
 
-    Parser * parser = new Parser (&symbolsTable,lex, &errors);
+//    Parser * parser = new Parser (&symbolsTable,lex, &errors);
     /*Se ejecuta el yyparse*/
     //int resultado = parser->yyparse();
 
