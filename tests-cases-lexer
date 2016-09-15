@@ -38,9 +38,9 @@ _d12
 
 &&asignacion mal escrita, despues del dos puntos siempre tiene que ir el igual
 :
-
+&
 &&comparadores bien escritos
-<   >   =   !=  <= >=
+<   >   =   !=  <= >=.
 
 &&operandos
 +   -   *   /
@@ -50,7 +50,7 @@ _d12
 
 &&comparador distinto mal escrito, despues del ! siempre va el igual
 !
-
+&
 &&cadena bien escritas
 "1er renglon de cadena multilinea con mas al final +
 ultimo renglon de cadena, no nesecita el mas"
@@ -63,7 +63,7 @@ ultimo renglon"
 &&Si no tiene comillas al final,(no lo pongo porque se come toda la muestra), si se tomaria como error de cadena.
 
 &&anotaciones bien escritas
-&&@F	&&@C	&&@F este comentario termina con el salto de linea
+&&@F	&&@C	&&@C este comentario termina con el salto de linea
 
 &&comentario/anotacion:prefijo mal escrito
 &
