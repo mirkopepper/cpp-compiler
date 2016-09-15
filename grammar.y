@@ -16,7 +16,7 @@ sentencia_declarativa : variable
 variable : tipo lista_id ';' {addRule("Declaracion de variable/s");}
         ;
 
-conversion : ALOW tipo TO tipo ';' {addRule("Conversion entre variables");}
+conversion : ALLOW tipo TO tipo ';' {addRule("Conversion entre variables");}
         ;
 
 tipo : DOUBLE
@@ -87,8 +87,8 @@ comparador : '<'
         | DISTINTO
         ;
 
-asignacion : asignacion_izq  IGUAL expresion ';' {addRule("Asignacion");}
-        | asignacion_izq RESTAIGUAL expresion ';' {addRule("Asignacion con resta");}
+asignacion : asignacion_izq DOSPUNTOSIGUAL expresion ';' {addRule("Asignacion");}
+        | asignacion_izq MENOSIGUAL expresion ';' {addRule("Asignacion con resta");}
         ;
 
 asignacion_izq : ID
@@ -113,7 +113,7 @@ factor : ID
 celda : ID '[' expresion ']' '[' expresion ']'
         ;
 
-iteracion : WHILE '(' condicion ')' THEN bloque_de_sentencias {addRule("Sentencia WHILE");}
+iteracion : WHILE '(' condicion ')' bloque_de_sentencias {addRule("Sentencia WHILE");}
         ;
 
 impresion : PRINT '(' CADENA ')' ';' {addRule("Impresion por pantalla");}

@@ -1,6 +1,8 @@
 #include <iostream>
 #include "lexicalanalyzer.h"
 #include "symbolstable.h"
+#include "parser.h"
+
 using namespace std;
 
 static list<string> warnings, errors, tokens;
@@ -61,7 +63,7 @@ int main(int argc, char *argv[])
     LexicalAnalyzer * lex = new LexicalAnalyzer(argv[1], &warnings, &errors, &symbolsTable);
     lex->reconocerTokens();
 
-    //Parser * parser = new Parser (&tablaDeSimbolos,lex, &errores);
+    Parser * parser = new Parser (&symbolsTable,lex, &errors);
     /*Se ejecuta el yyparse*/
     //int resultado = parser->yyparse();
 

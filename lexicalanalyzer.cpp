@@ -623,7 +623,7 @@ void LexicalAnalyzer::initState(){
         semanticActions[22][11]=&LexicalAnalyzer::ASV;
         semanticActions[22][12]=&LexicalAnalyzer::ASV;
         semanticActions[22][13]=&LexicalAnalyzer::ASV;
-        semanticActions[22][14]=&LexicalAnalyzer::ASA;
+        semanticActions[22][14]=&LexicalAnalyzer::ASV;
         semanticActions[22][15]=&LexicalAnalyzer::ASV;
         semanticActions[22][16]=&LexicalAnalyzer::ASV;
         semanticActions[22][17]=&LexicalAnalyzer::ASV;
@@ -752,7 +752,7 @@ int LexicalAnalyzer::ASA (string * buffer, char c) {
 
 /*Accion semántica de token invalido */
 int LexicalAnalyzer::ASTI (string * buffer, char c) {
-    file.push_front(c);
+    //file.push_front(c);
     string msg = "\nError lexico: Token invalido en linea: ";
     msg+=std::to_string(lines)+".";
     errors->push_back(msg);
@@ -1055,7 +1055,6 @@ int LexicalAnalyzer::ASAN_EOF (string * buffer, char c) {
         token = ARROBA_F;
     else if (*buffer == "&&@C")
         token = ARROBA_C;
-
     return token;
 }
 
@@ -1096,7 +1095,6 @@ void LexicalAnalyzer::addRecognized(string * buffer, int token) {
             } else if (token == CADENA)
                 description="Cadena: ";
     }
-
     description+=*buffer;
     description+="\n";
 

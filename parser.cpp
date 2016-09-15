@@ -15,13 +15,13 @@ list<string> Parser::getRules()
 
 void Parser::addErrorMessage(string errorm)
 {
-    this->errors->push_back("\nError del parser: "+ errorm + ". (Linea: "+ string::number(lexicalAnalyzer->lineaActual())+").");
+    //this->errors->push_back("\nError del parser: "+ errorm + ". (Linea: "+ std::to_string(lexicalAnalyzer->lineaActual())+").");
     error=true;
 }
 
 void Parser::addRule(const char * rule)
 {
-    this->rules.push_back("Se encontro " + string(rule) + ". (Linea: " + string::number(lexicalAnalyzer->lineaActual()) +").");
+    //this->rules.push_back("Se encontro " + string(rule) + ". (Linea: " + string::number(lexicalAnalyzer->lineaActual()) +").");
 }
 
 int Parser::yylex()
@@ -31,7 +31,7 @@ int Parser::yylex()
 
 void Parser::yyerror(string s)
 {
-    this->errors->push_back("\nError:"+ s + ". (Linea: "+ string::number(lexicalAnalyzer->lineaActual())+").");
+    //this->errors->push_back("\nError:"+ s + ". (Linea: "+ string::number(lexicalAnalyzer->lineaActual())+").");
 }
 
 bool Parser::hasError()
@@ -43,4 +43,4 @@ bool Parser::hasError()
 
 #define yyparse Parser::yyparse
 #define yyerror Parser::yyerror
-#include "y.tab.c" // yypase()
+//#include "y.tab.c" // yypase()
