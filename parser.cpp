@@ -8,9 +8,9 @@ Parser::Parser(SymbolsTable *ts, LexicalAnalyzer *lex, list<string> *err)
     error = false;
 }
 
-list<string> Parser::getRules()
+list<string> Parser::getProgramComponents()
 {
-    return rules;
+    return programComponents;
 }
 
 void Parser::addErrorMessage(string errorm)
@@ -19,9 +19,9 @@ void Parser::addErrorMessage(string errorm)
     error=true;
 }
 
-void Parser::addRule(const char * rule)
+void Parser::addProgramComponent(const char * programComponent)
 {
-    this->rules.push_back("Se encontro " + string(rule) + ". (Linea: " + std::to_string(lexicalAnalyzer->getLine()) +").");
+    this->programComponents.push_back("Se encontro " + string(programComponent) + ". (Linea: " + std::to_string(lexicalAnalyzer->getLine()) +").");
 }
 
 int Parser::yylex()
@@ -31,7 +31,7 @@ int Parser::yylex()
 
 void Parser::yyerror(string s)
 {
-    //this->errors->push_back("\nError:"+ s + ". (Linea: "+ string::number(lexicalAnalyzer->lineaActual())+").");
+    this->errors->push_back("\nError:"+ s + ". (Linea: "+ std::to_string(lexicalAnalyzer->getLine())+").");
 }
 
 bool Parser::hasError()

@@ -13,10 +13,10 @@ private:
     bool error;
 
     /*Sólo para imprimir al final */
-    list<string> rules;
+    list<string> programComponents;
 
     void addErrorMessage (string msg);
-    void addRule (const char * msg);
+    void addProgramComponent (const char * msg);
     void yyerror(string s);
 
     int yylex();
@@ -24,7 +24,7 @@ private:
 
 public:
     Parser(SymbolsTable * ts, LexicalAnalyzer * lex, list<string> * err);
-    list <string> getRules();
+    list <string> getProgramComponents();
     bool hasError();
     int yyparse();
 

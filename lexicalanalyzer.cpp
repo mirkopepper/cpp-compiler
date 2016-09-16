@@ -864,7 +864,7 @@ int LexicalAnalyzer::AS_id_pr_EOF(string * buffer, char c) {
         symbolsTable->put(*buffer, entry);
     }
 
-    //yylval = symbolsTable->indexOf(*buffer);
+    yylval = symbolsTable->indexOf(*buffer);
 
     return ID;
 }
@@ -917,7 +917,7 @@ int LexicalAnalyzer::ASE_EOF (string * buffer, char c) {
         symbolsTable->put(*buffer, entry);
     }
 
-    //yylval = symbolsTable->indexOf(*buffer);
+    yylval = symbolsTable->indexOf(*buffer);
 
     return CTE;
 
@@ -990,7 +990,7 @@ int LexicalAnalyzer::ASD_EOF (string * buffer, char c) {
         symbolsTable->put(*buffer,e);
     }
 
-//    yylval = symbolsTable->indexOf(*buffer);
+    yylval = symbolsTable->indexOf(*buffer);
 
     return CTE;
 }
@@ -1018,10 +1018,6 @@ int LexicalAnalyzer::ASOPD (string * buffer, char c) {
 int LexicalAnalyzer::ASCAD (string * buffer, char c) {
     buffer->push_back(c);
 
-    //VERIFICAR TS
-
-    //YYLVAL = Index
-
     /*Chequea si está en TS. Si no, lo da de alta */
     if (!symbolsTable->contains(*buffer)) {
         Entry * e = new Entry(*buffer, "CADENA", CADENA);
@@ -1029,7 +1025,7 @@ int LexicalAnalyzer::ASCAD (string * buffer, char c) {
         symbolsTable->put(*buffer,e);
     }
 
-//    yylval = symbolsTable->indexOf(*buffer);
+    yylval = symbolsTable->indexOf(*buffer);
     return CADENA;
 }
 

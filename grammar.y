@@ -13,10 +13,10 @@ sentencia_declarativa : variable
         | arreglo
         ;
 
-variable : tipo lista_id ';' {addRule("Declaracion de variable/s");}
+variable : tipo lista_id ';' {addProgramComponent("Declaracion de variable/s");}
         ;
 
-conversion : ALLOW tipo TO tipo ';' {addRule("Conversion entre variables");}
+conversion : ALLOW tipo TO tipo ';' {addProgramComponent("Conversion entre variables");}
         ;
 
 tipo : DOUBLE
@@ -28,7 +28,7 @@ lista_id : lista_id ',' ID
         ;
 
 arreglo : tipo MATRIX ID dimensiones opcional_arreglo ';'
-        | tipo MATRIX ID dimensiones ';'    {addRule("Declaracion de matriz");}
+        | tipo MATRIX ID dimensiones ';'    {addProgramComponent("Declaracion de matriz");}
         | tipo ID
         ;
 
@@ -38,9 +38,9 @@ dimensiones : dimension dimension
 dimension : '[' CTE ']'
         ;
 
-opcional_arreglo : inicializacion anotacion {addRule("Declaracion, inicializacion y anotacion de matriz");}
-        | inicializacion    {addRule("Declaracion e inicializacion de matriz");}
-        | anotacion     {addRule("Declaracion y anotacion de matriz");}
+opcional_arreglo : inicializacion anotacion {addProgramComponent("Declaracion, inicializacion y anotacion de matriz");}
+        | inicializacion    {addProgramComponent("Declaracion e inicializacion de matriz");}
+        | anotacion     {addProgramComponent("Declaracion y anotacion de matriz");}
         ;
 
 anotacion : ARROBA_C
@@ -68,8 +68,8 @@ sentencia : seleccion
         | impresion
         ;
 
-seleccion : IF '(' condicion ')' bloque_de_sentencias ELSE bloque_de_sentencias ENDIF {addRule("Sentencia IF con bloque ELSE");}
-        | IF '(' condicion ')' bloque_de_sentencias ENDIF  {addRule("Sentencia IF sin bloque ELSE");}
+seleccion : IF '(' condicion ')' bloque_de_sentencias ELSE bloque_de_sentencias ENDIF {addProgramComponent("Sentencia IF con bloque ELSE");}
+        | IF '(' condicion ')' bloque_de_sentencias ENDIF  {addProgramComponent("Sentencia IF sin bloque ELSE");}
         ;
 
 bloque_de_sentencias : sentencia
@@ -87,8 +87,8 @@ comparador : '<'
         | DISTINTO
         ;
 
-asignacion : asignacion_izq DOSPUNTOSIGUAL expresion ';' {addRule("Asignacion");}
-        | asignacion_izq MENOSIGUAL expresion ';' {addRule("Asignacion con resta");}
+asignacion : asignacion_izq DOSPUNTOSIGUAL expresion ';' {addProgramComponent("Asignacion");}
+        | asignacion_izq MENOSIGUAL expresion ';' {addProgramComponent("Asignacion con resta");}
         ;
 
 asignacion_izq : ID
@@ -113,8 +113,8 @@ factor : ID
 celda : ID '[' expresion ']' '[' expresion ']'
         ;
 
-iteracion : WHILE '(' condicion ')' bloque_de_sentencias {addRule("Sentencia WHILE");}
+iteracion : WHILE '(' condicion ')' bloque_de_sentencias {addProgramComponent("Sentencia WHILE");}
         ;
 
-impresion : PRINT '(' CADENA ')' ';' {addRule("Impresion por pantalla");}
+impresion : PRINT '(' CADENA ')' ';' {addProgramComponent("Impresion por pantalla");}
         ;
