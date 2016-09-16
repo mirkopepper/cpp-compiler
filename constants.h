@@ -1,7 +1,7 @@
 #ifndef CONSTANTS
 #define CONSTANTS
 
-#define CTE 300
+/*#define CTE 300
 #define MAYORIGUAL 301
 #define MENORIGUAL 302
 #define DISTINTO 303
@@ -21,6 +21,6 @@
 #define WHILE 317
 #define allow 318
 #define TO 319
-
+*/
 #endif // CONSTANTS
 

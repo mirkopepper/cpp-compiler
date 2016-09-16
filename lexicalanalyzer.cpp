@@ -1,6 +1,7 @@
 #include "lexicalanalyzer.h"
 #include <fstream>
 #include <cmath>
+#include "y.tab.c"
 
 LexicalAnalyzer::LexicalAnalyzer(const char * textFile, list<string> * warnings, list<string> * errors, SymbolsTable * symbolsTable) {
     lines=1;
@@ -46,9 +47,9 @@ void LexicalAnalyzer::initReservedWords() {
     reservedWords.insert(std::map<string,int>::value_type("print", PRINT));
     reservedWords.insert(std::map<string,int>::value_type("integer", INTEGER));
     reservedWords.insert(std::map<string,int>::value_type("double", DOUBLE));
-    reservedWords.insert(std::map<string,int>::value_type("matrix", matrix));
+    reservedWords.insert(std::map<string,int>::value_type("matrix", MATRIX));
     reservedWords.insert(std::map<string,int>::value_type("while", WHILE));
-    reservedWords.insert(std::map<string,int>::value_type("allow", allow));
+    reservedWords.insert(std::map<string,int>::value_type("allow", ALLOW));
     reservedWords.insert(std::map<string,int>::value_type("to", TO));
 }
 
@@ -648,6 +649,9 @@ void LexicalAnalyzer::initState(){
 
     while (actualState!=F && column!=EOF) {
 
+        if(actualState==0)
+            buffer->clear();
+
         if (file.empty()) {
             column=EOF;
         } else {
@@ -661,11 +665,8 @@ void LexicalAnalyzer::initState(){
         //Actualiza el estado actual
         actualState = state [actualState][column];
 
-        if (actualState==FE || (actualState==F && token==INVALID)) {
+        if (actualState==F && token==INVALID) {
             actualState=0;
-            int k=c;
-            cout<<"valor de token invalido: "<<*buffer<<", char: "<<c<<", ascci: "<<k<<", column: "<<column<<", linea: "<<lines<<endl;
-            buffer->clear();
         }
     } /*End While. Aca hay dos posibilidades: se llego a estado final con token valido,
        o se llego a fin de archivo*/
@@ -739,7 +740,9 @@ void LexicalAnalyzer::reconocerTokens(){
 
  }
 
-
+int LexicalAnalyzer::getLine() {
+    return lines;
+}
 
 /*Accion semántica que acumula el char en el buffer */
 int LexicalAnalyzer::ASA (string * buffer, char c) {
@@ -760,7 +763,8 @@ int LexicalAnalyzer::ASTI (string * buffer, char c) {
 
 /*Accion semántica de token invalido */
 int LexicalAnalyzer::ASTI_EOF(string * buffer, char c) {
-    string msg = "\nError lexico: Token invalido en linea: ";
+
+    string msg = "\nError lexico: Descartando '"+*buffer+c+"' por ser token invalido en linea: ";
     msg+=std::to_string(lines)+".";
     errors->push_back(msg);
     return INVALID;
@@ -1091,19 +1095,58 @@ return recognizedTokens;
 
 void LexicalAnalyzer::addRecognized(string * buffer, int token) {
     string description = "";
-    if (token >= 300) //ACA IRIA 257 CON YACC CREO
-    {
-        if (token >=310)
-            description="Palabra reservada: ";
-        else if (token == ID)
-            description="Identificador: ";
-            else if (token == CTE) {
-                //REVISAR LA TS Y AGREGAR "Constante entera: " o "Constante double")
-            } else if (token == CADENA)
-                description="Cadena: ";
-    }
-    description+=*buffer;
-    description+="\n";
+
+    /*despues del if estan solo las palabras reservadas, siendo if la 1ra*/
+    if (token >=IF)
+        description="Palabra reservada: "+*buffer+"\n";
+
+    /*identificador*/
+    else if (token == ID){
+           description="Identificador: "+*buffer+"\n";
+           }
+
+           /*cte:integer o double*/
+           else if (token == CTE) {
+                if(symbolsTable->contains(*buffer)){
+                    Entry * entry=symbolsTable->getEntry(*buffer);
+
+                    /*integer*/
+                    if(entry->type=="INT")
+                        description="Constate entera: "+buffer->substr(2,buffer->size()-1)+"\n";
+
+                    /*double*/
+                    else if(entry->type=="DOUBLE")
+                            description="Constante double: "+buffer->substr(2,buffer->size()-1)+"\n";
+                }
+
+                /*si sale este error entonces hay problemas de codigo*/
+                else
+                    cout<<"Error!! "<<*buffer<<" no esta en la TS."<<endl;
+
+           /*cadenas multilinea*/
+           } else if (token == CADENA){
+                       description="Cadena: "+symbolsTable->getEntry(*buffer)->lexeme+"\n";
+                  }
+
+                  /*los operadores de comparacion pueden ser: >=,<=,!= ó >,=,<*/
+                  else if((token >=MAYORIGUAL && token <= DISTINTO) || (token >= 60 && token <=62))
+                        description="Operador de comparacion: "+*buffer+"\n";
+
+                   /*anotaciones: &&@F ó &&@C*/
+                   else if(token == ARROBA_C || token == ARROBA_F)
+                        description="Anotacion de arreglo: "+*buffer+"\n";
+
+                   /*operadores asignacion: := ó -=*/
+                   else if(token == DOSPUNTOSIGUAL || token == MENOSIGUAL)
+                        description="Operador de asignacion: "+*buffer+"\n";
+
+                   /*caracteres especiales: coma,punto y coma,llaves,corchetes,parentesis*/
+                   else if(*buffer ==";" ||*buffer =="," ||*buffer =="[" ||*buffer =="]" ||*buffer =="(" ||*buffer ==")" ||*buffer =="{" ||*buffer =="}")
+                        description="Caracter especial: "+*buffer+"\n";
+
+                   /*operadores aritmeticos: +  - * / */
+                   else if(*buffer =="+" ||*buffer =="-" ||*buffer =="*" ||*buffer =="/")
+                        description="Operador aritmetico: "+*buffer+"\n";
 
     recognizedTokens.push_back(description);
 

@@ -63,9 +63,11 @@ int main(int argc, char *argv[])
     LexicalAnalyzer * lex = new LexicalAnalyzer(argv[1], &warnings, &errors, &symbolsTable);
     lex->reconocerTokens();
 
-//    Parser * parser = new Parser (&symbolsTable,lex, &errors);
+    Parser * parser = new Parser (&symbolsTable,lex, &errors);
     /*Se ejecuta el yyparse*/
-    //int resultado = parser->yyparse();
+    int outcome = parser->yyparse();
+
+    cout <<"resultado del yyparse: "<<outcome<<endl;
 
     cout << "\n\nCodigo fuente analizado: " << argv[1] << endl;
 
@@ -79,5 +81,6 @@ int main(int argc, char *argv[])
     printLexicalErrors();
     printLexicalWarnings();
     //imprimirReglas();
+    return 0;
 }
 
