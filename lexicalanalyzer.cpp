@@ -1,7 +1,6 @@
 #include "lexicalanalyzer.h"
 #include <fstream>
 #include <cmath>
-#include "y.tab.c"
 
 LexicalAnalyzer::LexicalAnalyzer(const char * textFile, list<string> * warnings, list<string> * errors, SymbolsTable * symbolsTable) {
     lines=1;
