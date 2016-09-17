@@ -1,0 +1,12 @@
+&&1bloque declarativo
+
+&&3sentencias declarativas bien y mal escritas
+integer a;
+integer ;
+integer b,c;
+integer d e f;
+int g,h,i;
+
+{
+
+}

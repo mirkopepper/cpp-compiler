@@ -30,118 +30,118 @@ static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #define TO 276
 #define YYERRCODE 256
 short yylhs[] = {                                        -1,
-    0,    1,    1,    3,    3,    3,    4,    5,    7,    7,
-    8,    8,    6,    6,    9,   11,   10,   10,   10,   13,
-   13,   12,   14,   14,   15,   15,    2,    2,   16,   16,
-   16,   16,   17,   17,   22,   22,   21,   24,   24,   24,
-   24,   24,   24,   18,   18,   25,   25,   23,   23,   23,
-   27,   27,   27,   28,   28,   28,   26,   19,   20,
+    0,    1,    1,    3,    3,    3,    4,    4,    5,    7,
+    7,    8,    8,    6,    6,    9,   11,   10,   10,   10,
+   13,   13,   12,   14,   14,   15,   15,    2,    2,   16,
+   16,   16,   16,   17,   17,   22,   22,   21,   24,   24,
+   24,   24,   24,   24,   18,   18,   25,   25,   23,   23,
+   23,   27,   27,   27,   28,   28,   28,   26,   19,   20,
 };
 short yylen[] = {                                         2,
-    4,    2,    1,    1,    1,    1,    3,    5,    1,    1,
-    3,    1,    5,    5,    2,    3,    2,    2,    3,    1,
-    1,    3,    3,    1,    3,    1,    2,    1,    1,    1,
-    1,    1,    8,    6,    1,    3,    3,    1,    1,    1,
-    1,    1,    1,    4,    4,    1,    1,    3,    3,    1,
-    3,    3,    1,    1,    1,    1,    7,    5,    5,
+    4,    2,    1,    1,    1,    1,    3,    3,    5,    1,
+    1,    3,    1,    5,    5,    2,    3,    2,    2,    3,
+    1,    1,    3,    3,    1,    3,    1,    2,    1,    1,
+    1,    1,    1,    8,    6,    1,    3,    3,    1,    1,
+    1,    1,    1,    1,    4,    4,    1,    1,    3,    3,
+    1,    3,    3,    1,    1,    1,    1,    7,    5,    5,
 };
 short yydefred[] = {                                      0,
-   10,    9,    0,    0,    0,    3,    4,    5,    6,    0,
-    0,    0,    2,   12,    0,    0,    0,    0,    0,    0,
-    0,    0,   28,   29,   30,   31,   32,    0,   47,    0,
-    7,    0,    0,    0,    0,    0,    0,    1,   27,    0,
-    0,    0,    0,    0,   11,    8,   55,    0,    0,   56,
-    0,   53,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,   13,    0,   15,    0,    0,    0,    0,    0,    0,
-   41,   40,   43,   38,   39,   42,    0,    0,    0,   44,
-   45,   16,   26,    0,    0,   21,   20,   18,    0,    0,
-    0,    0,   51,   52,    0,   35,    0,    0,   59,   58,
-   22,    0,    0,   19,    0,    0,    0,   34,    0,   25,
-   57,   36,    0,   33,
+   11,   10,    0,    0,    0,    3,    4,    5,    6,    0,
+    0,    0,    2,    0,   13,    0,    0,    0,    0,    0,
+    0,    0,    0,   29,   30,   31,   32,   33,    0,   48,
+    8,    0,    7,    0,    0,    0,    0,    0,    0,    1,
+   28,    0,    0,    0,    0,    0,   12,    9,   56,    0,
+    0,   57,    0,   54,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,   14,    0,   16,    0,    0,    0,    0,
+    0,    0,   42,   41,   44,   39,   40,   43,    0,    0,
+    0,   45,   46,   17,   27,    0,    0,   22,   21,   19,
+    0,    0,    0,    0,   52,   53,    0,   36,    0,    0,
+   60,   59,   23,    0,    0,   20,    0,    0,    0,   35,
+    0,   26,   58,   37,    0,   34,
 };
 short yydgoto[] = {                                       4,
-    5,   22,    6,    7,    8,    9,   10,   16,   43,   62,
-   44,   63,   88,   84,   85,   96,   24,   25,   26,   27,
-   53,   97,   54,   77,   28,   50,   51,   52,
+    5,   23,    6,    7,    8,    9,   10,   17,   45,   64,
+   46,   65,   90,   86,   87,   98,   25,   26,   27,   28,
+   55,   99,   56,   79,   29,   52,   53,   54,
 };
-short yysindex[] = {                                   -171,
-    0,    0, -188,    0, -120,    0,    0,    0,    0, -193,
- -228, -177,    0,    0, -195,   22, -188,    5,   45,   58,
-   62,  -87,    0,    0,    0,    0,    0, -170,    0,   14,
-    0, -159,   59, -190, -190, -146, -190,    0,    0, -190,
- -190, -135,  -17,   14,    0,    0,    0,    5,    2,    0,
-   27,    0,   82,  -28,   84,   85,   16,   20,   34, -129,
- -155,    0,   70,    0,   41, -190, -190, -190, -190,  -96,
-    0,    0,    0,    0,    0,    0, -190,   74,  -96,    0,
-    0,    0,    0,  -48,   90,    0,    0,    0, -155, -190,
-   27,   27,    0,    0, -177,    0, -157,   25,    0,    0,
-    0, -129, -121,    0,   15,  -85,  -96,    0,   90,    0,
-    0,    0, -132,    0,
+short yysindex[] = {                                   -172,
+    0,    0, -213,    0, -120,    0,    0,    0,    0, -206,
+ -231, -173,    0,   -8,    0, -201,   32, -213,  -19,   43,
+   55,   62,  -87,    0,    0,    0,    0,    0, -149,    0,
+    0,  -12,    0, -162,   47, -188, -188, -143, -188,    0,
+    0, -188, -188, -142,  -18,  -12,    0,    0,    0,  -19,
+   18,    0,   39,    0,   85,  -28,   88,   89,   25,   30,
+   38, -124, -148,    0,   75,    0,   44, -188, -188, -188,
+ -188,  -96,    0,    0,    0,    0,    0,    0, -188,   77,
+  -96,    0,    0,    0,    0,  -43,   93,    0,    0,    0,
+ -148, -188,   39,   39,    0,    0, -173,    0, -150,   45,
+    0,    0,    0, -124, -119,    0,   21,  -85,  -96,    0,
+   93,    0,    0,    0, -130,    0,
 };
 short yyrindex[] = {                                      0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0, -148,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0, -139,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,  -41,    0,    0,
-  -36,    0,    0,    0,    0,    0,    0,    0,    0,    0,
- -115,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,  -41,
+    0,    0,  -36,    0,    0,    0,    0,    0,    0,    0,
+    0,    0, -115,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,  -43,    0,    0,    0, -110,    0,
-  -31,   -6,    0,    0,    0,    0,    0,   97,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,  -37,    0,
-    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,  -16,    0,    0,    0,
+ -110,    0,  -31,   -6,    0,    0,    0,    0,    0,   99,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+  -15,    0,    0,    0,    0,    0,
 };
 short yygindex[] = {                                      0,
-    0,   44,  135,    0,    0,    0,   61,    0,    0,    0,
-   98,    0,   54,    0,   39,   29,    0,    0,    0,    0,
-  107,  -35,    9,    0,    0,   24,   49,   52,
+    0,   46,  136,    0,    0,    0,   74,    0,    0,    0,
+   96,    0,   53,    0,   41,   24,    0,    0,    0,    0,
+  107,  -35,    6,    0,    0,   -1,   56,   57,
 };
 #define YYTABLESIZE 254
-short yytable[] = {                                      54,
-   54,   54,   12,   54,   50,   54,   50,   14,   50,   48,
-  102,   48,   17,   48,   66,   24,   67,   54,   54,   54,
-   54,   23,   50,   50,   50,   50,   95,   48,   48,   48,
-   48,   74,   76,   75,   49,   29,   49,   38,   49,  112,
-   23,   61,   49,  100,   66,   29,   67,   17,   57,   58,
-   39,   54,   49,   49,   49,   49,   50,   66,   66,   67,
-   67,   48,   66,   11,   67,   32,   47,   66,   68,   67,
-   30,  113,   14,   69,   80,   48,  101,   33,   81,   15,
-   31,   24,    1,    2,   35,   98,   49,   23,   18,   19,
-   40,   41,   20,   29,   65,   34,   21,   36,  105,    1,
-    2,   37,   29,    3,   42,   60,   45,  111,   86,   87,
-  107,  108,   46,   46,   91,   92,   55,   46,   29,   93,
-   94,   59,   70,   23,   78,   79,   82,   83,   89,   29,
-   29,   90,   99,  103,   39,  110,  114,   37,  106,   13,
-  109,   64,  104,   56,    0,    0,    0,    0,    0,    0,
-    1,    2,    0,    0,    3,   14,   14,    0,    0,   14,
-   17,   17,    0,    0,   17,    0,    0,    0,    0,   18,
-   19,    0,    0,   20,    0,    0,    0,   21,   18,   19,
-   18,   19,   20,    0,   20,    0,   21,    0,   21,    0,
+short yytable[] = {                                      55,
+   55,   55,   12,   55,   51,   55,   51,   15,   51,   49,
+   30,   49,   18,   49,   68,  104,   69,   55,   55,   55,
+   55,   30,   51,   51,   51,   51,   97,   49,   49,   49,
+   49,   76,   78,   77,   50,   24,   50,   40,   50,  114,
+   63,   51,   25,   24,   18,  102,   41,   59,   60,   14,
+   31,   55,   50,   50,   50,   50,   51,    1,    2,   15,
+   68,   49,   69,   68,   32,   69,   16,   68,   49,   69,
+   30,   36,   68,  115,   69,   34,   11,   50,   44,   30,
+   70,  103,   37,   82,  100,   71,   50,   68,   83,   69,
+   33,   35,   19,   20,   38,   30,   21,  107,    1,    2,
+   22,   39,    3,   47,   62,   48,   30,   30,   25,   24,
+   67,   42,   43,  113,   61,   88,   89,  109,  110,   57,
+   24,   47,   47,   93,   94,   72,   95,   96,   80,   81,
+   84,   41,   85,   91,   92,  101,  105,  112,  116,   38,
+   13,   66,  108,  106,  111,   58,    0,    0,    0,    0,
+    1,    2,    0,    0,    3,   15,   15,    0,    0,   15,
+   18,   18,    0,    0,   18,    0,    0,    0,    0,   19,
+   20,    0,    0,   21,    0,    0,    0,   22,   19,   20,
+   19,   20,   21,    0,   21,    0,   22,    0,   22,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,   54,   54,   54,    0,
-    0,   50,   50,   50,    0,    0,   48,   48,   48,   71,
-   72,   73,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,   55,   55,   55,    0,
+    0,   51,   51,   51,    0,    0,   49,   49,   49,   73,
+   74,   75,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,   49,   49,   49,
+    0,   50,   50,   50,
 };
 short yycheck[] = {                                      41,
    42,   43,  123,   45,   41,   47,   43,  123,   45,   41,
-   59,   43,  123,   45,   43,   59,   45,   59,   60,   61,
-   62,   59,   59,   60,   61,   62,  123,   59,   60,   61,
+   12,   43,  123,   45,   43,   59,   45,   59,   60,   61,
+   62,   23,   59,   60,   61,   62,  123,   59,   60,   61,
    62,   60,   61,   62,   41,   12,   43,  125,   45,  125,
-   12,   59,   34,   79,   43,   22,   45,  276,   40,   41,
-   22,   93,   59,   60,   61,   62,   93,   43,   43,   45,
-   45,   93,   43,    3,   45,   44,  257,   43,   42,   45,
-  266,  107,  266,   47,   59,  266,  125,   17,   59,  273,
-   59,  125,  271,  272,   40,   77,   93,  125,  266,  267,
-  261,  262,  270,   70,   93,   91,  274,   40,   90,  271,
-  272,   40,   79,  275,   91,  123,  266,   93,  264,  265,
-  268,  269,  261,  262,   66,   67,  263,   59,   95,   68,
-   69,  257,   41,   95,   41,   41,   93,  257,   59,  106,
-  107,   91,   59,   44,  106,  257,  269,   41,   95,    5,
-  102,   44,   89,   37,   -1,   -1,   -1,   -1,   -1,   -1,
+   59,   36,   59,   59,  276,   81,   23,   42,   43,  256,
+   59,   93,   59,   60,   61,   62,   93,  271,  272,  266,
+   43,   93,   45,   43,  266,   45,  273,   43,  257,   45,
+   72,   91,   43,  109,   45,   44,    3,  266,   91,   81,
+   42,  125,   40,   59,   79,   47,   93,   43,   59,   45,
+   59,   18,  266,  267,   40,   97,  270,   92,  271,  272,
+  274,   40,  275,  266,  123,   59,  108,  109,  125,  125,
+   93,  261,  262,   93,  257,  264,  265,  268,  269,  263,
+   97,  261,  262,   68,   69,   41,   70,   71,   41,   41,
+   93,  108,  257,   59,   91,   59,   44,  257,  269,   41,
+    5,   46,   97,   91,  104,   39,   -1,   -1,   -1,   -1,
   271,  272,   -1,   -1,  275,  271,  272,   -1,   -1,  275,
   271,  272,   -1,   -1,  275,   -1,   -1,   -1,   -1,  266,
   267,   -1,   -1,  270,   -1,   -1,   -1,  274,  266,  267,
@@ -181,6 +181,7 @@ char *yyrule[] = {
 "sentencia_declarativa : conversion",
 "sentencia_declarativa : arreglo",
 "variable : tipo lista_id ';'",
+"variable : tipo error ';'",
 "conversion : ALLOW tipo TO tipo ';'",
 "tipo : DOUBLE",
 "tipo : INTEGER",
@@ -429,214 +430,218 @@ case 7:
 {addProgramComponent("variable = tipo + lista ids");}
 break;
 case 8:
-#line 19 "grammar.y"
-{addProgramComponent("Conversion entre variables");}
+#line 17 "grammar.y"
+{addProgramComponent("error en lista_id");}
 break;
 case 9:
-#line 22 "grammar.y"
-{addProgramComponent("tipo double");}
+#line 20 "grammar.y"
+{addProgramComponent("Conversion entre variables");}
 break;
 case 10:
 #line 23 "grammar.y"
-{addProgramComponent("tipo integer");}
+{addProgramComponent("tipo double");}
 break;
 case 11:
-#line 26 "grammar.y"
-{addProgramComponent("lista ids = lista ids + id");}
+#line 24 "grammar.y"
+{addProgramComponent("tipo integer");}
 break;
 case 12:
 #line 27 "grammar.y"
-{addProgramComponent("lista ids = id");}
+{addProgramComponent("lista ids = lista ids + id");}
 break;
 case 13:
-#line 30 "grammar.y"
-{addProgramComponent("arreglo = tipo matrix id dimensiones opcional arreglo");}
+#line 28 "grammar.y"
+{addProgramComponent("lista ids = id");}
 break;
 case 14:
 #line 31 "grammar.y"
-{addProgramComponent("Declaracion de matriz");}
+{addProgramComponent("arreglo = tipo matrix id dimensiones opcional arreglo");}
 break;
 case 15:
-#line 34 "grammar.y"
-{addProgramComponent("dimensiones = dimension + dimension");}
+#line 32 "grammar.y"
+{addProgramComponent("Declaracion de matriz");}
 break;
 case 16:
-#line 37 "grammar.y"
-{addProgramComponent("dimension = cte entre corchetes");}
+#line 35 "grammar.y"
+{addProgramComponent("dimensiones = dimension + dimension");}
 break;
 case 17:
-#line 40 "grammar.y"
-{addProgramComponent("Declaracion e inicializacion de matriz");}
+#line 38 "grammar.y"
+{addProgramComponent("dimension = cte entre corchetes");}
 break;
 case 18:
 #line 41 "grammar.y"
-{addProgramComponent("Declaracion y anotacion de matriz");}
+{addProgramComponent("Declaracion e inicializacion de matriz");}
 break;
 case 19:
 #line 42 "grammar.y"
-{addProgramComponent("Declaracion, inicializacion y anotacion de matriz");}
+{addProgramComponent("Declaracion y anotacion de matriz");}
 break;
 case 20:
-#line 45 "grammar.y"
-{addProgramComponent("anotacion c");}
+#line 43 "grammar.y"
+{addProgramComponent("Declaracion, inicializacion y anotacion de matriz");}
 break;
 case 21:
 #line 46 "grammar.y"
-{addProgramComponent("anotacion f");}
+{addProgramComponent("anotacion c");}
 break;
 case 22:
-#line 49 "grammar.y"
-{addProgramComponent("inicializacion = lista de listas entre corchetes");}
+#line 47 "grammar.y"
+{addProgramComponent("anotacion f");}
 break;
 case 23:
-#line 52 "grammar.y"
-{addProgramComponent("lista de listas = lista de listas + puntocoma + lista valores");}
+#line 50 "grammar.y"
+{addProgramComponent("inicializacion = lista de listas entre corchetes");}
 break;
 case 24:
 #line 53 "grammar.y"
-{addProgramComponent("lista de listas = lista valores");}
+{addProgramComponent("lista de listas = lista de listas + puntocoma + lista valores");}
 break;
 case 25:
-#line 56 "grammar.y"
-{addProgramComponent("lista valores = lista valores + coma + cte");}
+#line 54 "grammar.y"
+{addProgramComponent("lista de listas = lista valores");}
 break;
 case 26:
 #line 57 "grammar.y"
-{addProgramComponent("lista valores = cte");}
+{addProgramComponent("lista valores = lista valores + coma + cte");}
 break;
 case 27:
-#line 60 "grammar.y"
-{addProgramComponent("bloque ejecutable = bloque ejecutable + sentencia");}
+#line 58 "grammar.y"
+{addProgramComponent("lista valores = cte");}
 break;
 case 28:
 #line 61 "grammar.y"
-{addProgramComponent("bloque ejecutable = sentencia");}
+{addProgramComponent("bloque ejecutable = bloque ejecutable + sentencia");}
 break;
 case 29:
-#line 64 "grammar.y"
-{addProgramComponent("sentencia = seleccion");}
+#line 62 "grammar.y"
+{addProgramComponent("bloque ejecutable = sentencia");}
 break;
 case 30:
 #line 65 "grammar.y"
-{addProgramComponent("sentencia = asignacion");}
+{addProgramComponent("sentencia = seleccion");}
 break;
 case 31:
 #line 66 "grammar.y"
-{addProgramComponent("sentencia = iteracion");}
+{addProgramComponent("sentencia = asignacion");}
 break;
 case 32:
 #line 67 "grammar.y"
-{addProgramComponent("sentecia = impresion");}
+{addProgramComponent("sentencia = iteracion");}
 break;
 case 33:
-#line 70 "grammar.y"
-{addProgramComponent("Sentencia IF con bloque ELSE");}
+#line 68 "grammar.y"
+{addProgramComponent("sentecia = impresion");}
 break;
 case 34:
 #line 71 "grammar.y"
-{addProgramComponent("Sentencia IF sin bloque ELSE");}
+{addProgramComponent("Sentencia IF con bloque ELSE");}
 break;
 case 35:
-#line 74 "grammar.y"
-{addProgramComponent("bloque sentencias = sentencia");}
+#line 72 "grammar.y"
+{addProgramComponent("Sentencia IF sin bloque ELSE");}
 break;
 case 36:
 #line 75 "grammar.y"
-{addProgramComponent("bloque sentencias = bloque ejecutable entre llaves");}
+{addProgramComponent("bloque sentencias = sentencia");}
 break;
 case 37:
-#line 78 "grammar.y"
-{addProgramComponent("condicion = comparacion de expresiones");}
+#line 76 "grammar.y"
+{addProgramComponent("bloque sentencias = bloque ejecutable entre llaves");}
 break;
 case 38:
-#line 81 "grammar.y"
-{addProgramComponent("comparador = menor");}
+#line 79 "grammar.y"
+{addProgramComponent("condicion = comparacion de expresiones");}
 break;
 case 39:
 #line 82 "grammar.y"
-{addProgramComponent("comparador = mayor");}
+{addProgramComponent("comparador = menor");}
 break;
 case 40:
 #line 83 "grammar.y"
-{addProgramComponent("comparador = menor igual");}
+{addProgramComponent("comparador = mayor");}
 break;
 case 41:
 #line 84 "grammar.y"
-{addProgramComponent("comparador = mayor igual");}
+{addProgramComponent("comparador = menor igual");}
 break;
 case 42:
 #line 85 "grammar.y"
-{addProgramComponent("comparador = igual");}
+{addProgramComponent("comparador = mayor igual");}
 break;
 case 43:
 #line 86 "grammar.y"
-{addProgramComponent("comparador = distinto");}
+{addProgramComponent("comparador = igual");}
 break;
 case 44:
-#line 89 "grammar.y"
-{addProgramComponent("Asignacion");}
+#line 87 "grammar.y"
+{addProgramComponent("comparador = distinto");}
 break;
 case 45:
 #line 90 "grammar.y"
-{addProgramComponent("Asignacion con resta");}
+{addProgramComponent("Asignacion");}
 break;
 case 46:
-#line 93 "grammar.y"
-{addProgramComponent("asignacion izq = id");}
+#line 91 "grammar.y"
+{addProgramComponent("Asignacion con resta");}
 break;
 case 47:
 #line 94 "grammar.y"
-{addProgramComponent("asignacion izq = celda");}
+{addProgramComponent("asignacion izq = id");}
 break;
 case 48:
-#line 97 "grammar.y"
-{addProgramComponent("expresion = expresion mas termino");}
+#line 95 "grammar.y"
+{addProgramComponent("asignacion izq = celda");}
 break;
 case 49:
 #line 98 "grammar.y"
-{addProgramComponent("expresion = expresion menos termino");}
+{addProgramComponent("expresion = expresion mas termino");}
 break;
 case 50:
 #line 99 "grammar.y"
-{addProgramComponent("expresion = termino");}
+{addProgramComponent("expresion = expresion menos termino");}
 break;
 case 51:
-#line 102 "grammar.y"
-{addProgramComponent("termino = termino por factor");}
+#line 100 "grammar.y"
+{addProgramComponent("expresion = termino");}
 break;
 case 52:
 #line 103 "grammar.y"
-{addProgramComponent("termino = termino dividido factor");}
+{addProgramComponent("termino = termino por factor");}
 break;
 case 53:
 #line 104 "grammar.y"
-{addProgramComponent("termino = factor");}
+{addProgramComponent("termino = termino dividido factor");}
 break;
 case 54:
-#line 107 "grammar.y"
-{addProgramComponent("factor = id");}
+#line 105 "grammar.y"
+{addProgramComponent("termino = factor");}
 break;
 case 55:
 #line 108 "grammar.y"
-{addProgramComponent("factor = cte");}
+{addProgramComponent("factor = id");}
 break;
 case 56:
 #line 109 "grammar.y"
-{addProgramComponent("factor = celda");}
+{addProgramComponent("factor = cte");}
 break;
 case 57:
-#line 112 "grammar.y"
-{addProgramComponent("celda = id + expresion x2, cada una entre corchetes");}
+#line 110 "grammar.y"
+{addProgramComponent("factor = celda");}
 break;
 case 58:
-#line 115 "grammar.y"
-{addProgramComponent("Sentencia WHILE");}
+#line 113 "grammar.y"
+{addProgramComponent("celda = id + expresion x2, cada una entre corchetes");}
 break;
 case 59:
-#line 118 "grammar.y"
+#line 116 "grammar.y"
+{addProgramComponent("Sentencia WHILE");}
+break;
+case 60:
+#line 119 "grammar.y"
 {addProgramComponent("Impresion por pantalla");}
 break;
-#line 640 "y.tab.c"
+#line 645 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
