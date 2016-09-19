@@ -14,13 +14,13 @@ integer d e;
 allow integer to
 integer c;
 
-&&alow mal escrito
+&&allow mal escrito
 alow integer to double;
 
 &&1er tipo mal escrito
 allow int to double;
 
-&&to mal escrito
+&& palabra to mal escrito
 allow integer TO double;
 
 &&falta 1er tipo
@@ -50,8 +50,8 @@ print ();
 
 &&cadena mal escrita
 print (cadena5);
-&&errores de parentesis condiciones mal escritos
 
+&&errores de parentesis condiciones mal escritos
 if (a <= b
 a:=b;
 endif
@@ -79,7 +79,7 @@ b:=b;
 while(a!= double)
 b:=c;
 
-&&falta el else
+&&falta la palabra reservada else
 if(a=a)
 a:=c;
 {
