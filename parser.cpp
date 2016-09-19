@@ -19,9 +19,9 @@ void Parser::addErrorMessage(string errorm)
     error=true;
 }
 
-void Parser::addProgramComponent(const char * programComponent)
+void Parser::addProgramComponent(string programComponent)
 {
-    this->programComponents.push_back("Se encontro " + string(programComponent) + ". (Linea: " + std::to_string(lexicalAnalyzer->getLine()) +").");
+    this->programComponents.push_back("Se encontro " + programComponent + ". (Linea: " + std::to_string(lexicalAnalyzer->getLine()) +").");
 }
 
 int Parser::yylex()

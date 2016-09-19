@@ -1,12 +1,33 @@
-&&1bloque declarativo
-
-&&3sentencias declarativas bien y mal escritas
-integer a;
-integer ;
-integer b,c;
-integer d e f;
-int g,h,i;
-
+integer a
+integer b;
 {
+&&falta el punto y coma
+a:=_i1
+
+&&asignaciones bien escritas
+a:=_i1;
+
+&&no hay nada del lado derecho
+b:=;
+
+&&lo del lado derecho no es una expresion
+c:=double;
+
+&&falta el operador
+&&t _i1;
+
+&&no van ctes del lado izquierdo
+&&double:=_i2;
+
+&&esta bien
+&&t:= d;
+
+&&falta lado izquierdo
+&&:=_i3;
+
+&&
+
+&&
+a:=b;
 
 }

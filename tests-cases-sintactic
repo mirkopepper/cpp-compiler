@@ -8,8 +8,8 @@ double d,e,f;
 allow double to integer;
 
 &&sentencias de declaracion de matrices
-integer matrix matInt [2][2] {0,1;2,3}; &&@F esto es una anotacion de matriz arrobaF
-double matrix matDou [2][3];
+integer matrix matInt [_i2][_i2] {_i0,_i1;_i2,_i3}; &&@F esto es una anotacion de matriz arrobaF
+double matrix matDou [_i2][_i3];
 
 &&bloque ejecutable
 {
@@ -18,10 +18,10 @@ double matrix matDou [2][3];
     a:=_i4-_i2-matInt[_i0][_i0];
     a-=_i1;
     b:=a;
-    matDou[a][a-_i1]:=.1;
+    matDou[a][a-_i1]:=_d.1;
 
     &&sentencias de seleccion anidadas, el if de afuera tiene un grupo de sentencias en sus bloques then y else
-    if(matDou[b][b-_i1]==_i10){
+    if(matDou[b][b-_i1]=_i10){
         if(matDou[b][b-_i1]!=_i10)
             &&sentencias de mensaje por pantalla
             print("Primer renglon de cadena multilinea. +

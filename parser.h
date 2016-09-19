@@ -16,7 +16,7 @@ private:
     list<string> programComponents;
 
     void addErrorMessage (string msg);
-    void addProgramComponent (const char * msg);
+    void addProgramComponent (string msg);
     void yyerror(string s);
 
     int yylex();
