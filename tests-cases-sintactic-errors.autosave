@@ -15,9 +15,5 @@ a:=a;
 
 &&falta lado izquierdo
 :=_i3;
-a:=a;
-
-&&
-a:=b;
 
 }

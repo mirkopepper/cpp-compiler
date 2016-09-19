@@ -1,47 +1,47 @@
 %token CTE MAYORIGUAL MENORIGUAL DISTINTO DOSPUNTOSIGUAL MENOSIGUAL CADENA ARROBA_F ARROBA_C ID IF ELSE ENDIF PRINT INTEGER DOUBLE MATRIX WHILE ALLOW TO
 
 %%
-programa : bloque_declarativo '{' bloque_ejecutable '}' {addProgramComponent("Dectecto un programa!!");}
-		| bloque_declarativo bloque_ejecutable '}' {addProgramComponent("error: falta llave de inicio. Programa Compilado!");}
-		| bloque_declarativo '{' bloque_ejecutable {addProgramComponent("error: falta llave de cierre. Programa Compilado!");}
+programa : bloque_declarativo '{' bloque_ejecutable '}'       {addProgramComponent("Dectecto un programa!!");}
+		| bloque_declarativo bloque_ejecutable '}'    {addErrorMessage("error: falta llave de inicio. Programa Compilado!");}
+		| bloque_declarativo '{' bloque_ejecutable    {addErrorMessage("error: falta llave de cierre. Programa Compilado!");}
         ;
 
-bloque_declarativo : bloque_declarativo sentencia_declarativa {addProgramComponent("bloque declarativo=bloque declarativo + setencia declarativa");}
-        | sentencia_declarativa	{addProgramComponent("bloque declarativo = sentencia declarativa");}
+bloque_declarativo : bloque_declarativo sentencia_declarativa
+        | sentencia_declarativa
         ;
 
-sentencia_declarativa : variable	{addProgramComponent("setencia declarativa = variable");}
-        | conversion	{addProgramComponent("sentencia declaratica = conversion");}
-        | arreglo	{addProgramComponent("sentencia declarativo = arreglo");}
+sentencia_declarativa : variable
+        | conversion
+        | arreglo
         ;
 
-variable : tipo lista_id ';' {addProgramComponent("variable = tipo + lista ids");}
-		| tipo error ';' {addProgramComponent("error de declaracion de variables: lista de identificadores mal esrita");}
-		| tipo lista_id error ';' {addProgramComponent("error de declaracion de variables: falta ';'");}
+variable : tipo lista_id ';'                  {addProgramComponent("Declaracion de una variable");}
+		| tipo error ';'              {addErrorMessage("error de declaracion de variables: lista de identificadores mal esrita");}
+		| tipo lista_id error ';'     {addErrorMessage("error de declaracion de variables: falta ';'");}
         ;
 
-conversion : ALLOW tipo TO tipo ';' {addProgramComponent("Conversion entre variables");}
-	| error tipo TO tipo ';' {addProgramComponent("Error de declaracion de conversion: palabra allow mal escrita");}
-	| ALLOW error TO tipo ';' {addProgramComponent("Error de declaracion de conversion: falta tipo entre allow y to");}
-	| ALLOW tipo error tipo ';' {addProgramComponent("Error de declaracion de conversion; palabra to mal escrita");}
-	| ALLOW tipo TO error ';' {addProgramComponent("Error de declaracion de conversion: falta tipo despues del to");}
+conversion : ALLOW tipo TO tipo ';' {addProgramComponent("Declaracion de conversion entre tipos");}
+	| error tipo TO tipo ';' {addErrorMessage("Error de declaracion de conversion: palabra allow mal escrita");}
+	| ALLOW error TO tipo ';' {addErrorMessage("Error de declaracion de conversion: falta tipo entre allow y to");}
+	| ALLOW tipo error tipo ';' {addErrorMessage("Error de declaracion de conversion; palabra to mal escrita");}
+	| ALLOW tipo TO error ';' {addErrorMessage("Error de declaracion de conversion: falta tipo despues del to");}
         ;
 
-tipo : DOUBLE	{addProgramComponent("tipo double");}
-        | INTEGER	{addProgramComponent("tipo integer");}
+tipo : DOUBLE
+        | INTEGER
         ;
 
-lista_id : lista_id ',' ID	{addProgramComponent("lista ids = lista ids + id");}
-	| lista_id ID error {addProgramComponent("antes del identificador tiene que ir una coma.");}
-        | ID	{addProgramComponent("lista ids = id");}
+lista_id : lista_id ',' ID
+	| lista_id ID error {addErrorMessage("antes del identificador tiene que ir una coma.");}
+        | ID
         ;
 
-arreglo : tipo MATRIX ID corchetes_cte corchetes_cte opcional_arreglo	{addProgramComponent("arreglo = tipo matrix id dimensiones opcional arreglo");}
+arreglo : tipo MATRIX ID corchetes_cte corchetes_cte opcional_arreglo
         | tipo MATRIX ID corchetes_cte corchetes_cte ';'    {addProgramComponent("Declaracion de matriz");}
         ;
 
 
-corchetes_cte : '[' CTE ']'	{addProgramComponent("corchetes_cte = cte entre corchetes");}
+corchetes_cte : '[' CTE ']'
         ;
 
 opcional_arreglo : inicializacion ';'   {addProgramComponent("Declaracion e inicializacion de matriz");}
@@ -49,112 +49,106 @@ opcional_arreglo : inicializacion ';'   {addProgramComponent("Declaracion e inic
 	| inicializacion ';' anotacion {addProgramComponent("Declaracion, inicializacion y anotacion de matriz");}
         ;
 
-anotacion : ARROBA_C	{addProgramComponent("anotacion c");}
-        | ARROBA_F	{addProgramComponent("anotacion f");}
+anotacion : ARROBA_C
+        | ARROBA_F
         ;
 
-inicializacion : '{' lista_de_listas '}'	{addProgramComponent("inicializacion = lista de listas entre corchetes");}
+inicializacion : '{' lista_de_listas '}'
         ;
 
-lista_de_listas : lista_de_listas ';' lista_valores	{addProgramComponent("lista de listas = lista de listas + puntocoma + lista valores");}
-        | lista_valores	{addProgramComponent("lista de listas = lista valores");}
+lista_de_listas : lista_de_listas ';' lista_valores
+        | lista_valores
         ;
 
-lista_valores : lista_valores ',' CTE	{addProgramComponent("lista valores = lista valores + coma + cte");}
-        | CTE	{addProgramComponent("lista valores = cte");}
+lista_valores : lista_valores ',' CTE
+        | CTE
         ;
 
-bloque_ejecutable : bloque_ejecutable sentencia	{addProgramComponent("bloque ejecutable = bloque ejecutable + sentencia");}
-        | sentencia	{addProgramComponent("bloque ejecutable = sentencia");}
+bloque_ejecutable : bloque_ejecutable sentencia
+        | sentencia
         ;
 
-sentencia : seleccion	{addProgramComponent("sentencia = seleccion");}
-        | asignacion	{addProgramComponent("sentencia = asignacion");}
-        | iteracion	{addProgramComponent("sentencia = iteracion");}
-        | impresion	';'{addProgramComponent("sentecia = impresion");}
-        | impresion	{addProgramComponent("ERRRORsentecia = impresion");}
+sentencia : seleccion
+        | asignacion	{addErrorMessage("error en sentencia = falta ';' en el final de la asignacion");}
+        | asignacion ';'{addProgramComponent("sentencia de asignacion");}
+        | iteracion
+        | impresion ';' {addProgramComponent("sentecia de impresion");}
+        | impresion	{addErrorMessage("error en sentecia = falta ';' en el final de la impresion");}
         ;
 
 seleccion : IF parentesis_condicion bloque_de_sentencias ELSE bloque_de_sentencias ENDIF {addProgramComponent("Sentencia IF con bloque ELSE");}
-		| IF parentesis_condicion bloque_de_sentencias bloque_de_sentencias ENDIF {addProgramComponent("error en sentencia IF: falta else");}
+	| IF parentesis_condicion bloque_de_sentencias bloque_de_sentencias ENDIF {addErrorMessage("error en sentencia IF: falta else");}
         | IF parentesis_condicion bloque_de_sentencias ENDIF  {addProgramComponent("Sentencia IF sin bloque ELSE");}
         ;
 
-bloque_de_sentencias : sentencia	{addProgramComponent("bloque sentencias = sentencia");}
-        | '{' bloque_ejecutable '}'	{addProgramComponent("bloque sentencias = bloque ejecutable entre llaves");}
+bloque_de_sentencias : sentencia
+        | '{' bloque_ejecutable '}'	{addProgramComponent("bloque ejecutable entre llaves");}
         ;
 
-parentesis_condicion : '(' condicion ')' {addProgramComponent("parentesis_condicion = condicion entre parentesis");}
-		| condicion ')' {addProgramComponent("error en parentesis_condicion: falta '('");}
-		| '(' condicion  {addProgramComponent("error en parentesis_condicion: ')' ");}
-		| condicion  {addProgramComponent("error en parentesis_condicion: faltan ambos parentesis ");}
-		;
+parentesis_condicion : '(' condicion ')'
+	| condicion ')' {addErrorMessage("error en parentesis_condicion: falta '('");}
+	| '(' condicion  {addErrorMessage("error en parentesis_condicion: falta ')' ");}
+	| condicion  {addErrorMessage("error en parentesis_condicion: faltan ambos parentesis ");}
+	;
 
-condicion : expresion comparador expresion	{addProgramComponent("condicion = comparacion de expresiones");}
-		| error comparador expresion	{addProgramComponent("error en condicion: problema con expresion del lado izquierdo");}
-		| expresion error expresion	{addProgramComponent("error en condicion: problema con el comparador");}
-		| expresion comparador error	{addProgramComponent("error en condicion: problema con expresion del lado derecho");}
+condicion : expresion comparador expresion
+	| error comparador expresion	{addErrorMessage("error en condicion: problema con expresion del lado izquierdo");}
+	| expresion error expresion	{addErrorMessage("error en condicion: problema con el comparador");}
+	| expresion comparador error	{addErrorMessage("error en condicion: problema con expresion del lado derecho");}
         ;
 
-comparador : '<'	{addProgramComponent("comparador = menor");}
-        | '>'	{addProgramComponent("comparador = mayor");}
-        | MENORIGUAL	{addProgramComponent("comparador = menor igual");}
-        | MAYORIGUAL	{addProgramComponent("comparador = mayor igual");}
-        | '='	{addProgramComponent("comparador = igual");}
-        | DISTINTO	{addProgramComponent("comparador = distinto");}
+comparador : '<'
+        | '>'
+        | MENORIGUAL
+        | MAYORIGUAL
+        | '='
+        | DISTINTO
         ;
 
-asignacion : asignacion_izq operador_asignacion expresion ';' {addProgramComponent("Asignacion");}
-		| asignacion_izq operador_asignacion expresion {addProgramComponent("Error en asignacion:falta el ';'");}
-		| asignacion_izq operador_asignacion expresion error ';' {addProgramComponent("Error en asignacion:problema con asignacion");}
-        | asignacion_izq operador_asignacion error ';' {addProgramComponent("Error en asignacioN:problema con la expresion del lado derecho");}
-		| asignacion_izq error ';' {addProgramComponent("Error en asignacion:falta el operador de asignacion");}
+asignacion : asignacion_izq operador_asignacion expresion
+	| asignacion_izq operador_asignacion expresion error  {addErrorMessage("Error en asignacion:problema con asignacion");}
+        | asignacion_izq operador_asignacion error {addErrorMessage("Error en asignacioN:problema con la expresion del lado derecho");}
+	| asignacion_izq expresion ';' {addErrorMessage("Error en asignacion:falta el operador de asignacion");}
+	| operador_asignacion expresion error {addErrorMessage("Error en asignacion:falta variable en lado derecho");}
         ;
 
 operador_asignacion : DOSPUNTOSIGUAL
 	| MENOSIGUAL
 	;
 
-asignacion_izq : ID	{addProgramComponent("asignacion izq = id");}
-        | celda		{addProgramComponent("asignacion izq = celda");}
+asignacion_izq : ID
+        | celda
         ;
 
-expresion : expresion '+' termino	{addProgramComponent("expresion = expresion mas termino");}
-        | expresion '-' termino		{addProgramComponent("expresion = expresion menos termino");}
-        | termino		{addProgramComponent("expresion = termino");}
+expresion : expresion '+' termino
+        | expresion '-' termino	
+        | termino
         ;
 
-termino : termino '*' factor	{addProgramComponent("termino = termino por factor");}
-        | termino '/' factor	{addProgramComponent("termino = termino dividido factor");}
-        | factor		{addProgramComponent("termino = factor");}
+termino : termino '*' factor
+        | termino '/' factor
+        | factor
         ;
 
-factor : ID	{addProgramComponent("factor = id");}
-        | CTE	{addProgramComponent("factor = cte");}
-        | celda	{addProgramComponent("factor = celda");}
+factor : ID
+        | CTE
+        | celda
         ;
 
-celda : ID corchetes_expresion corchetes_expresion	{addProgramComponent("celda = id + expresion x2, cada una entre corchetes");}
-//		| ID error expresion ']' '[' expresion ']'	{addProgramComponent("error en celda = falta corchete '[' en 1er dimension");}
-//		| ID '[' expresion error '[' expresion ']'	{addProgramComponent("error en celda = falta corchete ']' en 1er dimension");}
-//		| ID '[' error ']' '[' expresion ']'	{addProgramComponent("error en celda = falta expresion en 1er dimension");}
-//		| ID '[' expresion ']' error expresion ']'	{addProgramComponent("error en celda = falta corchete '[' en 2da dimension");}
-//		| ID '[' expresion ']' '[' error ']'	{addProgramComponent("error en celda = falta corchete ']' en 2da dimension");}
-//		| ID '[' expresion ']' '[' expresion error	{addProgramComponent("error en celda = falta expresion en 2da dimension");}
+celda : ID '[' expresion ']' '[' expresion ']'
+	| ID '[' error ']' '[' expresion ']'       {addErrorMessage("error en celda: falta expresion en 1er dimension");}
+        | ID '[' error '[' expresion ']'       {addErrorMessage("error en celda: falta ']' en la 1er dimension");}
+        | ID '[' expresion ']' error expresion ']'       {addErrorMessage("error en celda: falta '[' en la 2da dimension");}
+        | ID '[' expresion ']' '[' error ']'       {addErrorMessage("error en celda: falta expresion en 2da dimension");}
+        | ID '[' expresion ']' '[' expresion error       {addErrorMessage("error en celda: falta ']' en 2da dimension");}
         ;
-
-corchetes_expresion :  '[' expresion ']' {addProgramComponent("corchetes_expresion = expresion entre corchetes");}
-//		| error expresion ']' {addProgramComponent("error en corchetes_expresion = falta '['");}
-//		| '[' expresion error {addProgramComponent("error en corchetes_expresion = falta ']'");}
-//		| '[' error ']' {addProgramComponent("error en corchetes_expresion = error con la expresion");}
-		;
 
 iteracion : WHILE parentesis_condicion bloque_de_sentencias {addProgramComponent("Sentencia WHILE");}
         ;
 
 impresion : PRINT '(' CADENA ')' {addProgramComponent("Impresion por pantalla");}
-	| PRINT '(' error ')'  {addProgramComponent("error de impresion por pantalla: falta cadena");}
-	| PRINT CADENA ')'  {addProgramComponent("error de impresion por pantalla: falta parentesis '('");}
-	| PRINT '(' CADENA   {addProgramComponent("error de impresion por pantalla: falta parentesis ')'");}
-	| PRINT CADENA   {addProgramComponent("error de impresion por pantalla: faltan ambos parentesis");}
+	| PRINT '(' error ')'  {addErrorMessage("error de impresion por pantalla: falta cadena");}
+	| PRINT CADENA ')'  {addErrorMessage("error de impresion por pantalla: falta parentesis '('");}
+	| PRINT '(' CADENA   {addErrorMessage("error de impresion por pantalla: falta parentesis ')'");}
+	| PRINT CADENA   {addErrorMessage("error de impresion por pantalla: faltan ambos parentesis");}
         ;
