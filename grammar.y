@@ -71,7 +71,8 @@ bloque_ejecutable : bloque_ejecutable sentencia	{addProgramComponent("bloque eje
 sentencia : seleccion	{addProgramComponent("sentencia = seleccion");}
         | asignacion	{addProgramComponent("sentencia = asignacion");}
         | iteracion	{addProgramComponent("sentencia = iteracion");}
-        | impresion	{addProgramComponent("sentecia = impresion");}
+        | impresion	';'{addProgramComponent("sentecia = impresion");}
+        | impresion	{addProgramComponent("ERRRORsentecia = impresion");}
         ;
 
 seleccion : IF parentesis_condicion bloque_de_sentencias ELSE bloque_de_sentencias ENDIF {addProgramComponent("Sentencia IF con bloque ELSE");}
@@ -151,9 +152,9 @@ corchetes_expresion :  '[' expresion ']' {addProgramComponent("corchetes_expresi
 iteracion : WHILE parentesis_condicion bloque_de_sentencias {addProgramComponent("Sentencia WHILE");}
         ;
 
-impresion : PRINT '(' CADENA ')' ';' {addProgramComponent("Impresion por pantalla");}
-	| PRINT '(' error ')' ';' {addProgramComponent("error de impresion por pantalla: falta cadena");}
-	| PRINT error CADENA ')' ';' {addProgramComponent("error de impresion por pantalla: falta parentesis '('");}
-	| PRINT '(' CADENA error ';' {addProgramComponent("error de impresion por pantalla: falta parentesis ')'");}
-	| PRINT error CADENA error ';' {addProgramComponent("error de impresion por pantalla: faltan ambos parentesis");}
+impresion : PRINT '(' CADENA ')' {addProgramComponent("Impresion por pantalla");}
+	| PRINT '(' error ')'  {addProgramComponent("error de impresion por pantalla: falta cadena");}
+	| PRINT CADENA ')'  {addProgramComponent("error de impresion por pantalla: falta parentesis '('");}
+	| PRINT '(' CADENA   {addProgramComponent("error de impresion por pantalla: falta parentesis ')'");}
+	| PRINT CADENA   {addProgramComponent("error de impresion por pantalla: faltan ambos parentesis");}
         ;

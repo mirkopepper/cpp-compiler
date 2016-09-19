@@ -1,6 +1,7 @@
-integer a
-integer b;
+integer c;
+
 {
+
 &&falta el punto y coma
 a:=_i1
 
@@ -24,8 +25,6 @@ c:=double;
 
 &&falta lado izquierdo
 &&:=_i3;
-
-&&
 
 &&
 a:=b;
