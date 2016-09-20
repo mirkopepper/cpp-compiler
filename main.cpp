@@ -37,28 +37,28 @@ void printSymbolsTable() {
 
 void printLexicalErrors() {
 
-    cout << "Errores Lexicos\n\n";
+    cout << "Errores \n\n";
     if (errors.size()>0) {
         for (list<string>::iterator it = errors.begin(); it!= errors.end(); it++) {
             cout << it->c_str();
         }
     }
     else
-        cout<<"No hay errores lexicos"<<endl;
+        cout<<"No hay errores "<<endl;
     cout << endl;
 
 }
 
 void printLexicalWarnings() {
 
-    cout << "Warnings Lexicos\n\n";
+    cout << "Warnings \n\n";
     if (warnings.size()>0) {
         for (list<string>::iterator it = warnings.begin(); it!= warnings.end(); it++) {
             cout << it->c_str();
         }
     }
     else
-        cout<<"No hay warnings lexicas"<<endl;
+        cout<<"No hay warnings"<<endl;
     cout << "\n";
 
 }
