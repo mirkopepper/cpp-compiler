@@ -952,15 +952,16 @@ double getDouble(string number){
         if(i==std::string::npos){//tampoco con d -> no hay exponente
             mantisse=number;
         }
-        else{//el exponnte empieza con d
-            mantisse=number.substr(2,i-2);
+        else{//el exponente empieza con d
+            mantisse=number.substr(0,i);
             exponent=number.substr(i+1,number.size()-1);
         }
     }
     else{//el exponente empieza con D
-        mantisse=number.substr(2,i-2);
+        mantisse=number.substr(0,i);
         exponent=number.substr(i+1,number.size()-1);
     }
+    cout << "mantisa: "<< mantisse << "exponente: "<<exponent <<endl;
     return atof(mantisse.c_str()) * (pow (10, atoi(exponent.c_str())));
 }
 
@@ -971,9 +972,10 @@ int LexicalAnalyzer::ASD_EOF (string * buffer, char c) {
 
     /*tranforma el string a double, por parametro:string sin prefijo*/
     aux = getDouble(buffer->substr(2,buffer->size()-1));
-
+    cout << "valor sin prefijo: "<< buffer->substr(2,buffer->size()-1) <<endl;
     double maximum = 1.7976931348623157 * (pow(10.0,308.0));
     double minimum = -1.7976931348623157 * (pow(10.0,308.0));
+    cout << "rango maximo: " <<maximum << ", rango minimo: " <<minimum << "aux: "<< aux <<endl;
     if (aux > maximum || aux < minimum) {
         string lexicalError = "\nError lexico: Constante flotante fuera de rango (Linea: ";
         lexicalError.append(std::to_string(lines));
