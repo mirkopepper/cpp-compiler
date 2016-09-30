@@ -55,6 +55,7 @@ _d12
 
 &&cadena bien escritas
 "1er renglon de cadena multilinea con mas al final +
+2do renglon de cadena multilinea con mas al final +
 ultimo renglon de cadena, no nesecita el mas"
 
 &&cadena:antes de saltar de linea debe haber un +.

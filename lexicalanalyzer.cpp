@@ -961,7 +961,6 @@ double getDouble(string number){
         mantisse=number.substr(0,i);
         exponent=number.substr(i+1,number.size()-1);
     }
-    cout << "mantisa: "<< mantisse << "exponente: "<<exponent <<endl;
     return atof(mantisse.c_str()) * (pow (10, atoi(exponent.c_str())));
 }
 
@@ -972,10 +971,8 @@ int LexicalAnalyzer::ASD_EOF (string * buffer, char c) {
 
     /*tranforma el string a double, por parametro:string sin prefijo*/
     aux = getDouble(buffer->substr(2,buffer->size()-1));
-    cout << "valor sin prefijo: "<< buffer->substr(2,buffer->size()-1) <<endl;
     double maximum = 1.7976931348623157 * (pow(10.0,308.0));
     double minimum = -1.7976931348623157 * (pow(10.0,308.0));
-    cout << "rango maximo: " <<maximum << ", rango minimo: " <<minimum << "aux: "<< aux <<endl;
     if (aux > maximum || aux < minimum) {
         string lexicalError = "\nError lexico: Constante flotante fuera de rango (Linea: ";
         lexicalError.append(std::to_string(lines));
@@ -1019,6 +1016,13 @@ int LexicalAnalyzer::ASOPD (string * buffer, char c) {
 /*Accion semantica que reconoce cadena*/
 int LexicalAnalyzer::ASCAD (string * buffer, char c) {
     buffer->push_back(c);
+
+    /*elimina los saltos de linea*/
+    int pos=buffer->find('+\n');
+    while(pos!=std::string::npos) {
+        buffer->erase(pos-1,2);
+        pos=buffer->find('+\n');
+    }
 
     /*Chequea si está en TS. Si no, lo da de alta */
     if (!symbolsTable->contains(*buffer)) {
