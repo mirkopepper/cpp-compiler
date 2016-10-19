@@ -4,13 +4,12 @@
 #include <list>
 #include <string>
 #include <Map>
-#include "constants.h"
+#include "y.tab.h"
 #include "symbolstable.h"
 #include <iostream>
 using namespace std;
 
 #define F -2 //estado final
-#define FE -3 //Final con error. Para cuando hay errores. También para los comentarios (se vuelve al estado 0)
 #define EOF 22 //columna de fin de archivo
 #define INVALID -4 //para devolver cuando el token no es valido, o en pasos intermedios
 
@@ -24,29 +23,29 @@ static const int state [23][23] ={
                                                                     ','
                                                      tab            ';'
         letra	digito	F,C i	d	D	.   -	 _	blanco, \n  (+)  /      &	@	 "	 >	 <	 :	 !  (=)	  otro EOF      */
-       { 1 ,       FE , 1,  1 , 1 , 1 , FE, 11 , 2 ,   0 ,  0 ,  F ,  F ,  18 , FE , 16 ,13, 12 ,14 ,15 ,F,    FE, FE}, //0
-       { 1 ,       1 ,  1,  1 , 1 , 1 , F , F ,  1 ,   F ,  F ,  F ,  F ,  F ,  F ,  F , F,  F , F , F , F,    F,  F}, //1
-       { FE ,      FE , FE, 3 , 5 , FE ,FE ,FE ,FE ,   FE , FE , FE , FE , FE , FE , FE, FE, FE ,FE ,FE, FE,   FE, FE}, //2
-       { FE ,      4 ,  FE, FE, FE ,FE ,FE ,4 , FE ,   FE , FE , FE , FE , FE , FE,  FE ,FE, FE ,FE ,FE ,FE,   FE, FE}, //3
-       { F ,       4 ,  F,  F , F , F , F , F , F ,    F ,  F ,  F ,  F ,  F ,  F ,  F , F,  F , F , F , F,    F,  F}, //4
-       { FE ,      6 ,  FE, FE ,FE ,FE ,7 , 6 , FE,    FE , FE , FE , FE , FE , FE , FE, FE, FE, FE ,FE ,FE,   FE, FE}, //5
-       { FE,       6 ,  FE, FE ,FE ,FE ,7 , FE ,FE ,   FE , FE , FE , FE , FE , FE , FE ,FE, FE ,FE ,FE ,FE,   FE, FE}, //6
-       { F ,       7 ,  F,  F , 8 , 8 , F , F , F ,    F ,  F ,  F ,  F ,  F ,  F ,  F , F,  F , F , F , F,    F,  F}, //7
-       { FE ,      9 ,  FE, FE ,FE ,FE ,FE ,10 ,FE ,   FE , FE , 10 , FE , FE , FE , FE ,FE, FE ,FE ,FE ,FE,   FE, FE}, //8
-       { F ,       9 ,  F,  F , F , F , F , F , F ,    F ,  F ,  F ,  F ,  F ,  F ,  F , F,  F , F , F , F,    F,  F}, //9
-       { FE ,      9 ,  FE, FE ,FE ,FE ,FE ,FE ,FE ,   FE , FE , FE , FE , FE , FE,  FE ,FE, FE, FE ,FE ,FE,   FE, FE}, //10
-       { F ,       F ,  F,  F , F , F , F , F , F ,    F ,  F ,  F ,  F ,  F ,  F ,  F , F,  F , F , F , F,    F,  F}, //11
-       { F ,       F ,  F,  F , F , F , F , F , F ,    F ,  F ,  F ,  F ,  F ,  F ,  F , F,  F , F , F , F,    F,  F}, //12
-       { F ,       F ,  F,  F , F , F , F , F , F ,    F ,  F ,  F ,  F ,  F ,  F ,  F , F,  F , F , F , F,    F,  F}, //13
-       { FE ,      FE,  FE, FE ,FE ,FE ,FE ,FE ,FE ,   FE , FE , FE , FE , FE , FE , FE ,FE, FE ,FE ,FE ,F,    FE, FE}, //14
-       { FE ,      FE,  FE, FE ,FE ,FE ,FE ,FE ,FE ,   FE , FE , FE , FE , FE , FE , FE ,FE, FE ,FE ,FE ,F,    FE, FE}, //15
-       { 16 ,      16 , 16, 16 ,16 ,16 ,16 ,16 ,16 ,   16 , FE , 17 , 16 , 16 , 16 , F , 16, 16 ,16 ,16 ,16,   16, FE}, //16
-       { 16 ,      16 , 16, 16 ,16 ,16 ,16 ,16 ,16 ,   16 , 16 , 17 , 16 , 16 , 16 , F , 16, 16 ,16 ,16 ,16,   16, FE}, //17
-       { FE ,      FE,  FE, FE ,FE ,FE ,FE ,FE ,FE ,   FE , FE , FE , FE , 19 , FE , FE ,FE, FE ,FE ,FE ,F,    FE, FE}, //18
-       { 20 ,      20 , 20, 20 ,20 ,20 ,20 ,20 ,20 ,   20 , FE , 20 , 20 , 20  ,21 , 20 ,20, 20 ,20 ,20 ,20,   20, FE}, //19
-       { 20 ,      20 , 20, 20 ,20 ,20 ,20 ,20 ,20 ,   20 , FE , 20 , 20 , 20  ,20 , 20 ,20, 20 ,20 ,20 ,20,   20, FE}, //20
-       { 20 ,      20 , 22, 20 ,20 ,20 ,20 ,20 ,20 ,   20 , FE , 20 , 20 , 20  ,20 , 20 ,20, 20 ,20 ,20 ,20,   20, FE}, //21
-       { 22 ,      22 , 22, 22 ,22 ,22 ,22 ,22 ,22 ,   22 , F ,  22 , 22 , 22 , 22 , 22, 22, 22 ,22 ,22 ,22,   22, F} //22
+        { 1  ,    0  ,  1 , 1 , 1 , 1 , 0 , 11 , 2  ,  0  ,  0 , F , F   ,  18, 0 ,  16, 13, 12, 14, 15, F  ,  0 , 0}, //0
+        { 1  ,    1  ,  1 , 1 , 1 , 1 , F , F  , 1  ,  F  ,  F , F , F   ,  F , F ,  F , F , F , F , F , F  ,  F , F}, //1
+        { 0  ,    0  ,  0 , 3 , 5 , 0 , 0 , 0  , 0  ,  0  ,  0 , 0 , 0   ,  0 , 0 ,  0 , 0 , 0 , 0 , 0 , 0  ,  0 , 0}, //2
+        { 0  ,    4  ,  0 , 0 , 0 , 0 , 0 , 4  , 0  ,  0  ,  0 , 0 , 0   ,  0 , 0 ,  0 , 0 , 0 , 0 , 0 , 0  ,  0 , 0}, //3
+        { F  ,    4  ,  F , F , F , F , F , F  , F  ,  F  ,  F , F , F   ,  F , F ,  F , F , F , F , F , F  ,  F , F}, //4
+        { 0  ,    6  ,  0 , 0 , 0 , 0 , 7 , 6  , 0  ,  0  ,  0 , 0 , 0   ,  0 , 0 ,  0 , 0 , 0 , 0 , 0 , 0  ,  0 , 0}, //5
+        { 0  ,    6  ,  0 , 0 , 0 , 0 , 7 , 0  , 0  ,  0  ,  0 , 0 , 0   ,  0 , 0 ,  0 , 0 , 0 , 0 , 0 , 0  ,  0 , 0}, //6
+        { F  ,    7  ,  F , F , 8 , 8 , F , F  , F  ,  F  ,  F , F , F   ,  F , F ,  F , F , F , F , F , F  ,  F , F}, //7
+        { 0  ,    9  ,  0 , 0 , 0 , 0 , 0 , 10 , 0  ,  0  ,  0 , 10, 0   ,  0 , 0 ,  0 , 0 , 0 , 0 , 0 , 0  ,  0 , 0}, //8
+        { F  ,    9  ,  F , F , F , F , F , F  , F  ,  F  ,  F , F , F   ,  F , F ,  F , F , F , F , F , F  ,  F , F}, //9
+        { 0  ,    9  ,  0 , 0 , 0 , 0 , 0 , 0  , 0  ,  0  ,  0 , 0 , 0   ,  0 , 0 ,  0 , 0 , 0 , 0 , 0 , 0  ,  0 , 0}, //10
+        { F  ,    F  ,  F , F , F , F , F , F  , F  ,  F  ,  F , F , F   ,  F , F ,  F , F , F , F , F , F  ,  F , F}, //11
+        { F  ,    F  ,  F , F , F , F , F , F  , F  ,  F  ,  F , F , F   ,  F , F ,  F , F , F , F , F , F  ,  F , F}, //12
+        { F  ,    F  ,  F , F , F , F , F , F  , F  ,  F  ,  F , F , F   ,  F , F ,  F , F , F , F , F , F  ,  F , F}, //13
+        { 0  ,    0  ,  0 , 0 , 0 , 0 , 0 , 0  , 0  ,  0  ,  0 , 0 , 0   ,  0 , 0 ,  0 , 0 , 0 , 0 , 0 , F  ,  0 , 0}, //14
+        { 0  ,    0  ,  0 , 0 , 0 , 0 , 0 , 0  , 0  ,  0  ,  0 , 0 , 0   ,  0 , 0 ,  0 , 0 , 0 , 0 , 0 , F  ,  0 , 0}, //15
+        { 16 ,    16 ,  16, 16, 16, 16, 16, 16 , 16 ,  16 ,  0 , 17, 16  ,  16, 16,  F , 16, 16, 16, 16, 16 ,  16, 0}, //16
+        { 16 ,    16 ,  16, 16, 16, 16, 16, 16 , 16 ,  16 ,  16, 17, 16  ,  16, 16,  F , 16, 16, 16, 16, 16 ,  16, 0}, //17
+        { 0  ,    0  ,  0 , 0 , 0 , 0 , 0 , 0  , 0  ,  0  ,  0 , 0 , 0   ,  19, 0 ,  0 , 0 , 0 , 0 , 0 , F  ,  0 , 0}, //18
+        { 20 ,    20 ,  20, 20, 20, 20, 20, 20 , 20 ,  20 ,  0 , 20, 20  ,  20, 21,  20, 20, 20, 20, 20, 20 ,  20, 0}, //19
+        { 20 ,    20 ,  20, 20, 20, 20, 20, 20 , 20 ,  20 ,  0 , 20, 20  ,  20, 20,  20, 20, 20, 20, 20, 20 ,  20, 0}, //20
+        { 20 ,    20 ,  22, 20, 20, 20, 20, 20 , 20 ,  20 ,  0 , 20, 20  ,  20, 20,  20, 20, 20, 20, 20, 20 ,  20, 0}, //21
+        { 22 ,    22 ,  22, 22, 22, 22, 22, 22 , 22 ,  22 ,  F , 22, 22  ,  22, 22,  22, 22, 22, 22, 22, 22 ,  22, F}  //22
 
    };
 
@@ -60,6 +59,9 @@ public:
 
     //ESTA ES SOLO PARA TESTEO, DE ESTO SE ENCARGA EL PARSER,LLAMO A YYLEX
     void reconocerTokens();
+
+    //devuelve la cantidad de lineas leidas hasta el momento (o lo que es lo mismo, la linea en la que esta parado el lexico en este momento)
+    int getLine();
 
 private:
     SymbolsTable * symbolsTable;
@@ -82,7 +84,6 @@ private:
     //dado un char, devuelve su columna correspondiente
     int getColumn(char c);
 
-
     void initState();
     void initReservedWords();
     void error(string str);
@@ -94,6 +95,9 @@ private:
 
     //Accion semantica para token invalido
     int ASTI(string * buffer, char c);
+
+    //Accion semantica para token invalido
+    int ASTI_EOF(string * buffer, char c);
 
     //Accion semantica para cuando no se tiene que almacenar ni descartar
     int ASV(string * buffer, char c);

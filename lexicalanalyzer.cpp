@@ -46,9 +46,9 @@ void LexicalAnalyzer::initReservedWords() {
     reservedWords.insert(std::map<string,int>::value_type("print", PRINT));
     reservedWords.insert(std::map<string,int>::value_type("integer", INTEGER));
     reservedWords.insert(std::map<string,int>::value_type("double", DOUBLE));
-    reservedWords.insert(std::map<string,int>::value_type("matrix", matrix));
+    reservedWords.insert(std::map<string,int>::value_type("matrix", MATRIX));
     reservedWords.insert(std::map<string,int>::value_type("while", WHILE));
-    reservedWords.insert(std::map<string,int>::value_type("allow", allow));
+    reservedWords.insert(std::map<string,int>::value_type("allow", ALLOW));
     reservedWords.insert(std::map<string,int>::value_type("to", TO));
 }
 
@@ -58,12 +58,12 @@ void LexicalAnalyzer::initState(){
 
     /* Fila 0 */
         semanticActions[0][0]=&LexicalAnalyzer::ASA;
-        semanticActions[0][1]=&LexicalAnalyzer::ASTI;
+        semanticActions[0][1]=&LexicalAnalyzer::ASTI_EOF;
         semanticActions[0][2]=&LexicalAnalyzer::ASA;
         semanticActions[0][3]=&LexicalAnalyzer::ASA;
         semanticActions[0][4]=&LexicalAnalyzer::ASA;
         semanticActions[0][5]=&LexicalAnalyzer::ASA;
-        semanticActions[0][6]=&LexicalAnalyzer::ASTI;
+        semanticActions[0][6]=&LexicalAnalyzer::ASTI_EOF;
         semanticActions[0][7]=&LexicalAnalyzer::ASA;
         semanticActions[0][8]=&LexicalAnalyzer::ASA;
         semanticActions[0][9]=&LexicalAnalyzer::ASV;
@@ -71,14 +71,14 @@ void LexicalAnalyzer::initState(){
         semanticActions[0][11]=&LexicalAnalyzer::AS_opSimple;
         semanticActions[0][12]=&LexicalAnalyzer::AS_opSimple;
         semanticActions[0][13]=&LexicalAnalyzer::ASA;
-        semanticActions[0][14]=&LexicalAnalyzer::ASTI;
+        semanticActions[0][14]=&LexicalAnalyzer::ASTI_EOF;
         semanticActions[0][15]=&LexicalAnalyzer::ASA;
         semanticActions[0][16]=&LexicalAnalyzer::ASA;
         semanticActions[0][17]=&LexicalAnalyzer::ASA;
         semanticActions[0][18]=&LexicalAnalyzer::ASA;
         semanticActions[0][19]=&LexicalAnalyzer::ASA;
         semanticActions[0][20]=&LexicalAnalyzer::AS_opSimple;
-        semanticActions[0][21]=&LexicalAnalyzer::ASTI;
+        semanticActions[0][21]=&LexicalAnalyzer::ASTI_EOF;
         semanticActions[0][22]=&LexicalAnalyzer::AS_opSimple;
 
     /* Fila 1 */
@@ -428,8 +428,8 @@ void LexicalAnalyzer::initState(){
         semanticActions[14][18]=&LexicalAnalyzer::ASTI;
         semanticActions[14][19]=&LexicalAnalyzer::ASTI;
         semanticActions[14][20]=&LexicalAnalyzer::ASOPD;
-        semanticActions[13][21]=&LexicalAnalyzer::ASTI;
-        semanticActions[13][22]=&LexicalAnalyzer::ASTI;
+        semanticActions[14][21]=&LexicalAnalyzer::ASTI;
+        semanticActions[14][22]=&LexicalAnalyzer::ASTI;
 
     /* Fila 15 */
         semanticActions[15][0]=&LexicalAnalyzer::ASTI;
@@ -623,7 +623,7 @@ void LexicalAnalyzer::initState(){
         semanticActions[22][11]=&LexicalAnalyzer::ASV;
         semanticActions[22][12]=&LexicalAnalyzer::ASV;
         semanticActions[22][13]=&LexicalAnalyzer::ASV;
-        semanticActions[22][14]=&LexicalAnalyzer::ASA;
+        semanticActions[22][14]=&LexicalAnalyzer::ASV;
         semanticActions[22][15]=&LexicalAnalyzer::ASV;
         semanticActions[22][16]=&LexicalAnalyzer::ASV;
         semanticActions[22][17]=&LexicalAnalyzer::ASV;
@@ -648,6 +648,9 @@ void LexicalAnalyzer::initState(){
 
     while (actualState!=F && column!=EOF) {
 
+        if(actualState==0)
+            buffer->clear();
+
         if (file.empty()) {
             column=EOF;
         } else {
@@ -661,9 +664,8 @@ void LexicalAnalyzer::initState(){
         //Actualiza el estado actual
         actualState = state [actualState][column];
 
-        if (actualState==FE || (actualState==F && token==INVALID)) {
+        if (actualState==F && token==INVALID) {
             actualState=0;
-            buffer->clear();
         }
     } /*End While. Aca hay dos posibilidades: se llego a estado final con token valido,
        o se llego a fin de archivo*/
@@ -712,7 +714,7 @@ void LexicalAnalyzer::reconocerTokens(){
      else if(c=='+') //suma
          return 11;
      else if(c=='(' || c==')' || c=='[' || c==']' || c=='{' || c=='}'
-         || c==',' || c==';' || c=='/') //paretensis, llaves, corchetes,punto y coma,coma
+         || c==',' || c==';' || c=='/' || c=='*') //paretensis, llaves, corchetes,punto y coma,coma
          return 12;
      else if(c=='&') //ampersant
          return 13;
@@ -737,7 +739,9 @@ void LexicalAnalyzer::reconocerTokens(){
 
  }
 
-
+int LexicalAnalyzer::getLine() {
+    return lines;
+}
 
 /*Accion semántica que acumula el char en el buffer */
 int LexicalAnalyzer::ASA (string * buffer, char c) {
@@ -752,7 +756,14 @@ int LexicalAnalyzer::ASA (string * buffer, char c) {
 
 /*Accion semántica de token invalido */
 int LexicalAnalyzer::ASTI (string * buffer, char c) {
-    string msg = "\nError lexico: Token invalido en linea: ";
+    file.push_front(c);
+    return ASTI_EOF(buffer,c);
+}
+
+/*Accion semántica de token invalido */
+int LexicalAnalyzer::ASTI_EOF(string * buffer, char c) {
+
+    string msg = "\nError lexico: Descartando '"+*buffer+c+"' por ser token invalido en linea: ";
     msg+=std::to_string(lines)+".";
     errors->push_back(msg);
     return INVALID;
@@ -853,7 +864,7 @@ int LexicalAnalyzer::AS_id_pr_EOF(string * buffer, char c) {
         symbolsTable->put(*buffer, entry);
     }
 
-    //yylval = symbolsTable->indexOf(*buffer);
+    yylval = symbolsTable->indexOf(*buffer);
 
     return ID;
 }
@@ -870,6 +881,7 @@ int LexicalAnalyzer::ASEPN(string * buffer, char c) {
 
 /*Accion semantica de entero mal escrito*/
 int LexicalAnalyzer::ASEE(string * buffer, char c) {
+    file.push_front(c);
     string msg = "\nError lexico: numero entero mal escrito en linea: ";
     msg+=std::to_string(lines);
     msg.append(".");
@@ -905,7 +917,7 @@ int LexicalAnalyzer::ASE_EOF (string * buffer, char c) {
         symbolsTable->put(*buffer, entry);
     }
 
-    //yylval = symbolsTable->indexOf(*buffer);
+    yylval = symbolsTable->indexOf(*buffer);
 
     return CTE;
 
@@ -940,13 +952,13 @@ double getDouble(string number){
         if(i==std::string::npos){//tampoco con d -> no hay exponente
             mantisse=number;
         }
-        else{//el exponnte empieza con d
-            mantisse=number.substr(2,i-2);
+        else{//el exponente empieza con d
+            mantisse=number.substr(0,i);
             exponent=number.substr(i+1,number.size()-1);
         }
     }
     else{//el exponente empieza con D
-        mantisse=number.substr(2,i-2);
+        mantisse=number.substr(0,i);
         exponent=number.substr(i+1,number.size()-1);
     }
     return atof(mantisse.c_str()) * (pow (10, atoi(exponent.c_str())));
@@ -959,7 +971,6 @@ int LexicalAnalyzer::ASD_EOF (string * buffer, char c) {
 
     /*tranforma el string a double, por parametro:string sin prefijo*/
     aux = getDouble(buffer->substr(2,buffer->size()-1));
-
     double maximum = 1.7976931348623157 * (pow(10.0,308.0));
     double minimum = -1.7976931348623157 * (pow(10.0,308.0));
     if (aux > maximum || aux < minimum) {
@@ -978,7 +989,7 @@ int LexicalAnalyzer::ASD_EOF (string * buffer, char c) {
         symbolsTable->put(*buffer,e);
     }
 
-//    yylval = symbolsTable->indexOf(*buffer);
+    yylval = symbolsTable->indexOf(*buffer);
 
     return CTE;
 }
@@ -1006,9 +1017,12 @@ int LexicalAnalyzer::ASOPD (string * buffer, char c) {
 int LexicalAnalyzer::ASCAD (string * buffer, char c) {
     buffer->push_back(c);
 
-    //VERIFICAR TS
-
-    //YYLVAL = Index
+    /*elimina los saltos de linea*/
+    int pos=buffer->find('+\n');
+    while(pos!=std::string::npos) {
+        buffer->erase(pos-1,2);
+        pos=buffer->find('+\n');
+    }
 
     /*Chequea si está en TS. Si no, lo da de alta */
     if (!symbolsTable->contains(*buffer)) {
@@ -1017,7 +1031,7 @@ int LexicalAnalyzer::ASCAD (string * buffer, char c) {
         symbolsTable->put(*buffer,e);
     }
 
-//    yylval = symbolsTable->indexOf(*buffer);
+    yylval = symbolsTable->indexOf(*buffer);
     return CADENA;
 }
 
@@ -1053,7 +1067,6 @@ int LexicalAnalyzer::ASAN_EOF (string * buffer, char c) {
         token = ARROBA_F;
     else if (*buffer == "&&@C")
         token = ARROBA_C;
-
     return token;
 }
 
@@ -1083,20 +1096,58 @@ return recognizedTokens;
 
 void LexicalAnalyzer::addRecognized(string * buffer, int token) {
     string description = "";
-    if (token >= 300) //ACA IRIA 257 CON YACC CREO
-    {
-        if (token >=310)
-            description="Palabra reservada: ";
-        else if (token == ID)
-            description="Identificador: ";
-            else if (token == CTE) {
-                //REVISAR LA TS Y AGREGAR "Constante entera: " o "Constante double")
-            } else if (token == CADENA)
-                description="Cadena: ";
-    }
 
-    description+=*buffer;
-    description+="\n";
+    /*despues del if estan solo las palabras reservadas, siendo if la 1ra*/
+    if (token >=IF)
+        description="Palabra reservada: "+*buffer+"\n";
+
+    /*identificador*/
+    else if (token == ID){
+           description="Identificador: "+*buffer+"\n";
+           }
+
+           /*cte:integer o double*/
+           else if (token == CTE) {
+                if(symbolsTable->contains(*buffer)){
+                    Entry * entry=symbolsTable->getEntry(*buffer);
+
+                    /*integer*/
+                    if(entry->type=="INT")
+                        description="Constate entera: "+buffer->substr(2,buffer->size()-1)+"\n";
+
+                    /*double*/
+                    else if(entry->type=="DOUBLE")
+                            description="Constante double: "+buffer->substr(2,buffer->size()-1)+"\n";
+                }
+
+                /*si sale este error entonces hay problemas de codigo*/
+                else
+                    cout<<"Error!! "<<*buffer<<" no esta en la TS."<<endl;
+
+           /*cadenas multilinea*/
+           } else if (token == CADENA){
+                       description="Cadena: "+symbolsTable->getEntry(*buffer)->lexeme+"\n";
+                  }
+
+                  /*los operadores de comparacion pueden ser: >=,<=,!= ó >,=,<*/
+                  else if((token >=MAYORIGUAL && token <= DISTINTO) || (token >= 60 && token <=62))
+                        description="Operador de comparacion: "+*buffer+"\n";
+
+                   /*anotaciones: &&@F ó &&@C*/
+                   else if(token == ARROBA_C || token == ARROBA_F)
+                        description="Anotacion de arreglo: "+*buffer+"\n";
+
+                   /*operadores asignacion: := ó -=*/
+                   else if(token == DOSPUNTOSIGUAL || token == MENOSIGUAL)
+                        description="Operador de asignacion: "+*buffer+"\n";
+
+                   /*caracteres especiales: coma,punto y coma,llaves,corchetes,parentesis*/
+                   else if(*buffer ==";" ||*buffer =="," ||*buffer =="[" ||*buffer =="]" ||*buffer =="(" ||*buffer ==")" ||*buffer =="{" ||*buffer =="}")
+                        description="Caracter especial: "+*buffer+"\n";
+
+                   /*operadores aritmeticos: +  - * / */
+                   else if(*buffer =="+" ||*buffer =="-" ||*buffer =="*" ||*buffer =="/")
+                        description="Operador aritmetico: "+*buffer+"\n";
 
     recognizedTokens.push_back(description);
 

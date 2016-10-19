@@ -1,12 +1,28 @@
 #include <iostream>
 #include "lexicalanalyzer.h"
 #include "symbolstable.h"
+#include "parser.h"
+
 using namespace std;
 
-static list<string> warnings, errors, tokens;
+static list<string> warnings, errors, tokens,programComponents;
 static SymbolsTable symbolsTable;
 
+void printProgramComponents() {
+
+    cout <<"Elementos de Programa Encontrados\n\n";
+    if(programComponents.size()==0)
+        cout<<"No se reconocio ningun componente en el programa!.\n\n";
+    else{
+        for (std::list<string>::iterator it =programComponents.begin(); it !=programComponents.end(); it++) {
+            cout<<*it<<endl;
+        }
+        cout<<endl;
+    }
+}
+
 void printSymbolsTable() {
+
     cout << "Tabla de Simbolos\n\n";
     list<string> symbols=symbolsTable.getSymbolsToPrint();
     if(symbols.size()==0)
@@ -20,32 +36,35 @@ void printSymbolsTable() {
 }
 
 void printLexicalErrors() {
-    cout << "Errores Lexicos\n\n";
+
+    cout << "Errores \n\n";
     if (errors.size()>0) {
         for (list<string>::iterator it = errors.begin(); it!= errors.end(); it++) {
             cout << it->c_str();
         }
     }
     else
-        cout<<"No hay errores lexicos"<<endl;
+        cout<<"No hay errores "<<endl;
     cout << endl;
 
 }
 
 void printLexicalWarnings() {
-    cout << "Warnings Lexicos\n\n";
+
+    cout << "Warnings \n\n";
     if (warnings.size()>0) {
         for (list<string>::iterator it = warnings.begin(); it!= warnings.end(); it++) {
             cout << it->c_str();
         }
     }
     else
-        cout<<"No hay warnings lexicas"<<endl;
+        cout<<"No hay warnings"<<endl;
     cout << "\n";
 
 }
 
 void printTokens() {
+
     cout << "\n\nTokens identificados:\n\n";
     if (tokens.size()>0) {
         for (list<string>::iterator it = tokens.begin(); it!= tokens.end(); it++) {
@@ -59,11 +78,12 @@ int main(int argc, char *argv[])
 {
 
     LexicalAnalyzer * lex = new LexicalAnalyzer(argv[1], &warnings, &errors, &symbolsTable);
-    lex->reconocerTokens();
 
-    //Parser * parser = new Parser (&tablaDeSimbolos,lex, &errores);
+    Parser * parser = new Parser (&symbolsTable,lex, &errors);
     /*Se ejecuta el yyparse*/
-    //int resultado = parser->yyparse();
+    int outcome = parser->yyparse();
+
+    cout <<"resultado del yyparse: "<<outcome<<endl;
 
     cout << "\n\nCodigo fuente analizado: " << argv[1] << endl;
 
@@ -71,11 +91,13 @@ int main(int argc, char *argv[])
 
     /*Ahora se imprimen todos los resultados*/
     tokens = lex->getTokens();
+    programComponents = parser->getProgramComponents();
 
     printTokens();
     printSymbolsTable();
+    printProgramComponents();
     printLexicalErrors();
     printLexicalWarnings();
-    //imprimirReglas();
+    return 0;
 }
 
