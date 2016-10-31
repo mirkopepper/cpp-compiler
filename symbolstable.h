@@ -2,9 +2,8 @@
 #define SYMBOLSTABLE_H
 
 #include "entry.h"
-#include "list"
-#include "map"
-#include <vector>
+#include <QtCore/QVector>
+#include <QtCore/QMap>
 
 class SymbolsTable
 {
@@ -28,7 +27,7 @@ public:
     int indexOf(string lexeme);
 
     //Devuelve las claves que contiene la tabla
-    vector<string> getKeys();
+    QList<string> getKeys();
 
     Entry * getEntry (const string lexeme);
     Entry * getEntry (const int index);
@@ -38,10 +37,24 @@ public:
 
     list<string> toListString();
 
+    /** Segunda entrega **/
+
+    /*se usa para cambiarle el nombre a una variable o matriz*/
+    void modifyLexeme(string oldLexeme, string newLexeme);
+
+    QString getType(string lexeme);
+
+    /*se usa para saber si una entrada es variable o matriz*/
+    string getUse(string lexeme);
+
+    /*asocia un lexeme con el uso que se le da*/
+    void setUse(string lexeme,string use);
+
 private:
 
-    map<string, Entry*> entries;
-    vector <string> index;
+    QMap<string, Entry*> entries;
+    QVector <string> index;
+    QMap<string,string> uses;
 };
 
 #endif // SYMBOLSTABLE_H

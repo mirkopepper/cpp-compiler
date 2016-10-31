@@ -16,9 +16,9 @@ public:
     //Crea nodo con dos hijos y devuelve su clave
     string crearNodo(string dato, string nodoIzquierda, string nodoDerecha);
 
+    PointersTable pointersTable;
 
 private:
-    PointersTable pointersTable;
 
     Node * root;
 

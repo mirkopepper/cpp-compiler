@@ -2,11 +2,13 @@
 #include "lexicalanalyzer.h"
 #include "symbolstable.h"
 #include "parser.h"
+#include "codegenerator.h"
 
 using namespace std;
 
 static list<string> warnings, errors, tokens,programComponents;
 static SymbolsTable symbolsTable;
+static CodeGenerator codeGen;
 
 void printProgramComponents() {
 
@@ -79,7 +81,7 @@ int main(int argc, char *argv[])
 
     LexicalAnalyzer * lex = new LexicalAnalyzer(argv[1], &warnings, &errors, &symbolsTable);
 
-    Parser * parser = new Parser (&symbolsTable,lex, &errors);
+    Parser * parser = new Parser (&symbolsTable,lex, &codeGen, &errors);
     /*Se ejecuta el yyparse*/
     int outcome = parser->yyparse();
 

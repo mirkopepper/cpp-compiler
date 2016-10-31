@@ -32,7 +32,7 @@ LexicalAnalyzer::LexicalAnalyzer(const char * textFile, list<string> * warnings,
 
 
 /*Apuntará a la entrada de la tabla de simbolos en cada token con lexema no unico*/
-extern int yylval;
+extern string yylval;
 
 
 void LexicalAnalyzer::error(string str) {

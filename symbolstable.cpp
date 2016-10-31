@@ -1,7 +1,7 @@
 #include "symbolstable.h"
-#include <vector>
 #include <iostream>
 #include <algorithm>
+#include <QtCore/QString>
 
 SymbolsTable::SymbolsTable()
 {
@@ -10,19 +10,16 @@ SymbolsTable::SymbolsTable()
 }
 
 void SymbolsTable::put(string lexeme, Entry *e) {
-    this->entries.insert(std::pair<string,Entry*>(lexeme,e));
+    this->entries.insert(lexeme,e);
     this->index.push_back(lexeme);
 }
 
 int SymbolsTable::indexOf(string lexeme) {
-    std::vector<string>::iterator it;
-    it=std::find(index.begin(),index.end(),lexeme);
-    return distance(index.begin(),it);
+    return this->index.indexOf(lexeme);
 }
 
 bool SymbolsTable::contains(string lexeme) {
-    std::map<string,Entry*>::iterator it=entries.find(lexeme);
-    return it!=entries.end();
+    return this->entries.contains(lexeme);
 }
 
 bool SymbolsTable::contains(int key) {
@@ -33,27 +30,47 @@ int SymbolsTable::size() {
     return this->entries.size();
 }
 
-vector<string> SymbolsTable::getKeys() {
-    return index;
+QList<string> SymbolsTable::getKeys() {
+    return entries.keys();
 }
 
 Entry * SymbolsTable::getEntry(const int index) {
-    return this->entries.find(this->index.at(index))->second;
+    return this->entries.value(this->index.value(index));
 }
 
 Entry * SymbolsTable::getEntry(const string lexeme) {
-    return entries.find(lexeme)->second;
+    return entries.value(lexeme);
 }
 
 list<string> SymbolsTable::getSymbolsToPrint(){
 
     list<string> symbolsToPrint;
     symbolsToPrint.clear();
-    for (int i = 0; i < index.size(); ++i) {
-        Entry *e=entries.find(index.at(i))->second;
-        string aux=std::to_string(i+1)+"    "+e->toString();
-        symbolsToPrint.push_back(aux);
-    }
-
+    for (int i=0; i<index.size(); i++) {
+            Entry * e = entries.value(index.at(i));
+            string aux = "\nNro. Entrada: " + (QString::number(i+1)).toStdString() + " | ";
+            aux+=e->toString();
+            symbolsToPrint.push_back(aux);
+        }
     return symbolsToPrint;
+}
+
+/** Segunda entrega **/
+
+void SymbolsTable::modifyLexeme(string oldLexeme, string newLexeme) {
+    Entry * e = this->entries.value(oldLexeme);
+    index.remove(this->indexOf(oldLexeme));
+    entries.remove(oldLexeme);
+    e->lexeme=newLexeme;
+    this->put(newLexeme, e);
+}
+
+QString SymbolsTable::getType(string lexeme) {
+    Entry * e = this->entries.value(lexeme);
+
+    return QString::fromStdString(e->type);
+}
+
+void SymbolsTable::setUse(string lexeme,string use){
+    uses.insert(lexeme,use);
 }
