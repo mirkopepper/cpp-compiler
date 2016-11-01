@@ -102,4 +102,3 @@ int main(int argc, char *argv[])
     printLexicalWarnings();
     return 0;
 }
-
