@@ -81,7 +81,7 @@ bool Parser::integerSubindex(QString tipo1,QString tipo2){
         return true;
 }
 
-string Parser::createAritmethicalOperatorNode(string aritmethicalOperator,string leftNode,string rightNode){
+string Parser::createOperatorNode(string fatherNode,string leftNode,string rightNode){
     QString tipo1, tipo2;
     if (!lastTypes.empty())
         tipo1 = lastTypes.pop();
@@ -92,20 +92,33 @@ string Parser::createAritmethicalOperatorNode(string aritmethicalOperator,string
             lastTypes.push("INTEGER");
         else
             lastTypes.push("DOUBLE");
-        return codeGen->crearNodo(aritmethicalOperator,leftNode,rightNode);
+        return codeGen->crearNodo(fatherNode,leftNode,rightNode);
     } else {
         //como stack es una pila, tipo1=factor tipo2=termino
         lastTypes.push("DOUBLE");
         if (tipo1=="INTEGER") {
             string conversion = codeGen->crearNodo("@conv",rightNode);
-            return codeGen->crearNodo("/",leftNode, conversion);
+            return codeGen->crearNodo(fatherNode,leftNode, conversion);
         } else {
             string conversion = codeGen->crearNodo("@conv",leftNode);
-            return codeGen->crearNodo("/", conversion,rightNode);
+            return codeGen->crearNodo(fatherNode, conversion,rightNode);
         }
     }
 }
 
+string Parser::createAssignmentNode(string assignmentOperator, string leftNode, string rightNode){
+    QString tipo1,tipo2;
+    if (!lastTypes.empty())
+        tipo1 = lastTypes.pop();
+    if (!lastTypes.empty())
+        tipo2 = lastTypes.pop();
+    /*tipo2=asig_izq tipo1=expresion*/
+    if(tipo2=="INTEGER" && tipo1=="DOUBLE" && !conversionsAllowed){
+        addErrorMessage("Error en asignacion: conversion no permitida.");
+        return codeGen->crearNodo(assignmentOperator,leftNode,rightNode);
+    }else
+        return createOperatorNode(assignmentOperator,leftNode,rightNode);
+}
 
 #define yyparse Parser::yyparse
 #define yyerror Parser::yyerror

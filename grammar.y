@@ -151,15 +151,7 @@ comparador : '<' 		{$$="<";}
 
 asignacion : asignacion_izq operador_asignacion expresion
                 {
-                QString tipo1,tipo2;
-                if (!lastTypes.empty())
-                    tipo1 = lastTypes.pop();
-                if (!lastTypes.empty())
-                    tipo2 = lastTypes.pop();
-                /*tipo2=asig_izq tipo1=expresion*/
-                if(tipo2=="INTEGER" && tipo1=="DOUBLE" && !conversionsAllowed)
-                    addErrorMessage("Error en asignacion: conversion no permitida.");
-                    $$=codeGen->crearNodo($2,$1,$3);
+                $$=createAssignmentNode($2,$1,$3);
                 }
         | asignacion_izq operador_asignacion expresion error	{addErrorMessage("Error en asignacion:problema con asignacion");}
         | asignacion_izq operador_asignacion error 		{addErrorMessage("Error en asignacioN:problema con la expresion del lado derecho");}
@@ -177,22 +169,22 @@ asignacion_izq : ID
 
 expresion : expresion '+' termino
                 {
-                $$=createAritmethicalOperatorNode("+",$1,$3);
+                $$=createOperatorNode("+",$1,$3);
                 }
         | expresion '-' termino
                 {
-                $$=createAritmethicalOperatorNode("-",$1,$3);
+                $$=createOperatorNode("-",$1,$3);
                 }
         | termino
         ;
 
 termino : termino '*' factor
                 {
-                $$=createAritmethicalOperatorNode("*",$1,$3);
+                $$=createOperatorNode("*",$1,$3);
                 }
         | termino '/' factor
                 {
-                $$=createAritmethicalOperatorNode("/",$1,$3);
+                $$=createOperatorNode("/",$1,$3);
                 }
         | factor
         ;

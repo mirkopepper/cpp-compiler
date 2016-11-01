@@ -772,59 +772,51 @@ break;
 case 65:
 #line 153 "grammar.y"
 {
-                QString tipo1,tipo2;
-                if (!lastTypes.empty())
-                    tipo1 = lastTypes.pop();
-                if (!lastTypes.empty())
-                    tipo2 = lastTypes.pop();
-                /*tipo2=asig_izq tipo1=expresion*/
-                if(tipo2=="INTEGER" && tipo1=="DOUBLE" && !conversionsAllowed)
-                    addErrorMessage("Error en asignacion: conversion no permitida.");
-                    yyval=codeGen->crearNodo(yyvsp[-1],yyvsp[-2],yyvsp[0]);
+                yyval=createAssignmentNode(yyvsp[-1],yyvsp[-2],yyvsp[0]);
                 }
 break;
 case 66:
-#line 164 "grammar.y"
+#line 156 "grammar.y"
 {addErrorMessage("Error en asignacion:problema con asignacion");}
 break;
 case 67:
-#line 165 "grammar.y"
+#line 157 "grammar.y"
 {addErrorMessage("Error en asignacioN:problema con la expresion del lado derecho");}
 break;
 case 68:
-#line 166 "grammar.y"
+#line 158 "grammar.y"
 {addErrorMessage("Error en asignacion:falta el operador de asignacion");}
 break;
 case 69:
-#line 167 "grammar.y"
+#line 159 "grammar.y"
 {addErrorMessage("Error en asignacion:falta variable en lado derecho");}
 break;
 case 74:
-#line 179 "grammar.y"
+#line 171 "grammar.y"
 {
-                yyval=createAritmethicalOperatorNode("+",yyvsp[-2],yyvsp[0]);
+                yyval=createOperatorNode("+",yyvsp[-2],yyvsp[0]);
                 }
 break;
 case 75:
-#line 183 "grammar.y"
+#line 175 "grammar.y"
 {
-                yyval=createAritmethicalOperatorNode("-",yyvsp[-2],yyvsp[0]);
+                yyval=createOperatorNode("-",yyvsp[-2],yyvsp[0]);
                 }
 break;
 case 77:
-#line 190 "grammar.y"
+#line 182 "grammar.y"
 {
-                yyval=createAritmethicalOperatorNode("*",yyvsp[-2],yyvsp[0]);
+                yyval=createOperatorNode("*",yyvsp[-2],yyvsp[0]);
                 }
 break;
 case 78:
-#line 194 "grammar.y"
+#line 186 "grammar.y"
 {
-                yyval=createAritmethicalOperatorNode("/",yyvsp[-2],yyvsp[0]);
+                yyval=createOperatorNode("/",yyvsp[-2],yyvsp[0]);
                 }
 break;
 case 80:
-#line 201 "grammar.y"
+#line 193 "grammar.y"
 {/*chequeo si ID fue declarado como VARIABLE*/
                 string var=mangle(yyvsp[0],"variable");
                 yyval=codeGen->crearNodo(var);
@@ -833,20 +825,20 @@ case 80:
                 }
 break;
 case 81:
-#line 208 "grammar.y"
+#line 200 "grammar.y"
 {yyval=codeGen->crearNodo(yyvsp[0]);
                 lastTypes.push(symbolsTable->getType(yyvsp[0]));
                 }
 break;
 case 82:
-#line 212 "grammar.y"
+#line 204 "grammar.y"
 {yyval=yyvsp[0];
                 Node * node = codeGen->pointersTable.getNode(yyvsp[0]);
                 lastTypes.push(symbolsTable->getType(node->dato));
                 }
 break;
 case 83:
-#line 219 "grammar.y"
+#line 211 "grammar.y"
 {/*chequeo tipo expresiones=INTEGER*/
                 string mat=mangle(yyvsp[-6],"matriz");
                 /*saca los ultimos 2 tipos*/
@@ -861,54 +853,54 @@ case 83:
                 }
 break;
 case 84:
-#line 231 "grammar.y"
+#line 223 "grammar.y"
 {addErrorMessage("error en celda: falta expresion en 1er dimension");}
 break;
 case 85:
-#line 232 "grammar.y"
+#line 224 "grammar.y"
 {addErrorMessage("error en celda: falta ']' en la 1er dimension");}
 break;
 case 86:
-#line 233 "grammar.y"
+#line 225 "grammar.y"
 {addErrorMessage("error en celda: falta '[' en la 2da dimension");}
 break;
 case 87:
-#line 234 "grammar.y"
+#line 226 "grammar.y"
 {addErrorMessage("error en celda: falta expresion en 2da dimension");}
 break;
 case 88:
-#line 235 "grammar.y"
+#line 227 "grammar.y"
 {addErrorMessage("error en celda: falta ']' en 2da dimension");}
 break;
 case 89:
-#line 239 "grammar.y"
+#line 231 "grammar.y"
 {addProgramComponent("Sentencia WHILE");
                 yyval=codeGen->crearNodo("@while",yyvsp[-1],yyvsp[0]);
                 }
 break;
 case 90:
-#line 245 "grammar.y"
+#line 237 "grammar.y"
 {addProgramComponent("Impresion por pantalla");
                 yyval=codeGen->crearNodo("@print",yyvsp[-1]);
                 }
 break;
 case 91:
-#line 248 "grammar.y"
+#line 240 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: falta cadena");}
 break;
 case 92:
-#line 249 "grammar.y"
+#line 241 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: falta parentesis '('");}
 break;
 case 93:
-#line 250 "grammar.y"
+#line 242 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: falta parentesis ')'");}
 break;
 case 94:
-#line 251 "grammar.y"
+#line 243 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: faltan ambos parentesis");}
 break;
-#line 912 "y.tab.c"
+#line 904 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

@@ -28,8 +28,11 @@ private:
 
     void declareVariable (string var, string prefix, string tipo,string use);
 
-    /**/
-    string createAritmethicalOperatorNode (string aritmethicalOperator,string leftNode,string rightNode);
+    /*se le pasa por parametro +,-,*,/ o op de asignacion. Para todos funciona igual. Crea el nodo padre con las
+     * expresiones/terminos/factores como hijos, agregando cuando sea necesario un nodo de conversion a DOUBLE*/
+    string createOperatorNode (string fatherNode,string leftNode,string rightNode);
+
+    string createAssignmentNode(string assignmentOperator,string leftNode,string rightNode);
 
     /*a partir del tipo de dato (variable o matriz), construye el nombre completo y se fija si se encuentra en la TS
     y si no esta informa el error*/
