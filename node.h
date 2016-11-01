@@ -9,6 +9,9 @@ public:
     string dato;
     Node *hijoIzquierdo;
     Node *hijoDerecho;
+
+    /*impresion pre-order del codigo intermedio*/
+    string preOrderPrint();
 };
 
 #endif // NODE_H
