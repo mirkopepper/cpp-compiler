@@ -81,7 +81,7 @@ bool Parser::integerSubindex(QString tipo1,QString tipo2){
         return true;
 }
 
-string Parser::createOperatorNode(string fatherNode,string leftNode,string rightNode){
+string Parser::createOperatorNode(string parentNode,string leftNode,string rightNode){
     QString tipo1, tipo2;
     if (!lastTypes.empty())
         tipo1 = lastTypes.pop();
@@ -92,16 +92,16 @@ string Parser::createOperatorNode(string fatherNode,string leftNode,string right
             lastTypes.push("INTEGER");
         else
             lastTypes.push("DOUBLE");
-        return codeGen->crearNodo(fatherNode,leftNode,rightNode);
+        return codeGen->crearNodo(parentNode,leftNode,rightNode);
     } else {
         //como stack es una pila, tipo1=factor tipo2=termino
         lastTypes.push("DOUBLE");
         if (tipo1=="INTEGER") {
             string conversion = codeGen->crearNodo("@conv",rightNode);
-            return codeGen->crearNodo(fatherNode,leftNode, conversion);
+            return codeGen->crearNodo(parentNode,leftNode, conversion);
         } else {
             string conversion = codeGen->crearNodo("@conv",leftNode);
-            return codeGen->crearNodo(fatherNode, conversion,rightNode);
+            return codeGen->crearNodo(parentNode, conversion,rightNode);
         }
     }
 }
@@ -113,11 +113,18 @@ string Parser::createAssignmentNode(string assignmentOperator, string leftNode, 
     if (!lastTypes.empty())
         tipo2 = lastTypes.pop();
     /*tipo2=asig_izq tipo1=expresion*/
-    if(tipo2=="INTEGER" && tipo1=="DOUBLE" && !conversionsAllowed){
-        addErrorMessage("Error en asignacion: conversion no permitida.");
+    if(tipo2==tipo1)/*si son del mismo tipo no hay conversiones*/
         return codeGen->crearNodo(assignmentOperator,leftNode,rightNode);
-    }else
-        return createOperatorNode(assignmentOperator,leftNode,rightNode);
+    else
+        if(tipo2=="INTEGER" && tipo1=="DOUBLE" && !conversionsAllowed){/*son de distinto tipo e incompatibles*/
+            addErrorMessage("Error en asignacion: conversion no permitida.");
+            return codeGen->crearNodo(assignmentOperator,leftNode,rightNode);
+        }else/*son de distinto tipo, pero se debe convertir lo del lado derecho*/
+            return codeGen->crearNodo(assignmentOperator,leftNode,codeGen->crearNodo("@conv",rightNode));
+}
+
+void Parser::declareMatriz(string mat, string prefix, string tipo, string use, string dimensiones, string optional){
+    /*hace lo mismo que declare variable, pero agrega funcinalidad. el martes lo termino.*/
 }
 
 #define yyparse Parser::yyparse

@@ -26,11 +26,15 @@ private:
 
     /** Segunda entrega **/
 
+    /*completa el nombre de la variable,actualiza la TS y le setea el tipo y uso*/
     void declareVariable (string var, string prefix, string tipo,string use);
+
+    /*le agrega al declareVariable: guarda la alineacion de la matriz(filas o columnas), direccion base y los limites*/
+    void declareMatriz(string mat, string prefix, string tipo, string use,string dimensiones,string optional);
 
     /*se le pasa por parametro +,-,*,/ o op de asignacion. Para todos funciona igual. Crea el nodo padre con las
      * expresiones/terminos/factores como hijos, agregando cuando sea necesario un nodo de conversion a DOUBLE*/
-    string createOperatorNode (string fatherNode,string leftNode,string rightNode);
+    string createOperatorNode (string parentNode,string leftNode,string rightNode);
 
     string createAssignmentNode(string assignmentOperator,string leftNode,string rightNode);
 

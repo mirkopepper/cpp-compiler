@@ -42,45 +42,62 @@ lista_id : lista_id ',' ID 	{declareVariable($3, "var@", type,"variable");}
 arreglo : tipo MATRIX ID dimensiones_cte opcional_arreglo
                 {
                 /*declarar matriz,guardar limites y forma de alinearse.Si fuera necesario se inicializa*/
+                declareMatriz($3,"mat@",type,"matriz",$4,$5);
                 }
         ;
 
 dimensiones_cte : '[' CTE ']' '[' CTE ']'
                 {
-                /*falta chequear que sean valores enteros y guardar ambos valores*/
+                /*falta chequear que sean valores enteros*/
+                if(symbolsTable->getEntry($2)->type=="INTEGER" && symbolsTable->getEntry($5)->type=="INTEGER")
+                    $$=$2+"@"+$5;
+                else{
+                    addErrorMessage("los limites de la matriz deben ser valores enteros.");
+                    /*QUE ONDA ACA??RETORNO DE TODAS FORMAS: CTE+@+CTE? NO RETORNO NADA?? CUAL ES EL VALOR POR DEFECTO SI NO "RETORNO NADA"?*/
+                }
                 }
         ;
 
 opcional_arreglo : ';'
                 {addProgramComponent("Declaracion de matriz");
                 /*No se inicializa nada pero se guarda inicializacion por filas (opcion por defecto)*/
+                $$="@@@";
                 }
         | inicializacion ';'            {addProgramComponent("Declaracion e inicializacion de matriz");}
                 {addProgramComponent("Declaracion e inicializacion de matriz");
                 /*Se inicializa  y guarda por filas  (opcion por defecto)*/
+                $$="@"+$1+"@filas@";
                 }
         | ';' anotacion     		{addProgramComponent("Declaracion y anotacion de matriz");}
                 {addProgramComponent("Declaracion y anotacion de matriz");
                 /*Se guarda alineacion por filas/columnas*/
+                $$="@@"+$2+"@";
                 }
         | inicializacion ';' anotacion 	{addProgramComponent("Declaracion, inicializacion y anotacion de matriz");}
                 {addProgramComponent("Declaracion, inicializacion y anotacion de matriz");
                 /*Se inicializa y guarda alineacion por filas/columnas*/
+                $$="@"+$1+"@"+$3+"@";
                 }
         ;
 
-anotacion : ARROBA_C    {/*guardar en algun lado que se inicaliza por columnas*/}
-        | ARROBA_F      {/*guardar en algun lado que se inicaliza por filas*/}
+anotacion : ARROBA_C
+                {/*se inicializa por columnas*/
+                $$="columas";
+                }
+        | ARROBA_F
+                {/*se inicializa por filas*/
+                $$="filas";
+                }
         ;
 
-inicializacion : '{' lista_de_listas '}'
+inicializacion : '{' lista_de_listas '}'    {$$=$2;}
         ;
 
-lista_de_listas : lista_de_listas ';' lista_valores
+lista_de_listas : lista_de_listas ';' lista_valores {$$=$1+";"+$3;}
         | lista_valores
         ;
 
-lista_valores : lista_valores ',' CTE
+lista_valores : lista_valores ',' CTE       {$$=$1+","+$3;}
         | CTE
         ;
 
