@@ -28,6 +28,9 @@ private:
 
     void declareVariable (string var, string prefix, string tipo,string use);
 
+    /**/
+    string createAritmethicalOperatorNode (string aritmethicalOperator,string leftNode,string rightNode);
+
     /*a partir del tipo de dato (variable o matriz), construye el nombre completo y se fija si se encuentra en la TS
     y si no esta informa el error*/
     string mangle (string var, string tipo);

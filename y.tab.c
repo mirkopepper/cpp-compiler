@@ -802,113 +802,29 @@ break;
 case 74:
 #line 179 "grammar.y"
 {
-                QString tipo1, tipo2;
-                if (!lastTypes.empty())
-                    tipo1 = lastTypes.pop();
-                if (!lastTypes.empty())
-                    tipo2 = lastTypes.pop();
-                if (tipo1==tipo2) {
-                    if (tipo1=="INTEGER")
-                        lastTypes.push("INTEGER");
-                    else
-                        lastTypes.push("DOUBLE");
-                    yyval=codeGen->crearNodo("+", yyvsp[-2], yyvsp[0]);
-                } else {
-                    /*como stack es una pila, tipo1=factor tipo2=termino*/
-                    lastTypes.push("DOUBLE");
-                    if (tipo1=="INTEGER") {
-                        string conversion = codeGen->crearNodo("@conv", yyvsp[0]);
-                        yyval=codeGen->crearNodo("+", yyvsp[-2], conversion);
-                    } else {
-                        string conversion = codeGen->crearNodo("@conv", yyvsp[-2]);
-                        yyval=codeGen->crearNodo("+", conversion, yyvsp[0]);
-                    }
-                }
+                yyval=createAritmethicalOperatorNode("+",yyvsp[-2],yyvsp[0]);
                 }
 break;
 case 75:
-#line 204 "grammar.y"
+#line 183 "grammar.y"
 {
-                QString tipo1, tipo2;
-                if (!lastTypes.empty())
-                    tipo1 = lastTypes.pop();
-                if (!lastTypes.empty())
-                    tipo2 = lastTypes.pop();
-                if (tipo1==tipo2) {
-                    if (tipo1=="INTEGER")
-                        lastTypes.push("INTEGER");
-                    else
-                        lastTypes.push("DOUBLE");
-                    yyval=codeGen->crearNodo("-", yyvsp[-2], yyvsp[0]);
-                } else {
-                    /*como stack es una pila, tipo1=factor tipo2=termino*/
-                    lastTypes.push("DOUBLE");
-                    if (tipo1=="INTEGER") {
-                        string conversion = codeGen->crearNodo("@conv", yyvsp[0]);
-                        yyval=codeGen->crearNodo("-", yyvsp[-2], conversion);
-                    } else {
-                        string conversion = codeGen->crearNodo("@conv", yyvsp[-2]);
-                        yyval=codeGen->crearNodo("-", conversion, yyvsp[0]);
-                    }
-                }
+                yyval=createAritmethicalOperatorNode("-",yyvsp[-2],yyvsp[0]);
                 }
 break;
 case 77:
-#line 232 "grammar.y"
+#line 190 "grammar.y"
 {
-                QString tipo1, tipo2;
-                if (!lastTypes.empty())
-                    tipo1 = lastTypes.pop();
-                if (!lastTypes.empty())
-                    tipo2 = lastTypes.pop();
-                if (tipo1==tipo2) {
-                    if (tipo1=="INTEGER")
-                        lastTypes.push("INTEGER");
-                    else
-                        lastTypes.push("DOUBLE");
-                    yyval=codeGen->crearNodo("*", yyvsp[-2], yyvsp[0]);
-                } else {
-                    /*como stack es una pila, tipo1=factor tipo2=termino*/
-                    lastTypes.push("DOUBLE");
-                    if (tipo1=="INTEGER") {
-                        string conversion = codeGen->crearNodo("@conv", yyvsp[0]);
-                        yyval=codeGen->crearNodo("*", yyvsp[-2], conversion);
-                    } else {
-                        string conversion = codeGen->crearNodo("@conv", yyvsp[-2]);
-                        yyval=codeGen->crearNodo("*", conversion, yyvsp[0]);
-                    }
-                }
+                yyval=createAritmethicalOperatorNode("*",yyvsp[-2],yyvsp[0]);
                 }
 break;
 case 78:
-#line 257 "grammar.y"
+#line 194 "grammar.y"
 {
-                QString tipo1, tipo2;
-                if (!lastTypes.empty())
-                    tipo1 = lastTypes.pop();
-                if (!lastTypes.empty())
-                    tipo2 = lastTypes.pop();
-                if (tipo1==tipo2) {
-                    if (tipo1=="INTEGER")
-                        lastTypes.push("INTEGER");
-                    else
-                        lastTypes.push("DOUBLE");
-                    yyval=codeGen->crearNodo("/", yyvsp[-2], yyvsp[0]);
-                } else {
-                    /*como stack es una pila, tipo1=factor tipo2=termino*/
-                    lastTypes.push("DOUBLE");
-                    if (tipo1=="INTEGER") {
-                        string conversion = codeGen->crearNodo("@conv", yyvsp[0]);
-                        yyval=codeGen->crearNodo("/", yyvsp[-2], conversion);
-                    } else {
-                        string conversion = codeGen->crearNodo("@conv", yyvsp[-2]);
-                        yyval=codeGen->crearNodo("/", conversion, yyvsp[0]);
-                    }
-                }
+                yyval=createAritmethicalOperatorNode("/",yyvsp[-2],yyvsp[0]);
                 }
 break;
 case 80:
-#line 285 "grammar.y"
+#line 201 "grammar.y"
 {/*chequeo si ID fue declarado como VARIABLE*/
                 string var=mangle(yyvsp[0],"variable");
                 yyval=codeGen->crearNodo(var);
@@ -917,20 +833,20 @@ case 80:
                 }
 break;
 case 81:
-#line 292 "grammar.y"
+#line 208 "grammar.y"
 {yyval=codeGen->crearNodo(yyvsp[0]);
                 lastTypes.push(symbolsTable->getType(yyvsp[0]));
                 }
 break;
 case 82:
-#line 296 "grammar.y"
+#line 212 "grammar.y"
 {yyval=yyvsp[0];
                 Node * node = codeGen->pointersTable.getNode(yyvsp[0]);
                 lastTypes.push(symbolsTable->getType(node->dato));
                 }
 break;
 case 83:
-#line 303 "grammar.y"
+#line 219 "grammar.y"
 {/*chequeo tipo expresiones=INTEGER*/
                 string mat=mangle(yyvsp[-6],"matriz");
                 /*saca los ultimos 2 tipos*/
@@ -945,54 +861,54 @@ case 83:
                 }
 break;
 case 84:
-#line 315 "grammar.y"
+#line 231 "grammar.y"
 {addErrorMessage("error en celda: falta expresion en 1er dimension");}
 break;
 case 85:
-#line 316 "grammar.y"
+#line 232 "grammar.y"
 {addErrorMessage("error en celda: falta ']' en la 1er dimension");}
 break;
 case 86:
-#line 317 "grammar.y"
+#line 233 "grammar.y"
 {addErrorMessage("error en celda: falta '[' en la 2da dimension");}
 break;
 case 87:
-#line 318 "grammar.y"
+#line 234 "grammar.y"
 {addErrorMessage("error en celda: falta expresion en 2da dimension");}
 break;
 case 88:
-#line 319 "grammar.y"
+#line 235 "grammar.y"
 {addErrorMessage("error en celda: falta ']' en 2da dimension");}
 break;
 case 89:
-#line 323 "grammar.y"
+#line 239 "grammar.y"
 {addProgramComponent("Sentencia WHILE");
                 yyval=codeGen->crearNodo("@while",yyvsp[-1],yyvsp[0]);
                 }
 break;
 case 90:
-#line 329 "grammar.y"
+#line 245 "grammar.y"
 {addProgramComponent("Impresion por pantalla");
                 yyval=codeGen->crearNodo("@print",yyvsp[-1]);
                 }
 break;
 case 91:
-#line 332 "grammar.y"
+#line 248 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: falta cadena");}
 break;
 case 92:
-#line 333 "grammar.y"
+#line 249 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: falta parentesis '('");}
 break;
 case 93:
-#line 334 "grammar.y"
+#line 250 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: falta parentesis ')'");}
 break;
 case 94:
-#line 335 "grammar.y"
+#line 251 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: faltan ambos parentesis");}
 break;
-#line 996 "y.tab.c"
+#line 912 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

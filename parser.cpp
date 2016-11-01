@@ -81,6 +81,32 @@ bool Parser::integerSubindex(QString tipo1,QString tipo2){
         return true;
 }
 
+string Parser::createAritmethicalOperatorNode(string aritmethicalOperator,string leftNode,string rightNode){
+    QString tipo1, tipo2;
+    if (!lastTypes.empty())
+        tipo1 = lastTypes.pop();
+    if (!lastTypes.empty())
+        tipo2 = lastTypes.pop();
+    if (tipo1==tipo2) {
+        if (tipo1=="INTEGER")
+            lastTypes.push("INTEGER");
+        else
+            lastTypes.push("DOUBLE");
+        return codeGen->crearNodo(aritmethicalOperator,leftNode,rightNode);
+    } else {
+        //como stack es una pila, tipo1=factor tipo2=termino
+        lastTypes.push("DOUBLE");
+        if (tipo1=="INTEGER") {
+            string conversion = codeGen->crearNodo("@conv",rightNode);
+            return codeGen->crearNodo("/",leftNode, conversion);
+        } else {
+            string conversion = codeGen->crearNodo("@conv",leftNode);
+            return codeGen->crearNodo("/", conversion,rightNode);
+        }
+    }
+}
+
+
 #define yyparse Parser::yyparse
 #define yyerror Parser::yyerror
 #include "y.tab.c" // yypase()

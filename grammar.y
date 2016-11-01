@@ -177,106 +177,22 @@ asignacion_izq : ID
 
 expresion : expresion '+' termino
                 {
-                QString tipo1, tipo2;
-                if (!lastTypes.empty())
-                    tipo1 = lastTypes.pop();
-                if (!lastTypes.empty())
-                    tipo2 = lastTypes.pop();
-                if (tipo1==tipo2) {
-                    if (tipo1=="INTEGER")
-                        lastTypes.push("INTEGER");
-                    else
-                        lastTypes.push("DOUBLE");
-                    $$=codeGen->crearNodo("+", $1, $3);
-                } else {
-                    //como stack es una pila, tipo1=factor tipo2=termino
-                    lastTypes.push("DOUBLE");
-                    if (tipo1=="INTEGER") {
-                        string conversion = codeGen->crearNodo("@conv", $3);
-                        $$=codeGen->crearNodo("+", $1, conversion);
-                    } else {
-                        string conversion = codeGen->crearNodo("@conv", $1);
-                        $$=codeGen->crearNodo("+", conversion, $3);
-                    }
-                }
+                $$=createAritmethicalOperatorNode("+",$1,$3);
                 }
         | expresion '-' termino
                 {
-                QString tipo1, tipo2;
-                if (!lastTypes.empty())
-                    tipo1 = lastTypes.pop();
-                if (!lastTypes.empty())
-                    tipo2 = lastTypes.pop();
-                if (tipo1==tipo2) {
-                    if (tipo1=="INTEGER")
-                        lastTypes.push("INTEGER");
-                    else
-                        lastTypes.push("DOUBLE");
-                    $$=codeGen->crearNodo("-", $1, $3);
-                } else {
-                    //como stack es una pila, tipo1=factor tipo2=termino
-                    lastTypes.push("DOUBLE");
-                    if (tipo1=="INTEGER") {
-                        string conversion = codeGen->crearNodo("@conv", $3);
-                        $$=codeGen->crearNodo("-", $1, conversion);
-                    } else {
-                        string conversion = codeGen->crearNodo("@conv", $1);
-                        $$=codeGen->crearNodo("-", conversion, $3);
-                    }
-                }
+                $$=createAritmethicalOperatorNode("-",$1,$3);
                 }
         | termino
         ;
 
 termino : termino '*' factor
                 {
-                QString tipo1, tipo2;
-                if (!lastTypes.empty())
-                    tipo1 = lastTypes.pop();
-                if (!lastTypes.empty())
-                    tipo2 = lastTypes.pop();
-                if (tipo1==tipo2) {
-                    if (tipo1=="INTEGER")
-                        lastTypes.push("INTEGER");
-                    else
-                        lastTypes.push("DOUBLE");
-                    $$=codeGen->crearNodo("*", $1, $3);
-                } else {
-                    //como stack es una pila, tipo1=factor tipo2=termino
-                    lastTypes.push("DOUBLE");
-                    if (tipo1=="INTEGER") {
-                        string conversion = codeGen->crearNodo("@conv", $3);
-                        $$=codeGen->crearNodo("*", $1, conversion);
-                    } else {
-                        string conversion = codeGen->crearNodo("@conv", $1);
-                        $$=codeGen->crearNodo("*", conversion, $3);
-                    }
-                }
+                $$=createAritmethicalOperatorNode("*",$1,$3);
                 }
         | termino '/' factor
                 {
-                QString tipo1, tipo2;
-                if (!lastTypes.empty())
-                    tipo1 = lastTypes.pop();
-                if (!lastTypes.empty())
-                    tipo2 = lastTypes.pop();
-                if (tipo1==tipo2) {
-                    if (tipo1=="INTEGER")
-                        lastTypes.push("INTEGER");
-                    else
-                        lastTypes.push("DOUBLE");
-                    $$=codeGen->crearNodo("/", $1, $3);
-                } else {
-                    //como stack es una pila, tipo1=factor tipo2=termino
-                    lastTypes.push("DOUBLE");
-                    if (tipo1=="INTEGER") {
-                        string conversion = codeGen->crearNodo("@conv", $3);
-                        $$=codeGen->crearNodo("/", $1, conversion);
-                    } else {
-                        string conversion = codeGen->crearNodo("@conv", $1);
-                        $$=codeGen->crearNodo("/", conversion, $3);
-                    }
-                }
+                $$=createAritmethicalOperatorNode("/",$1,$3);
                 }
         | factor
         ;
