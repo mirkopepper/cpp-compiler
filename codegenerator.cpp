@@ -2,7 +2,7 @@
 
 CodeGenerator::CodeGenerator()
 {
-
+    root=NULL;
 }
 
 string CodeGenerator::crearNodo(string dato){
@@ -27,4 +27,8 @@ string CodeGenerator::crearNodo(string dato, string nodoIzquierda, string nodoDe
     nodo->hijoDerecho=pointersTable.getNode(nodoDerecha);
     nodo->hijoIzquierdo=pointersTable.getNode(nodoIzquierda);
     return pointersTable.registerNode(nodo);
+}
+
+void CodeGenerator::setAsRootNode(string keyNode){
+    root=pointersTable.getNode(keyNode);
 }

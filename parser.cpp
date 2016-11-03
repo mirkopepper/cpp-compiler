@@ -123,9 +123,85 @@ string Parser::createAssignmentNode(string assignmentOperator, string leftNode, 
             return codeGen->crearNodo(assignmentOperator,leftNode,codeGen->crearNodo("@conv",rightNode));
 }
 
-void Parser::declareMatriz(string mat, string prefix, string tipo, string use, string dimensiones, string optional){
-    /*hace lo mismo que declare variable, pero agrega funcinalidad. el martes lo termino.*/
+string Parser::createConditionNode(string comparator, string leftExpresion, string rightExpresion){
+    QString tipo1, tipo2;
+    if (!lastTypes.empty())
+        tipo1 = lastTypes.pop();
+    if (!lastTypes.empty())
+        tipo2 = lastTypes.pop();
+    if (tipo1!=tipo2) {
+        if (tipo1=="INTEGER"){
+            string conversion = codeGen->crearNodo("@conv", rightExpresion);
+            return codeGen->crearNodo(comparator, leftExpresion, conversion);
+        }else{//tipo2=INTEGER
+            string conversion = codeGen->crearNodo("@conv", leftExpresion);
+            return codeGen->crearNodo(comparator, conversion, rightExpresion);
+        }
+    }
 }
+
+void Parser::declareMatriz(string mat, string prefix, string type, string use, string optional){
+    declareVariable(mat,prefix,type,use);
+    Entry * e=symbolsTable->getEntry(prefix+mat);
+    /*extraigo la forma de almacenamiento (filas o columnas): @+inicializacion+@+almacenamiento+@*/
+    e->storage=optional.substr(optional.find('@',1)+1,optional.size()-2);
+    /*extraigo la inicializacion de optional y chequeo si efectivamente se hace o no*/
+    if(optional.substr(1,optional.find('@',1))=="initialization"){
+        string sentence="";
+        for (int i = 0; i <= array.getLimitI(); ++i) {
+            for (int j = 0; j <= array.getLimitI(); ++j) {
+                /*genero arbol de: celda[expresion][expresion]*/
+                string subIndex1=codeGen->crearNodo(std::to_string(i));
+                string subIndex2=codeGen->crearNodo(std::to_string(j));
+                string celda=codeGen->crearNodo(prefix+mat,subIndex1,subIndex2);
+                /*genero subarbol de: sentencia de asignacion con ':='*/
+                array.setI(i);
+                array.setJ(j);
+                string assignment=codeGen->crearNodo(":=",celda,array.getValue());
+                if(sentence=="")
+                    sentence=codeGen->crearNodo("@setencia",assignment);
+                else
+                    sentence=codeGen->crearNodo("@sentencia",sentence,assignment);
+            }
+        }
+        codeGen->setAsRootNode(sentence);
+    }
+    /* para [1][1] inicializo: {0,1;2,3}
+     * en almacenamiento por filas      ->      [0][0]=0; [0][1]=1;
+     *                                          [1][0]=2; [1][1]=3;
+     *
+     * en almacenamiento por columnas   ->      [0][0]=0; [0][1]=2;
+     *                                          [1][0]=1; [1][1]=3;
+     *
+     * para [2][2] inicializo: {0,1,2;3,4,5;6,7,8}
+     * en almacenamiento pot filas      ->      [0][0]=0; [0][1]=1; [0][2]=2;
+     *                                          [1][0]=3; [1][1]=4; [1][2]=5;
+     *                                          [2][0]=6; [2][1]=7; [2][2]=8;
+     *
+     * en almacenamiento por columnas   ->      [0][0]=0; [0][1]=3; [0][2]=6;
+     *                                          [1][0]=1; [1][1]=4; [1][2]=7;
+     *                                          [2][0]=2; [2][1]=5; [2][2]=8;
+     *
+     * tengo la sentencia 'mat[1][2]:=2;' y se almacena por columnas
+     * como se almacena por columnas en realidad estoy haciendo 'mat[2][1]:=2;'?? impacta en el arbol de alguna forma??
+     * osea: 1 seria hijo izquierdo de la celda y 2 el derecho is ordeno por filas, pero si lo hago por columnas
+     * cambian de lugar o quedan como estaban??
+     * LA PREGUNTA SERIA... EN EL TP3, CUAL ES LA DIFERENCIA ENTRE ALMACENAR POR
+     * FILAS O COLUMNAS??
+     *
+     */
+}
+
+void Parser::updateArray(string s){
+    if(symbolsTable->getType(s).toStdString()==type)
+        if(array.validPosition())
+            array.setValue(s);
+        else
+            addErrorMessage("error en inicializacion: se quiere inicializar en una posicion fuera de rango.");
+    else
+        addErrorMessage("error en inicializacion matriz: el tipo de dato es diferente al declarado.");
+}
+
 
 #define yyparse Parser::yyparse
 #define yyerror Parser::yyerror

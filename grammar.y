@@ -42,31 +42,31 @@ lista_id : lista_id ',' ID 	{declareVariable($3, "var@", type,"variable");}
 arreglo : tipo MATRIX ID dimensiones_cte opcional_arreglo
                 {
                 /*declarar matriz,guardar limites y forma de alinearse.Si fuera necesario se inicializa*/
-                declareMatriz($3,"mat@",type,"matriz",$4,$5);
+                declareMatriz($3,"mat@",type,"matriz",$5);
                 }
         ;
 
 dimensiones_cte : '[' CTE ']' '[' CTE ']'
                 {
-                /*falta chequear que sean valores enteros*/
-                if(symbolsTable->getEntry($2)->type=="INTEGER" && symbolsTable->getEntry($5)->type=="INTEGER")
-                    $$=$2+"@"+$5;
-                else{
-                    addErrorMessage("los limites de la matriz deben ser valores enteros.");
-                    /*QUE ONDA ACA??RETORNO DE TODAS FORMAS: CTE+@+CTE? NO RETORNO NADA?? CUAL ES EL VALOR POR DEFECTO SI NO "RETORNO NADA"?*/
+                /*chequea que sean valores enteros*/
+                if(symbolsTable->getType($2)=="INTEGER" && symbolsTable->getType($5)=="INTEGER"){
+                    ArrayInitializer aux(stoi($2),stoi($5));
+                    array=aux;
                 }
+                else
+                    addErrorMessage("los limites de la matriz deben ser valores enteros.");
                 }
         ;
 
 opcional_arreglo : ';'
                 {addProgramComponent("Declaracion de matriz");
                 /*No se inicializa nada pero se guarda inicializacion por filas (opcion por defecto)*/
-                $$="@@@";
+                $$="@@rows@";
                 }
-        | inicializacion ';'            {addProgramComponent("Declaracion e inicializacion de matriz");}
+        | inicializacion ';'
                 {addProgramComponent("Declaracion e inicializacion de matriz");
                 /*Se inicializa  y guarda por filas  (opcion por defecto)*/
-                $$="@"+$1+"@filas@";
+                $$="@initialization@rows@";
                 }
         | ';' anotacion     		{addProgramComponent("Declaracion y anotacion de matriz");}
                 {addProgramComponent("Declaracion y anotacion de matriz");
@@ -76,33 +76,54 @@ opcional_arreglo : ';'
         | inicializacion ';' anotacion 	{addProgramComponent("Declaracion, inicializacion y anotacion de matriz");}
                 {addProgramComponent("Declaracion, inicializacion y anotacion de matriz");
                 /*Se inicializa y guarda alineacion por filas/columnas*/
-                $$="@"+$1+"@"+$3+"@";
+                $$="@initialization@"+$3+"@";
                 }
         ;
 
 anotacion : ARROBA_C
                 {/*se inicializa por columnas*/
-                $$="columas";
+                $$="columns";
                 }
         | ARROBA_F
                 {/*se inicializa por filas*/
-                $$="filas";
+                $$="rows";
                 }
         ;
 
-inicializacion : '{' lista_de_listas '}'    {$$=$2;}
+inicializacion : '{' lista_de_listas '}'
         ;
 
-lista_de_listas : lista_de_listas ';' lista_valores {$$=$1+";"+$3;}
+lista_de_listas : lista_de_listas ';' lista_valores
         | lista_valores
+                {/*pasa de la ultima posicion de la fila i a la 1ra de la fila i+1*/
+                array.setJ(0);
+                array.increaseI();
+                }
         ;
 
-lista_valores : lista_valores ',' CTE       {$$=$1+","+$3;}
+lista_valores : lista_valores ',' CTE
+                {/*pasa de la fila i en posicion j a misma fila en posicion j+1, ademas chequea que no se vaya de rango*/
+                array.increaseJ();
+                updateArray($3);
+                }
         | CTE
+                {/*guarda dato y chequea que no se vaya de rango*/
+                updateArray($1);
+                }
         ;
 
-bloque_ejecutable : bloque_ejecutable sentencia {$$=codeGen->crearNodo("@sentencia",$1,$2);}
-        | sentencia 				{$$=codeGen->crearNodo("@sentencia",$1);}
+bloque_ejecutable : bloque_ejecutable sentencia
+                {/*junta la sentencia con el arbol y actualiza la raiz*/
+                string executableBlock=codeGen->crearNodo("@sentencia",$1,$2);
+                codeGen->setAsRootNode(executableBlock);
+                $$=executableBlock;
+                }
+        | sentencia
+                {/*mismo que arriba pero para cuando se inicia un bloque ejecutable*/
+                string executableBlock=codeGen->crearNodo("@sentencia",$1);
+                codeGen->setAsRootNode(executableBlock);
+                $$=executableBlock;
+                }
         ;
 
 sentencia : seleccion
@@ -138,20 +159,8 @@ parentesis_condicion : '(' condicion ')' 	{$$=codeGen->crearNodo("@condicion", $
         ;
 
 condicion : expresion comparador expresion
-                {QString tipo1, tipo2;
-                if (!lastTypes.empty())
-                    tipo1 = lastTypes.pop();
-                if (!lastTypes.empty())
-                    tipo2 = lastTypes.pop();
-                if (tipo1!=tipo2) {
-                    if (tipo1=="INTEGER"){
-                        string conversion = codeGen->crearNodo("@conv", $3);
-                        $$=codeGen->crearNodo($2, $1, conversion);
-                    }else{//tipo2=INTEGER
-                        string conversion = codeGen->crearNodo("@conv", $1);
-                        $$=codeGen->crearNodo($2, conversion, $3);
-                    }
-                }
+                {
+                $$=createConditionNode($2,$1,$3);
                 }
         | error comparador expresion		{addErrorMessage("error en condicion: problema con expresion del lado izquierdo");}
         | expresion error expresion		{addErrorMessage("error en condicion: problema con el comparador");}
@@ -225,9 +234,8 @@ factor : ID
         ;
 
 celda : ID '[' expresion ']' '[' expresion ']'
-                {/*chequeo tipo expresiones=INTEGER*/
+                {
                 string mat=mangle($1,"matriz");
-                /*saca los ultimos 2 tipos*/
                 QString tipo1,tipo2;
                 if(!lastTypes.empty())
                     tipo1=lastTypes.pop();

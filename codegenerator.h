@@ -16,6 +16,9 @@ public:
     //Crea nodo con dos hijos y devuelve su clave
     string crearNodo(string dato, string nodoIzquierda, string nodoDerecha);
 
+    /*se le pasa la clave de un nodo ya creado, ahora el puntero raiz apunta a dicho nodo*/
+    void setAsRootNode(string keyNode);
+
     PointersTable pointersTable;
 
 private:
