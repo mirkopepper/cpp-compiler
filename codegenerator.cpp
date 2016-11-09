@@ -1,8 +1,12 @@
-#include "codegenerator.h"
+﻿#include "codegenerator.h"
 
 CodeGenerator::CodeGenerator(SymbolsTable * symbolsTable)
 {
+
     this->symbolsTable=symbolsTable;
+
+    root=NULL;
+
 }
 
 string CodeGenerator::crearNodo(string dato){
@@ -28,6 +32,7 @@ string CodeGenerator::crearNodo(string dato, string nodoIzquierda, string nodoDe
     nodo->hijoIzquierdo=pointersTable.getNode(nodoIzquierda);
     return pointersTable.registerNode(nodo);
 }
+
 
 bool CodeGenerator::firstSentence() {
     return (root==NULL);
@@ -312,4 +317,8 @@ void CodeGenerator::generateAssembler(const char * ruta) {
     out << "end start";
 
     out.close();
+}
+void CodeGenerator::setAsRootNode(string keyNode){
+    root=pointersTable.getNode(keyNode);
+
 }

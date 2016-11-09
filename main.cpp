@@ -83,9 +83,9 @@ int main(int argc, char *argv[])
 
     Parser * parser = new Parser (&symbolsTable,lex, &codeGen, &errors);
     /*Se ejecuta el yyparse*/
-    int outcome = parser->yyparse();
+    int output = parser->yyparse();
 
-    cout <<"resultado del yyparse: "<<outcome<<endl;
+    cout <<"resultado del yyparse: "<<output<<endl;
 
     cout << "\n\nCodigo fuente analizado: " << argv[1] << endl;
 

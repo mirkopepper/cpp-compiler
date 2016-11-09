@@ -18,6 +18,10 @@ public:
     int intValue;
     int doubleValue;
     int token_id;
+
+    /*solo se usa para matrices*/
+    int limit1,limit2,base;
+    string storage;
 };
 
 #endif // ENTRY_H

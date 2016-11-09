@@ -32,52 +32,52 @@ static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 short yylhs[] = {                                        -1,
     0,    0,    0,    1,    1,    3,    3,    3,    4,    4,
     4,    5,    5,    5,    5,    5,    7,    7,    8,    8,
-    8,    6,    9,   10,   12,   10,   14,   10,   15,   10,
-   13,   13,   11,   16,   16,   17,   17,    2,    2,   18,
-   18,   18,   18,   18,   18,   19,   19,   19,   24,   24,
-   23,   23,   23,   23,   25,   25,   25,   25,   27,   27,
-   27,   27,   27,   27,   20,   20,   20,   20,   20,   29,
-   29,   28,   28,   26,   26,   26,   31,   31,   31,   32,
-   32,   32,   30,   30,   30,   30,   30,   30,   21,   22,
-   22,   22,   22,   22,
+    8,    6,    9,   10,   10,   13,   10,   14,   10,   12,
+   12,   11,   15,   15,   16,   16,    2,    2,   17,   17,
+   17,   17,   17,   17,   18,   18,   18,   23,   23,   22,
+   22,   22,   22,   24,   24,   24,   24,   26,   26,   26,
+   26,   26,   26,   19,   19,   19,   19,   19,   28,   28,
+   27,   27,   25,   25,   25,   30,   30,   30,   31,   31,
+   31,   29,   29,   29,   29,   29,   29,   20,   21,   21,
+   21,   21,   21,
 };
 short yylen[] = {                                         2,
     5,    4,    4,    2,    1,    1,    1,    1,    3,    3,
     4,    5,    5,    5,    5,    5,    1,    1,    3,    3,
-    1,    5,    6,    1,    0,    3,    0,    3,    0,    4,
-    1,    1,    3,    3,    1,    3,    1,    2,    1,    1,
-    1,    2,    1,    2,    1,    6,    5,    4,    1,    3,
-    3,    2,    2,    1,    3,    3,    3,    3,    1,    1,
-    1,    1,    1,    1,    3,    4,    3,    3,    3,    1,
-    1,    1,    1,    3,    3,    1,    3,    3,    1,    1,
-    1,    1,    7,    7,    6,    7,    7,    7,    3,    4,
-    4,    3,    3,    2,
+    1,    5,    6,    1,    2,    0,    3,    0,    4,    1,
+    1,    3,    3,    1,    3,    1,    2,    1,    1,    1,
+    2,    1,    2,    1,    6,    5,    4,    1,    3,    3,
+    2,    2,    1,    3,    3,    3,    3,    1,    1,    1,
+    1,    1,    1,    3,    4,    3,    3,    3,    1,    1,
+    1,    1,    3,    3,    1,    3,    3,    1,    1,    1,
+    1,    7,    7,    6,    7,    7,    7,    3,    4,    4,
+    3,    3,    2,
 };
 short yydefred[] = {                                      0,
     0,    0,    0,   18,   17,    0,    0,    5,    6,    7,
-    8,    0,    0,    0,    0,   70,   71,    0,    0,    0,
-    0,    0,    0,    4,   39,   40,    0,   43,    0,    0,
-    0,   73,    0,   21,    0,    0,    0,    0,    0,    0,
-    0,    0,   81,    0,    0,    0,    0,    0,   82,    0,
-   79,    0,    0,    0,    0,    2,   38,   42,   44,    0,
+    8,    0,    0,    0,    0,   69,   70,    0,    0,    0,
+    0,    0,    0,    4,   38,   39,    0,   42,    0,    0,
+    0,   72,    0,   21,    0,    0,    0,    0,    0,    0,
+    0,    0,   80,    0,    0,    0,    0,    0,   81,    0,
+   78,    0,    0,    0,    0,    2,   37,   41,   43,    0,
     0,    0,   10,    0,    0,    0,    9,    0,    0,    0,
-    0,    0,    0,    0,    0,   62,   61,   64,   59,   60,
-   63,    0,    0,    0,   49,    0,   52,    0,    0,    0,
-    0,    0,    0,   92,    0,    0,   89,    1,   68,   67,
-    0,   69,    0,    0,   11,   20,   19,   13,   14,   15,
-   16,   12,    0,    0,    0,    0,   51,    0,    0,   48,
-    0,    0,    0,    0,   58,    0,   77,   78,   91,   90,
-   66,    0,    0,    0,   22,    0,    0,    0,    0,    0,
-   50,    0,   47,    0,   37,    0,    0,   32,   31,   27,
-    0,   85,    0,    0,    0,    0,   46,    0,   33,    0,
-    0,   28,   26,   29,   84,   86,   87,   88,   83,    0,
-    0,   36,   30,   23,
+    0,    0,    0,    0,    0,   61,   60,   63,   58,   59,
+   62,    0,    0,    0,   48,    0,   51,    0,    0,    0,
+    0,    0,    0,   91,    0,    0,   88,    1,   67,   66,
+    0,   68,    0,    0,   11,   20,   19,   13,   14,   15,
+   16,   12,    0,    0,    0,    0,   50,    0,    0,   47,
+    0,    0,    0,    0,   57,    0,   76,   77,   90,   89,
+   65,    0,    0,    0,   22,    0,    0,    0,    0,    0,
+   49,    0,   46,    0,   36,    0,    0,   31,   30,   26,
+    0,   84,    0,    0,    0,    0,   45,    0,   32,    0,
+    0,   27,   28,   83,   85,   86,   87,   82,    0,    0,
+   35,   29,   23,
 };
 short yydgoto[] = {                                       2,
     7,   23,    8,    9,   10,   11,   12,   36,  104,  135,
-  136,  163,  150,  162,  173,  146,  147,   85,   26,   27,
-   28,   29,   46,   86,   47,   48,   82,   30,   31,   49,
-   50,   51,
+  136,  150,  162,  172,  146,  147,   85,   26,   27,   28,
+   29,   46,   86,   47,   48,   82,   30,   31,   49,   50,
+   51,
 };
 short yysindex[] = {                                   -245,
  -199,    0, -176,    0,    0, -197,  171,    0,    0,    0,
@@ -96,8 +96,8 @@ short yysindex[] = {                                   -245,
     0,  152,  -18, -230,    0,  181,    4, -110, -110,  -44,
     0,  -28,    0,  158,    0,  -54,  206,    0,    0,    0,
  -230,    0,    7,   10,  159,  -39,    0,   -4,    0,  -18,
-   -1,    0,    0,    0,    0,    0,    0,    0,    0,  165,
-  206,    0,    0,    0,
+   -1,    0,    0,    0,    0,    0,    0,    0,  165,  206,
+    0,    0,    0,
 };
 short yyrindex[] = {                                      0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -116,69 +116,69 @@ short yyrindex[] = {                                      0,
     0,    0,    0,  193,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,  -33,    0,    0,    0,
   210,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-  -32,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,  -32,
+    0,    0,    0,
 };
 short yygindex[] = {                                      0,
     0,    3,  266,    0,    0,    0,  114,    0,    0,    0,
-    0,    0,  115,    0,    0,    0,  112,   15,    0,    0,
-    0,    0,  253,  -30,  231,  513,  229,    0,  250,  484,
-   84,  109,
+    0,  115,    0,    0,    0,  112,   15,    0,    0,    0,
+    0,  253,  -30,  231,  513,  229,    0,  250,  484,   84,
+  109,
 };
 #define YYTABLESIZE 653
 short yytable[] = {                                      53,
-   80,   45,   68,   89,  160,   90,   89,   89,   90,   90,
+   79,   45,   68,   89,  160,   90,   89,   89,   90,   90,
    79,   81,   80,   89,  140,   90,  134,   67,   39,   84,
-    1,   25,   76,   97,   55,   35,   34,   89,   95,   90,
+    1,   25,   75,   97,   55,   34,   33,   89,   95,   90,
    79,   81,   80,  148,  149,   96,   25,   57,   40,   84,
-   33,   80,   80,   80,   74,   80,   89,   80,   90,   89,
-   34,   90,   89,  169,   90,  121,    3,   35,   14,   80,
-   80,   80,   80,   76,  113,   76,  114,   76,   75,   57,
-  159,    4,    5,    4,    5,    6,   89,  115,   90,   94,
-  133,   76,   76,   76,   76,   74,  118,   74,  142,   74,
-   93,   35,   34,   80,    4,    5,  152,   37,   25,  165,
-   65,   38,  166,   74,   74,   74,   74,   74,   43,   75,
-   41,   75,   41,   75,   58,   76,   13,   44,   72,   15,
-   45,   42,   43,   80,   89,   80,   90,   75,   75,   75,
-   75,   44,   57,    4,    5,   59,   92,   74,   94,   43,
-   99,   93,   64,   16,   17,   76,   43,   76,   44,   93,
-   69,   70,   71,   73,   63,   44,   87,   16,   17,   65,
-   94,   75,   18,   19,  119,  120,   20,   74,  103,   74,
-   21,   56,  123,  124,  100,   43,  105,   16,   17,  139,
-  106,   57,   18,   19,   44,  107,   20,  125,   43,  132,
-   21,   75,  108,   75,   72,   55,  109,   44,   72,   72,
-  127,  128,   94,   72,   94,  110,  111,  112,   76,   77,
-   78,  155,   43,   93,   65,   93,  168,   42,   43,  102,
-  131,   44,   52,   65,   66,   65,   88,   44,   76,   77,
-   78,  117,  129,   41,  130,   41,  138,  143,  145,  151,
-  157,   16,   17,   45,  144,   45,   18,   19,  158,  161,
-   20,  167,  170,   56,   21,  172,   80,  174,   80,   80,
-   80,   80,   80,   57,    3,  164,   80,   80,   80,   80,
-   80,  171,   24,   54,   80,   83,   91,   55,   76,   61,
-   76,   76,   76,   76,   76,    0,    0,    0,   76,   76,
-   76,   76,   76,   22,    0,    0,   76,    0,    0,    0,
-   74,    0,   74,   74,   74,   74,   74,    0,    0,    0,
-   74,   74,   74,   74,   74,   24,    0,    0,   74,    0,
-    0,    0,    0,    0,   75,    0,   75,   75,   75,   75,
-   75,    0,   25,    0,   75,   75,   75,   75,   75,    0,
-   94,   94,   75,    0,    0,   94,   94,   94,   94,   94,
-   54,   93,   93,   94,    0,    0,   93,   93,   93,   93,
-   93,   65,   65,    0,   93,   53,   65,   65,   65,   65,
-   65,   41,   41,    0,   65,    0,   41,   41,   41,   41,
-   41,   45,   45,   56,   41,   98,   45,   45,   45,   45,
-   45,   56,   56,    0,   45,    0,   56,   56,    0,  141,
-   56,   57,   57,    0,   56,    0,   57,   57,    0,    0,
-   57,    0,    0,    0,   57,   55,   55,    0,    0,    0,
-   55,   55,    0,    0,   55,    0,    3,    0,   55,    0,
+   33,   79,   79,   79,   73,   79,   89,   79,   90,   89,
+   34,   90,   89,  168,   90,  121,    3,   35,   14,   79,
+   79,   79,   79,   75,  113,   75,  114,   75,   74,   57,
+  159,    4,    5,    4,    5,    6,   89,  115,   90,   93,
+  133,   75,   75,   75,   75,   73,  118,   73,  142,   73,
+   92,   34,   33,   79,    4,    5,  152,   37,   25,  164,
+   64,   38,  165,   73,   73,   73,   73,   74,   43,   74,
+   40,   74,   41,   74,   58,   75,   13,   44,   72,   15,
+   44,   42,   43,   79,   89,   79,   90,   74,   74,   74,
+   74,   44,   57,    4,    5,   59,   92,   73,   93,   43,
+   99,   93,   64,   16,   17,   75,   43,   75,   44,   92,
+   69,   70,   71,   73,   63,   44,   87,   16,   17,   64,
+   94,   74,   18,   19,  119,  120,   20,   73,  103,   73,
+   21,   55,  123,  124,  100,   43,  105,   16,   17,  139,
+  106,   56,   18,   19,   44,  107,   20,  125,   43,  132,
+   21,   74,  108,   74,   71,   54,  109,   44,   71,   71,
+  127,  128,   93,   71,   93,  110,  111,  112,   76,   77,
+   78,  155,   43,   92,   65,   92,  167,   42,   43,  102,
+  131,   44,   52,   64,   66,   64,   88,   44,   76,   77,
+   78,  117,  129,   40,  130,   40,  138,  143,  145,  151,
+  157,   16,   17,   44,  144,   44,   18,   19,  158,  161,
+   20,  166,  169,   55,   21,  171,   79,  173,   79,   79,
+   79,   79,   79,   56,    3,  163,   79,   79,   79,   79,
+   79,  170,   24,   54,   79,   83,   91,   54,   75,   61,
+   75,   75,   75,   75,   75,    0,    0,    0,   75,   75,
+   75,   75,   75,   22,    0,    0,   75,    0,    0,    0,
+   73,    0,   73,   73,   73,   73,   73,    0,    0,    0,
+   73,   73,   73,   73,   73,   24,    0,    0,   73,    0,
+    0,    0,    0,    0,   74,    0,   74,   74,   74,   74,
+   74,    0,   25,    0,   74,   74,   74,   74,   74,    0,
+   93,   93,   74,    0,    0,   93,   93,   93,   93,   93,
+   53,   92,   92,   93,    0,    0,   92,   92,   92,   92,
+   92,   64,   64,    0,   92,   52,   64,   64,   64,   64,
+   64,   40,   40,    0,   64,    0,   40,   40,   40,   40,
+   40,   44,   44,   56,   40,   98,   44,   44,   44,   44,
+   44,   55,   55,    0,   44,    0,   55,   55,    0,  141,
+   55,   56,   56,    0,   55,    0,   56,   56,    0,    0,
+   56,    0,    0,    0,   56,   54,   54,    0,    0,    0,
+   54,   54,    0,    0,   54,    0,    3,    0,   54,    0,
     0,   16,   17,    0,    0,    0,   18,   19,    0,    0,
    20,    4,    5,    0,   21,    6,    0,    0,   24,    0,
     0,    0,    0,   24,   24,    0,    0,    0,   24,   24,
     0,    0,   24,   24,   24,   25,   24,   24,    0,    0,
    25,   25,    0,    0,    0,   25,   25,    0,    0,   25,
-   25,   25,    0,   25,   25,    0,    0,    0,   54,   54,
-   32,    0,    0,   54,   54,    0,    0,   54,    0,    0,
-    0,   54,    0,   53,   53,   32,   32,    0,   53,   53,
-    0,    0,   53,    0,    0,    0,   53,    0,    0,   16,
+   25,   25,    0,   25,   25,    0,    0,    0,   53,   53,
+   32,    0,    0,   53,   53,    0,    0,   53,    0,    0,
+    0,   53,    0,   52,   52,   32,   32,    0,   52,   52,
+    0,    0,   52,    0,    0,    0,   52,    0,    0,   16,
    17,   16,   17,    0,   18,   19,   18,   19,   20,   32,
    20,    0,   21,    0,   21,   16,   17,   32,   32,    0,
    18,   19,   60,   62,   20,    0,    0,    0,   21,    0,
@@ -306,12 +306,11 @@ char *yyrule[] = {
 "arreglo : tipo MATRIX ID dimensiones_cte opcional_arreglo",
 "dimensiones_cte : '[' CTE ']' '[' CTE ']'",
 "opcional_arreglo : ';'",
+"opcional_arreglo : inicializacion ';'",
 "$$1 :",
-"opcional_arreglo : inicializacion ';' $$1",
+"opcional_arreglo : ';' anotacion $$1",
 "$$2 :",
-"opcional_arreglo : ';' anotacion $$2",
-"$$3 :",
-"opcional_arreglo : inicializacion ';' anotacion $$3",
+"opcional_arreglo : inicializacion ';' anotacion $$2",
 "anotacion : ARROBA_C",
 "anotacion : ARROBA_F",
 "inicializacion : '{' lista_de_listas '}'",
@@ -613,51 +612,99 @@ case 22:
 #line 43
 {
                 /*declarar matriz,guardar limites y forma de alinearse.Si fuera necesario se inicializa*/
+                declareMatriz(yyvsp[-2],"mat@",type,"matriz",yyvsp[0]);
                 }
 break;
 case 23:
+<<<<<<< HEAD
 #line 49
+=======
+#line 50 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {
-                /*falta chequear que sean valores enteros y guardar ambos valores*/
+                /*chequea que sean valores enteros*/
+                if(symbolsTable->getType(yyvsp[-4])=="INTEGER" && symbolsTable->getType(yyvsp[-1])=="INTEGER"){
+                    ArrayInitializer aux(stoi(yyvsp[-4]),stoi(yyvsp[-1]));
+                    array=aux;
+                }
+                else
+                    addErrorMessage("los limites de la matriz deben ser valores enteros.");
                 }
 break;
 case 24:
+<<<<<<< HEAD
 #line 55
+=======
+#line 62 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {addProgramComponent("Declaracion de matriz");
                 /*No se inicializa nada pero se guarda inicializacion por filas (opcion por defecto)*/
+                yyval="@@rows@";
                 }
 break;
 case 25:
+<<<<<<< HEAD
 #line 58
 {addProgramComponent("Declaracion e inicializacion de matriz");}
 break;
 case 26:
 #line 59
+=======
+#line 67 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {addProgramComponent("Declaracion e inicializacion de matriz");
                 /*Se inicializa  y guarda por filas  (opcion por defecto)*/
+                yyval="@initialization@rows@";
                 }
 break;
+<<<<<<< HEAD
 case 27:
 #line 62
 {addProgramComponent("Declaracion y anotacion de matriz");}
 break;
 case 28:
 #line 63
+=======
+case 26:
+#line 71 "grammar.y"
+{addProgramComponent("Declaracion y anotacion de matriz");}
+break;
+case 27:
+#line 72 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {addProgramComponent("Declaracion y anotacion de matriz");
                 /*Se guarda alineacion por filas/columnas*/
+                yyval="@@"+yyvsp[-1]+"@";
                 }
 break;
+<<<<<<< HEAD
 case 29:
 #line 66
 {addProgramComponent("Declaracion, inicializacion y anotacion de matriz");}
 break;
 case 30:
 #line 67
+=======
+case 28:
+#line 76 "grammar.y"
+{addProgramComponent("Declaracion, inicializacion y anotacion de matriz");}
+break;
+case 29:
+#line 77 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {addProgramComponent("Declaracion, inicializacion y anotacion de matriz");
                 /*Se inicializa y guarda alineacion por filas/columnas*/
+                yyval="@initialization@"+yyvsp[-1]+"@";
+                }
+break;
+case 30:
+#line 84 "grammar.y"
+{/*se inicializa por columnas*/
+                yyval="columns";
                 }
 break;
 case 31:
+<<<<<<< HEAD
 #line 72
 {/*guardar en algun lado que se inicaliza por columnas*/}
 break;
@@ -691,26 +738,102 @@ case 45:
 break;
 case 46:
 #line 100
+=======
+#line 88 "grammar.y"
+{/*se inicializa por filas*/
+                yyval="rows";
+                }
+break;
+case 34:
+#line 98 "grammar.y"
+{/*pasa de la ultima posicion de la fila i a la 1ra de la fila i+1*/
+                array.setJ(0);
+                array.increaseI();
+                }
+break;
+case 35:
+#line 105 "grammar.y"
+{/*pasa de la fila i en posicion j a misma fila en posicion j+1, ademas chequea que no se vaya de rango*/
+                array.increaseJ();
+                updateArray(yyvsp[0]);
+                }
+break;
+case 36:
+#line 110 "grammar.y"
+{/*guarda dato y chequea que no se vaya de rango*/
+                updateArray(yyvsp[0]);
+                }
+break;
+case 37:
+#line 116 "grammar.y"
+{/*junta la sentencia con el arbol y actualiza la raiz*/
+                string executableBlock=codeGen->crearNodo("@sentencia",yyvsp[-1],yyvsp[0]);
+                codeGen->setAsRootNode(executableBlock);
+                yyval=executableBlock;
+                }
+break;
+case 38:
+#line 122 "grammar.y"
+{/*mismo que arriba pero para cuando se inicia un bloque ejecutable*/
+                string executableBlock=codeGen->crearNodo("@sentencia",yyvsp[0]);
+                codeGen->setAsRootNode(executableBlock);
+                yyval=executableBlock;
+                }
+break;
+case 40:
+#line 130 "grammar.y"
+{addErrorMessage("error en sentencia = falta ';' en el final de la asignacion");}
+break;
+case 41:
+#line 131 "grammar.y"
+{addProgramComponent("sentencia de asignacion");}
+break;
+case 43:
+#line 133 "grammar.y"
+{addProgramComponent("sentecia de impresion");}
+break;
+case 44:
+#line 134 "grammar.y"
+{addErrorMessage("error en sentecia = falta ';' en el final de la impresion");}
+break;
+case 45:
+#line 138 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {addProgramComponent("Sentencia IF con bloque ELSE");
                 yyval=codeGen->crearNodo("@if",yyvsp[-4],codeGen->crearNodo("@cuerpo",codeGen->crearNodo("@then",yyvsp[-3]),codeGen->crearNodo("@else", yyvsp[-1])));
                 }
 break;
+<<<<<<< HEAD
 case 47:
 #line 103
 {addErrorMessage("error en sentencia IF: falta else");}
 break;
 case 48:
 #line 105
+=======
+case 46:
+#line 141 "grammar.y"
+{addErrorMessage("error en sentencia IF: falta else");}
+break;
+case 47:
+#line 143 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {addProgramComponent("Sentencia IF sin bloque ELSE");
                 yyval=codeGen->crearNodo("@if",yyvsp[-2],codeGen->crearNodo("@cuerpo",codeGen->crearNodo("@then",yyvsp[-1])));
                 }
 break;
+<<<<<<< HEAD
 case 50:
 #line 112
+=======
+case 49:
+#line 150 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {addProgramComponent("bloque ejecutable entre llaves");
                 yyval=yyvsp[-1];
                 }
 break;
+<<<<<<< HEAD
 case 51:
 #line 117
 {yyval=codeGen->crearNodo("@condicion", yyvsp[-1]);}
@@ -771,10 +894,61 @@ case 63:
 break;
 case 65:
 #line 153
+=======
+case 50:
+#line 155 "grammar.y"
+{yyval=codeGen->crearNodo("@condicion", yyvsp[-1]);}
+break;
+case 51:
+#line 156 "grammar.y"
+{addErrorMessage("error en parentesis_condicion: falta '('");}
+break;
+case 52:
+#line 157 "grammar.y"
+{addErrorMessage("error en parentesis_condicion: falta ')' ");}
+break;
+case 53:
+#line 158 "grammar.y"
+{addErrorMessage("error en parentesis_condicion: faltan ambos parentesis ");}
+break;
+case 54:
+#line 162 "grammar.y"
+{
+                yyval=createConditionNode(yyvsp[-1],yyvsp[-2],yyvsp[0]);
+                }
+break;
+case 55:
+#line 165 "grammar.y"
+{addErrorMessage("error en condicion: problema con expresion del lado izquierdo");}
+break;
+case 56:
+#line 166 "grammar.y"
+{addErrorMessage("error en condicion: problema con el comparador");}
+break;
+case 57:
+#line 167 "grammar.y"
+{addErrorMessage("error en condicion: problema con expresion del lado derecho");}
+break;
+case 58:
+#line 170 "grammar.y"
+{yyval="<";}
+break;
+case 59:
+#line 171 "grammar.y"
+{yyval=">";}
+break;
+case 62:
+#line 174 "grammar.y"
+{yyval="=";}
+break;
+case 64:
+#line 179 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {
                 yyval=createAssignmentNode(yyvsp[-1],yyvsp[-2],yyvsp[0]);
                 }
 break;
+<<<<<<< HEAD
 case 66:
 #line 156
 {addErrorMessage("Error en asignacion:problema con asignacion");}
@@ -793,30 +967,70 @@ case 69:
 break;
 case 74:
 #line 171
+=======
+case 65:
+#line 182 "grammar.y"
+{addErrorMessage("Error en asignacion:problema con asignacion");}
+break;
+case 66:
+#line 183 "grammar.y"
+{addErrorMessage("Error en asignacioN:problema con la expresion del lado derecho");}
+break;
+case 67:
+#line 184 "grammar.y"
+{addErrorMessage("Error en asignacion:falta el operador de asignacion");}
+break;
+case 68:
+#line 185 "grammar.y"
+{addErrorMessage("Error en asignacion:falta variable en lado derecho");}
+break;
+case 73:
+#line 197 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {
                 yyval=createOperatorNode("+",yyvsp[-2],yyvsp[0]);
                 }
 break;
+<<<<<<< HEAD
 case 75:
 #line 175
+=======
+case 74:
+#line 201 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {
                 yyval=createOperatorNode("-",yyvsp[-2],yyvsp[0]);
                 }
 break;
+<<<<<<< HEAD
 case 77:
 #line 182
+=======
+case 76:
+#line 208 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {
                 yyval=createOperatorNode("*",yyvsp[-2],yyvsp[0]);
                 }
 break;
+<<<<<<< HEAD
 case 78:
 #line 186
+=======
+case 77:
+#line 212 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {
                 yyval=createOperatorNode("/",yyvsp[-2],yyvsp[0]);
                 }
 break;
+<<<<<<< HEAD
 case 80:
 #line 193
+=======
+case 79:
+#line 219 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {/*chequeo si ID fue declarado como VARIABLE*/
                 string var=mangle(yyvsp[0],"variable");
                 yyval=codeGen->crearNodo(var);
@@ -824,24 +1038,39 @@ case 80:
                     lastTypes.push(symbolsTable->getType(var));
                 }
 break;
+<<<<<<< HEAD
 case 81:
 #line 200
+=======
+case 80:
+#line 226 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {yyval=codeGen->crearNodo(yyvsp[0]);
                 lastTypes.push(symbolsTable->getType(yyvsp[0]));
                 }
 break;
+<<<<<<< HEAD
 case 82:
 #line 204
+=======
+case 81:
+#line 230 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {yyval=yyvsp[0];
                 Node * node = codeGen->getNode(yyvsp[0]);
                 lastTypes.push(symbolsTable->getType(node->dato));
                 }
 break;
+<<<<<<< HEAD
 case 83:
 #line 211
 {/*chequeo tipo expresiones=INTEGER*/
+=======
+case 82:
+#line 237 "grammar.y"
+{
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
                 string mat=mangle(yyvsp[-6],"matriz");
-                /*saca los ultimos 2 tipos*/
                 QString tipo1,tipo2;
                 if(!lastTypes.empty())
                     tipo1=lastTypes.pop();
@@ -852,6 +1081,7 @@ case 83:
                     yyval=codeGen->crearNodo(mat,yyvsp[-4],yyvsp[-1]);
                 }
 break;
+<<<<<<< HEAD
 case 84:
 #line 223
 {addErrorMessage("error en celda: falta expresion en 1er dimension");}
@@ -874,16 +1104,46 @@ case 88:
 break;
 case 89:
 #line 231
+=======
+case 83:
+#line 248 "grammar.y"
+{addErrorMessage("error en celda: falta expresion en 1er dimension");}
+break;
+case 84:
+#line 249 "grammar.y"
+{addErrorMessage("error en celda: falta ']' en la 1er dimension");}
+break;
+case 85:
+#line 250 "grammar.y"
+{addErrorMessage("error en celda: falta '[' en la 2da dimension");}
+break;
+case 86:
+#line 251 "grammar.y"
+{addErrorMessage("error en celda: falta expresion en 2da dimension");}
+break;
+case 87:
+#line 252 "grammar.y"
+{addErrorMessage("error en celda: falta ']' en 2da dimension");}
+break;
+case 88:
+#line 256 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {addProgramComponent("Sentencia WHILE");
                 yyval=codeGen->crearNodo("@while",yyvsp[-1],yyvsp[0]);
                 }
 break;
+<<<<<<< HEAD
 case 90:
 #line 237
+=======
+case 89:
+#line 262 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {addProgramComponent("Impresion por pantalla");
                 yyval=codeGen->crearNodo("@print",yyvsp[-1]);
                 }
 break;
+<<<<<<< HEAD
 case 91:
 #line 240
 {addErrorMessage("error de impresion por pantalla: falta cadena");}
@@ -898,9 +1158,25 @@ case 93:
 break;
 case 94:
 #line 243
+=======
+case 90:
+#line 265 "grammar.y"
+{addErrorMessage("error de impresion por pantalla: falta cadena");}
+break;
+case 91:
+#line 266 "grammar.y"
+{addErrorMessage("error de impresion por pantalla: falta parentesis '('");}
+break;
+case 92:
+#line 267 "grammar.y"
+{addErrorMessage("error de impresion por pantalla: falta parentesis ')'");}
+break;
+case 93:
+#line 268 "grammar.y"
+>>>>>>> 1f0eae6409445336d7613687f3541a91431e2246
 {addErrorMessage("error de impresion por pantalla: faltan ambos parentesis");}
 break;
-#line 904 "y.tab.c"
+#line 929 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
