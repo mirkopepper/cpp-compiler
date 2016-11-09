@@ -5,8 +5,8 @@ Node::Node()
 
 }
 
-string Node::preOrderPrint(){
-    string toPrint=this->dato+"\n";
+QString Node::preOrderPrint(){
+    QString toPrint=this->dato+"\n";
     if(this->hijoIzquierdo!=NULL)
         toPrint+=this->hijoIzquierdo->preOrderPrint()+"\n";
     if(this->hijoDerecho!=NULL)

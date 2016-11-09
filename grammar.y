@@ -202,7 +202,7 @@ factor : ID
                 }
         | celda
                 {$$=$1;
-                Node * node = codeGen->pointersTable.getNode($1);
+                Node * node = codeGen->getNode($1);
                 lastTypes.push(symbolsTable->getType(node->dato));
                 }
         ;

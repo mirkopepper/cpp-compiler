@@ -43,6 +43,7 @@ public:
     void modifyLexeme(string oldLexeme, string newLexeme);
 
     QString getType(string lexeme);
+    QString getType(QString lexeme);
 
     /*se usa para saber si una entrada es variable o matriz*/
     string getUse(string lexeme);
