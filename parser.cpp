@@ -172,15 +172,20 @@ string Parser::createOperatorNode(string parentNode,string leftNode,string right
 }
 
 string Parser::createAssignmentNode(string assignmentOperator, string leftNode, string rightNode){
+
     QString rightNodeType,leftNodeType;
     if (!lastTypes.empty())
         rightNodeType = lastTypes.pop();
-    else
-        cout << "error!!!! En la derecha no hay nada. Revisar el pusheo de tipos" << endl;
+    else{
+        //cout << "error!!!! En la derecha no hay nada. Revisar el pusheo de tipos" << endl;
+        rightNodeType = "not a type";
+    }
     if (!lastTypes.empty())
         leftNodeType = lastTypes.pop();
-    else
-        cout << "error!!! En la izquierda no hay nada. Revisar el pusheo de tipos" << endl;
+    else{
+        //cout << "error!!! En la izquierda no hay nada. Revisar el pusheo de tipos" << endl;
+        rightNodeType = "not a type";
+    }
     /*leftNodeType=asig_izq rightNodeType=expresion*/
     if(leftNodeType==rightNodeType)/*si son del mismo tipo no hay conversiones*/
         return codeGen->crearNodo(assignmentOperator,leftNode,rightNode);
@@ -212,7 +217,11 @@ string Parser::createConditionNode(string comparator, string leftExpression, str
 }
 
 void Parser::printSintacticTree(){
-    codeGen->printSintacticTree();
+    if(hasError())
+        cout << "--------------------IMPORTANTE------------------- " << endl << "Como existen errores lexicos,"
+            " sintacticos y/o semanticos no hay generacion de codigo intermedio."<< endl;
+    else
+        codeGen->printSintacticTree();
 }
 
 string Parser::getLexeme(string symbolsTablePosition){

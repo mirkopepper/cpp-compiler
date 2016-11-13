@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     tokens = lex->getTokens();
     programComponents = parser->getProgramComponents();
 
-/*  Estos metodos, ya no son requeridos para esta entrega!!!
+    /*Estos resultados ya no son requeridos
     printTokens();
     printProgramComponents();
     */

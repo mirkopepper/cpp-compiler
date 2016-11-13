@@ -1,37 +1,42 @@
-CasosSintacticos
+testeoArbol
+
 &&bloque declarativo
 
 &&sentencias declarativas bien escritas
-integer a;
+integer a,b,a;
 double d,e;
 
 &&sentencias de conversion de tipos
-allow double to integer;
+&&allow double to integer;
 
 &&sentencias de declaracion de matrices
-integer matrix matInt [_i1][_i2] {_i0,_i1,_i2;_i3,_i4,_i5}; &&@F esto es una anotacion de matriz arrobaF
 double matrix matDou [_i2][_i3];
+double matrix matDou [_d.2][_i3];
+integer matrix matInt [_i2][_i2] {_i0,_i1,_i2;_i3,_i4,_i5;_i6,_i7,_i8}; &&@F esto es una anotacion de matriz arrobaF
 
 &&bloque ejecutable
 {
 
     &&sentencias de asignacion:igual,menosigual
-    a:=_i4-matInt[_i0][_i0];
-    a-=_i1;
-    matDou[a][a-_i1]:=_d.1*_d1.;
+    f-=_i1;
+    a:=_d4.-matInt[_i0][_i0];
+    matDou1[a][a-_d.1]:=_i1*_d1.;
 
     &&sentencias de seleccion anidadas, el if de afuera tiene un grupo de sentencias en sus bloques then y else
-    if(matDou[a][a-_i1]=_i10){
-        if(d!=_i10)
+    if(matDou[b][b-_i1]=_i10){
+        if(d!=_i11)
             &&sentencias de mensaje por pantalla
             print("Primer renglon de cadena multilinea. +
                 Esto se deberia imprimir por pantalla.");
         endif
         d:=_d1.2d-3;
+        a:=a;
     }
     else
         &&sentencia iterativa sin llaves de bloque, porque ejecuta solo una sentencia
-        while(a<=_i4)
+        while(a<=_i4){
             a:=a+_i1;
+            e-=_d-1.;
+        }
     endif
 }

@@ -4,7 +4,6 @@
 programa : ID bloque_declarativo '{' bloque_ejecutable '}'
                 {
                 addProgramComponent("Dectecto un programa!!");
-                cout << "TERMINA" << endl;
                 }
         | ID bloque_declarativo bloque_ejecutable '}'    {addErrorMessage("error: falta llave de inicio. Programa Compilado!");}
         | ID bloque_declarativo '{' bloque_ejecutable    {addErrorMessage("error: falta llave de cierre. Programa Compilado!");}
@@ -372,7 +371,7 @@ celda : ID '[' expresion ']' '[' expresion ']'
                 if(!lastTypes.empty())
                     subIndexType1=lastTypes.pop();
                 /*chequea si existe en la tabla de simbolos y que el tipo en subindices sea correcto*/
-                if((longMatName!="") && integerSubindex(subIndexType1,subIndexType2)){
+                if(integerSubindex(subIndexType1,subIndexType2) && (longMatName!="")){
                     lastTypes.push(QString::fromStdString(symbolsTable->getEntry(longMatName)->type));
                     $$=codeGen->crearNodo(longMatName,$3,$6);
                 }
