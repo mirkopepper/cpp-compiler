@@ -66,8 +66,6 @@ private:
 
     void setAsRoot(string tree);
 
-    void mapearConstantesyCadenas ();
-
     QList<QString> getAssemblerVariables();
 
     QList<QString> getInstructions(Node * node);
