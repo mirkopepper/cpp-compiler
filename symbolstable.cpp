@@ -75,6 +75,10 @@ QString SymbolsTable::getType(string lexeme) {
     return QString::fromStdString(e->type);
 }
 
+QString SymbolsTable::getType(QString lexeme) {
+    return this->getType(lexeme.toStdString());
+}
+
 void SymbolsTable::setUse(string lexeme,string use){
     uses.insert(lexeme,use);
 }

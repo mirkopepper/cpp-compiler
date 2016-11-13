@@ -8,7 +8,7 @@ using namespace std;
 
 static list<string> warnings, errors, tokens,programComponents;
 static SymbolsTable symbolsTable;
-static CodeGenerator codeGen;
+static CodeGenerator codeGen(&symbolsTable);
 
 void printProgramComponents() {
 
