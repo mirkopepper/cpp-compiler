@@ -7,6 +7,8 @@ Parser::Parser(SymbolsTable *ts, LexicalAnalyzer *lex, CodeGenerator * codGen,li
     this->codeGen=codGen;
     this->errors=err;
     error = false;
+    conversionsAllowed=false;
+    mainBlockConected=false;
 }
 
 list<string> Parser::getProgramComponents()
@@ -40,40 +42,103 @@ bool Parser::hasError()
     return this->error;
 }
 
-void Parser::declareVariable (string var, string prefix, string tipo, string use) {
-    string variable = prefix + var;
-    if (symbolsTable->contains(variable)) {
-        this->addErrorMessage("variable redeclarada");
+/*segunda parte: tp3-4*/
+
+void Parser::declareVariable (string varName, string prefix, string type, string use) {
+    string longVarName = prefix + varName;
+    if (symbolsTable->contains(longVarName)) {
+        this->addErrorMessage("error semantico: variable redeclarada");
     } else {
         //se modifica la tabla que dio de alta el lexico
-        Entry * e = symbolsTable->getEntry(var);
-        e->type = tipo;
+        Entry * e = symbolsTable->getEntry(varName);
+        e->type = type;
         e->intValue = 0;
         e->doubleValue = 0;
-        symbolsTable->setUse(var,use);
-        symbolsTable->modifyLexeme(var, variable);
+        symbolsTable->setUse(varName,use);
+        symbolsTable->modifyLexeme(varName, longVarName);
     }
-
 }
 
-//@TODO
-string Parser::mangle (string var, string tipo) {
-    /*se completa el nombre de 'var'*/
-    string aux="";
-    if (tipo=="matriz")
-        "mat@"+var;
-    else if (tipo=="variable")
-        aux="var@"+var;
+void Parser::generateInitializationMatrixTree(string storage, string longMatName){
+    string sentence="";
+    string lastSentence="";
+    for (int i = 0; i < array.getLimitI(); ++i) {
+        for (int j = 0; j < array.getLimitI(); ++j) {
+            /*genero arbol de: celda[expresion][expresion]*/
+            string subIndex1=codeGen->crearNodo(std::to_string(i));
+            string subIndex2=codeGen->crearNodo(std::to_string(j));
+            string celda;
+            if(storage=="rows")
+                celda=codeGen->crearNodo(longMatName,subIndex1,subIndex2);
+            else
+                celda=codeGen->crearNodo(longMatName,subIndex2,subIndex1);
+            /*genero subarbol de: sentencia de asignacion con ':='*/
+            array.setI(i);
+            array.setJ(j);
+            string expression=codeGen->crearNodo(symbolsTable->getEntry(array.getValue())->getValue());
+            string assignment=codeGen->crearNodo(":=",celda,expression);
+            if(sentence==""){
+                /*es la 1er asignacion de la matriz: matName[0][0]:=algo*/
+                sentence=codeGen->crearNodo("@sentencia",assignment);
+                if(codeGen->rootIsNull()){
+                    /*ademas es la 1er declaracion de matriz con inicializacion*/
+                    codeGen->setAsRootNode(sentence);
+                }
+                else{
+                    /*no es la 1ra, ya se inicializo otra antes*/
+                    string aux=codeGen->getLastBlock();
+                    codeGen->addRightNode(aux,sentence);
+                }
+            }
+            else{
+                /*no es la 1er asignacion de la matriz: los subindices no son [0][0]*/
+                sentence=codeGen->crearNodo("@sentencia",assignment);
+                codeGen->addRightNode(lastSentence,sentence);
+            }
+            lastSentence=sentence;
+        }
+    }
+    codeGen->setAsBlockSentenceNode(lastSentence);
+}
+
+void Parser::declareMatriz(string matName, string prefix, string type, string use, string optional){
+    declareVariable(matName,prefix,type,use);
+    Entry * e=symbolsTable->getEntry(prefix+matName);
+    /*extraigo la forma de almacenamiento (filas o columnas): inicializacion+@+almacenamiento*/
+    int posArroba=optional.find('@');
+    e->storage=optional.substr(posArroba+1,optional.size());
+    /*extraigo la inicializacion de optional y chequeo si efectivamente se hace o no*/
+    if(optional.substr(0,posArroba)=="initialize")
+        if(!array.matrixComplete())
+            addErrorMessage("error de inicializacion: el formato de la inicializacion no se corresponde con los limites de la matriz");
+        else{
+            generateInitializationMatrixTree(e->storage,prefix+matName);
+        }
+}
+
+string Parser::mangle (string varName, string type) {
+    /*se completa el nombre de 'varName'*/
+    string longVarName="";
+    if (type=="matriz")
+        longVarName="mat@"+varName;
+    else
+        if (type=="variable")
+            longVarName="var@"+varName;
+        else
+            cout << "parametro tipo en mangle es erroneo: no es ni matriz, ni variable" << endl;
     /*chequeo si existe o no, en la tabla de simbolo*/
-    if(!symbolsTable->contains(aux)){
+    if(!symbolsTable->contains(longVarName)){
         /*no se declaro previamente*/
         addErrorMessage("error con ID de variable o celda: no fue declarado previamente.");
+        return "";
     }
-    return aux;
+    else
+        symbolsTable->removeEntry(varName);
+    return longVarName;
 }
 
-bool Parser::integerSubindex(QString tipo1,QString tipo2){
-    if(tipo1=="DOUBLE" || tipo2=="DOUBLE"){
+bool Parser::integerSubindex(QString subIndexType1, QString subIndexType2){
+    if(subIndexType1=="DOUBLE" || subIndexType2=="DOUBLE"){
         addErrorMessage("error en celda: tipo incorrecto en subindices.");
         return false;
     }
@@ -82,21 +147,21 @@ bool Parser::integerSubindex(QString tipo1,QString tipo2){
 }
 
 string Parser::createOperatorNode(string parentNode,string leftNode,string rightNode){
-    QString tipo1, tipo2;
+    QString rightNodeType, leftNodeType;
     if (!lastTypes.empty())
-        tipo1 = lastTypes.pop();
+        rightNodeType = lastTypes.pop();
     if (!lastTypes.empty())
-        tipo2 = lastTypes.pop();
-    if (tipo1==tipo2) {
-        if (tipo1=="INTEGER")
+        leftNodeType = lastTypes.pop();
+    if (rightNodeType==leftNodeType) {
+        if (rightNodeType=="INTEGER")
             lastTypes.push("INTEGER");
         else
             lastTypes.push("DOUBLE");
         return codeGen->crearNodo(parentNode,leftNode,rightNode);
     } else {
-        //como stack es una pila, tipo1=factor tipo2=termino
+        //como stack es una pila, rightNodeType=factor leftNodeType=termino
         lastTypes.push("DOUBLE");
-        if (tipo1=="INTEGER") {
+        if (rightNodeType=="INTEGER") {
             string conversion = codeGen->crearNodo("@conv",rightNode);
             return codeGen->crearNodo(parentNode,leftNode, conversion);
         } else {
@@ -107,101 +172,64 @@ string Parser::createOperatorNode(string parentNode,string leftNode,string right
 }
 
 string Parser::createAssignmentNode(string assignmentOperator, string leftNode, string rightNode){
-    QString tipo1,tipo2;
+    QString rightNodeType,leftNodeType;
     if (!lastTypes.empty())
-        tipo1 = lastTypes.pop();
+        rightNodeType = lastTypes.pop();
+    else
+        cout << "error!!!! En la derecha no hay nada. Revisar el pusheo de tipos" << endl;
     if (!lastTypes.empty())
-        tipo2 = lastTypes.pop();
-    /*tipo2=asig_izq tipo1=expresion*/
-    if(tipo2==tipo1)/*si son del mismo tipo no hay conversiones*/
+        leftNodeType = lastTypes.pop();
+    else
+        cout << "error!!! En la izquierda no hay nada. Revisar el pusheo de tipos" << endl;
+    /*leftNodeType=asig_izq rightNodeType=expresion*/
+    if(leftNodeType==rightNodeType)/*si son del mismo tipo no hay conversiones*/
         return codeGen->crearNodo(assignmentOperator,leftNode,rightNode);
     else
-        if(tipo2=="INTEGER" && tipo1=="DOUBLE" && !conversionsAllowed){/*son de distinto tipo e incompatibles*/
+        if(leftNodeType=="INTEGER" && rightNodeType=="DOUBLE" && !conversionsAllowed){/*son de distinto tipo e incompatibles*/
             addErrorMessage("Error en asignacion: conversion no permitida.");
             return codeGen->crearNodo(assignmentOperator,leftNode,rightNode);
         }else/*son de distinto tipo, pero se debe convertir lo del lado derecho*/
             return codeGen->crearNodo(assignmentOperator,leftNode,codeGen->crearNodo("@conv",rightNode));
 }
 
-string Parser::createConditionNode(string comparator, string leftExpresion, string rightExpresion){
-    QString tipo1, tipo2;
+string Parser::createConditionNode(string comparator, string leftExpression, string rightExpression){
+    QString rightExpressionType, leftExpressionType;
     if (!lastTypes.empty())
-        tipo1 = lastTypes.pop();
+        rightExpressionType = lastTypes.pop();
     if (!lastTypes.empty())
-        tipo2 = lastTypes.pop();
-    if (tipo1!=tipo2) {
-        if (tipo1=="INTEGER"){
-            string conversion = codeGen->crearNodo("@conv", rightExpresion);
-            return codeGen->crearNodo(comparator, leftExpresion, conversion);
-        }else{//tipo2=INTEGER
-            string conversion = codeGen->crearNodo("@conv", leftExpresion);
-            return codeGen->crearNodo(comparator, conversion, rightExpresion);
+        leftExpressionType = lastTypes.pop();
+    if (rightExpressionType!=leftExpressionType) {
+        if (rightExpressionType=="INTEGER"){
+            string conversion = codeGen->crearNodo("@conv", rightExpression);
+            return codeGen->crearNodo(comparator, leftExpression, conversion);
+        }else{//leftExpressionType=INTEGER
+            string conversion = codeGen->crearNodo("@conv", leftExpression);
+            return codeGen->crearNodo(comparator, conversion, rightExpression);
         }
     }
+    else
+        return codeGen->crearNodo(comparator,leftExpression,rightExpression);
 }
 
-void Parser::declareMatriz(string mat, string prefix, string type, string use, string optional){
-    declareVariable(mat,prefix,type,use);
-    Entry * e=symbolsTable->getEntry(prefix+mat);
-    /*extraigo la forma de almacenamiento (filas o columnas): @+inicializacion+@+almacenamiento+@*/
-    e->storage=optional.substr(optional.find('@',1)+1,optional.size()-2);
-    /*extraigo la inicializacion de optional y chequeo si efectivamente se hace o no*/
-    if(optional.substr(1,optional.find('@',1))=="initialization"){
-        string sentence="";
-        for (int i = 0; i <= array.getLimitI(); ++i) {
-            for (int j = 0; j <= array.getLimitI(); ++j) {
-                /*genero arbol de: celda[expresion][expresion]*/
-                string subIndex1=codeGen->crearNodo(std::to_string(i));
-                string subIndex2=codeGen->crearNodo(std::to_string(j));
-                string celda=codeGen->crearNodo(prefix+mat,subIndex1,subIndex2);
-                /*genero subarbol de: sentencia de asignacion con ':='*/
-                array.setI(i);
-                array.setJ(j);
-                string assignment=codeGen->crearNodo(":=",celda,array.getValue());
-                if(sentence=="")
-                    sentence=codeGen->crearNodo("@setencia",assignment);
-                else
-                    sentence=codeGen->crearNodo("@sentencia",sentence,assignment);
-            }
+void Parser::printSintacticTree(){
+    codeGen->printSintacticTree();
+}
+
+string Parser::getLexeme(string symbolsTablePosition){
+    return symbolsTable->getEntry(stoi(symbolsTablePosition))->getValue();
+}
+
+void Parser::updateArray(string lexeme){
+    if(symbolsTable->getType(lexeme).toStdString()==type){
+        if(array.validPosition()){
+            array.setValue(lexeme);
         }
-        codeGen->setAsRootNode(sentence);
-    }
-    /* para [1][1] inicializo: {0,1;2,3}
-     * en almacenamiento por filas      ->      [0][0]=0; [0][1]=1;
-     *                                          [1][0]=2; [1][1]=3;
-     *
-     * en almacenamiento por columnas   ->      [0][0]=0; [0][1]=2;
-     *                                          [1][0]=1; [1][1]=3;
-     *
-     * para [2][2] inicializo: {0,1,2;3,4,5;6,7,8}
-     * en almacenamiento pot filas      ->      [0][0]=0; [0][1]=1; [0][2]=2;
-     *                                          [1][0]=3; [1][1]=4; [1][2]=5;
-     *                                          [2][0]=6; [2][1]=7; [2][2]=8;
-     *
-     * en almacenamiento por columnas   ->      [0][0]=0; [0][1]=3; [0][2]=6;
-     *                                          [1][0]=1; [1][1]=4; [1][2]=7;
-     *                                          [2][0]=2; [2][1]=5; [2][2]=8;
-     *
-     * tengo la sentencia 'mat[1][2]:=2;' y se almacena por columnas
-     * como se almacena por columnas en realidad estoy haciendo 'mat[2][1]:=2;'?? impacta en el arbol de alguna forma??
-     * osea: 1 seria hijo izquierdo de la celda y 2 el derecho is ordeno por filas, pero si lo hago por columnas
-     * cambian de lugar o quedan como estaban??
-     * LA PREGUNTA SERIA... EN EL TP3, CUAL ES LA DIFERENCIA ENTRE ALMACENAR POR
-     * FILAS O COLUMNAS??
-     *
-     */
-}
-
-void Parser::updateArray(string s){
-    if(symbolsTable->getType(s).toStdString()==type)
-        if(array.validPosition())
-            array.setValue(s);
         else
             addErrorMessage("error en inicializacion: se quiere inicializar en una posicion fuera de rango.");
+    }
     else
         addErrorMessage("error en inicializacion matriz: el tipo de dato es diferente al declarado.");
 }
-
 
 #define yyparse Parser::yyparse
 #define yyerror Parser::yyerror

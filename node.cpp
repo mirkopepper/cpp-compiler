@@ -5,11 +5,11 @@ Node::Node()
 
 }
 
-string Node::preOrderPrint(){
-    string toPrint=this->dato+"\n";
+string Node::preOrderPrint(string prefix){
+    string toPrint=prefix+this->dato+"\n";
     if(this->hijoIzquierdo!=NULL)
-        toPrint+=this->hijoIzquierdo->preOrderPrint()+"\n";
+        toPrint+=this->hijoIzquierdo->preOrderPrint(prefix+". . ");
     if(this->hijoDerecho!=NULL)
-        toPrint+=this->hijoDerecho->preOrderPrint()+"\n";
+           toPrint+=this->hijoDerecho->preOrderPrint(prefix+". . ");
     return toPrint;
 }

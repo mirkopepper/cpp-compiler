@@ -1,0 +1,11 @@
+testeoArbol
+
+&&declaracion de variables
+integer a;
+integer b;
+
+{
+c:=_i1;
+d-=e;
+f:=g+_i2;
+}

@@ -42,6 +42,10 @@ public:
     /*se usa para cambiarle el nombre a una variable o matriz*/
     void modifyLexeme(string oldLexeme, string newLexeme);
 
+    /*se usa para eliminar una entrada cuando ya se encuentra su verdadero nombre
+     * en la TS: variable a: su nombre en TS es var@a, entonces elimino a de TS (a es agregada por el lexico)*/
+    void removeEntry(string lexeme);
+
     QString getType(string lexeme);
 
     /*se usa para saber si una entrada es variable o matriz*/

@@ -9,6 +9,7 @@ class ArrayInitializer
 private:
     int i,j,limitI,limitJ;
     vector<vector<string>> matrix;
+    bool matrizComplete;
 public:
     ArrayInitializer();
     ArrayInitializer(int limitI,int limitJ);
@@ -21,6 +22,9 @@ public:
     void increaseJ();
     int getLimitI();
     int getLimitJ();
+    int getI();
+    int getJ();
+    bool matrixComplete();
 };
 
 #endif // ARRAYINITIALIZER_H

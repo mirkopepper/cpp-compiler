@@ -11,7 +11,7 @@ public:
     Node *hijoDerecho;
 
     /*impresion pre-order del codigo intermedio*/
-    string preOrderPrint();
+    string preOrderPrint(string prefix);
 };
 
 #endif // NODE_H

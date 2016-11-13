@@ -59,10 +59,14 @@ list<string> SymbolsTable::getSymbolsToPrint(){
 
 void SymbolsTable::modifyLexeme(string oldLexeme, string newLexeme) {
     Entry * e = this->entries.value(oldLexeme);
-    index.remove(this->indexOf(oldLexeme));
-    entries.remove(oldLexeme);
+    removeEntry(oldLexeme);
     e->lexeme=newLexeme;
     this->put(newLexeme, e);
+}
+
+void SymbolsTable::removeEntry(string lexeme){
+    index.remove(this->indexOf(lexeme));
+    entries.remove(lexeme);
 }
 
 QString SymbolsTable::getType(string lexeme) {

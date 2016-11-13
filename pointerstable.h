@@ -1,7 +1,7 @@
 #ifndef POINTERSTABLE_H
 #define POINTERSTABLE_H
 #include "node.h"
-#include <list>
+#include <QList>
 #include <string>
 using namespace std;
 
@@ -12,8 +12,12 @@ public:
 
     string registerNode(Node * nodo);
     Node * getNode (string key);
+    int getSize();
+    string registerBlock(string keyNode);
+    string getLastBlock();
 private:
     list <Node *> nodos;
+    QList <string> blockSentences;
 
 
 };
