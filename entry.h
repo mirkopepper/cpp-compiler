@@ -16,12 +16,14 @@ public:
 
     //solo se usara uno de los dos, segun el tipo (integer o double)
     int intValue;
-    int doubleValue;
+    double doubleValue;
     int token_id;
 
     /*solo se usa para matrices*/
     int limit1,limit2,base;
     string storage;
+
+    string getValue();
 };
 
 #endif // ENTRY_H

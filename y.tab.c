@@ -32,52 +32,51 @@ static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 short yylhs[] = {                                        -1,
     0,    0,    0,    1,    1,    3,    3,    3,    4,    4,
     4,    5,    5,    5,    5,    5,    7,    7,    8,    8,
-    8,    6,    9,   10,   10,   13,   10,   14,   10,   12,
-   12,   11,   15,   15,   16,   16,    2,    2,   17,   17,
-   17,   17,   17,   17,   18,   18,   18,   23,   23,   22,
-   22,   22,   22,   24,   24,   24,   24,   26,   26,   26,
-   26,   26,   26,   19,   19,   19,   19,   19,   28,   28,
-   27,   27,   25,   25,   25,   30,   30,   30,   31,   31,
-   31,   29,   29,   29,   29,   29,   29,   20,   21,   21,
-   21,   21,   21,
+    8,    6,    9,   10,   10,   10,   10,   12,   12,   11,
+   13,   13,   14,   14,    2,    2,   15,   15,   15,   15,
+   15,   15,   16,   16,   16,   21,   21,   20,   20,   20,
+   20,   22,   22,   22,   22,   24,   24,   24,   24,   24,
+   24,   17,   17,   17,   17,   17,   26,   26,   25,   25,
+   23,   23,   23,   28,   28,   28,   29,   29,   29,   27,
+   27,   27,   27,   27,   27,   18,   19,   19,   19,   19,
+   19,
 };
 short yylen[] = {                                         2,
     5,    4,    4,    2,    1,    1,    1,    1,    3,    3,
     4,    5,    5,    5,    5,    5,    1,    1,    3,    3,
-    1,    5,    6,    1,    2,    0,    3,    0,    4,    1,
-    1,    3,    3,    1,    3,    1,    2,    1,    1,    1,
-    2,    1,    2,    1,    6,    5,    4,    1,    3,    3,
-    2,    2,    1,    3,    3,    3,    3,    1,    1,    1,
-    1,    1,    1,    3,    4,    3,    3,    3,    1,    1,
-    1,    1,    3,    3,    1,    3,    3,    1,    1,    1,
-    1,    7,    7,    6,    7,    7,    7,    3,    4,    4,
-    3,    3,    2,
+    1,    5,    6,    1,    2,    2,    3,    1,    1,    3,
+    3,    1,    3,    1,    2,    1,    1,    1,    2,    1,
+    2,    1,    6,    5,    4,    1,    3,    3,    2,    2,
+    1,    3,    3,    3,    3,    1,    1,    1,    1,    1,
+    1,    3,    4,    3,    3,    3,    1,    1,    1,    1,
+    3,    3,    1,    3,    3,    1,    1,    1,    1,    7,
+    7,    6,    7,    7,    7,    3,    4,    4,    3,    3,
+    2,
 };
 short yydefred[] = {                                      0,
     0,    0,    0,   18,   17,    0,    0,    5,    6,    7,
-    8,    0,    0,    0,    0,   69,   70,    0,    0,    0,
-    0,    0,    0,    4,   38,   39,    0,   42,    0,    0,
-    0,   72,    0,   21,    0,    0,    0,    0,    0,    0,
-    0,    0,   80,    0,    0,    0,    0,    0,   81,    0,
-   78,    0,    0,    0,    0,    2,   37,   41,   43,    0,
+    8,    0,    0,    0,    0,   67,   68,    0,    0,    0,
+    0,    0,    0,    4,   36,   37,    0,   40,    0,    0,
+    0,   70,    0,   21,    0,    0,    0,    0,    0,    0,
+    0,    0,   78,    0,    0,    0,    0,    0,   79,    0,
+   76,    0,    0,    0,    0,    2,   35,   39,   41,    0,
     0,    0,   10,    0,    0,    0,    9,    0,    0,    0,
-    0,    0,    0,    0,    0,   61,   60,   63,   58,   59,
-   62,    0,    0,    0,   48,    0,   51,    0,    0,    0,
-    0,    0,    0,   91,    0,    0,   88,    1,   67,   66,
-    0,   68,    0,    0,   11,   20,   19,   13,   14,   15,
-   16,   12,    0,    0,    0,    0,   50,    0,    0,   47,
-    0,    0,    0,    0,   57,    0,   76,   77,   90,   89,
-   65,    0,    0,    0,   22,    0,    0,    0,    0,    0,
-   49,    0,   46,    0,   36,    0,    0,   31,   30,   26,
-    0,   84,    0,    0,    0,    0,   45,    0,   32,    0,
-    0,   27,   28,   83,   85,   86,   87,   82,    0,    0,
-   35,   29,   23,
+    0,    0,    0,    0,    0,   59,   58,   61,   56,   57,
+   60,    0,    0,    0,   46,    0,   49,    0,    0,    0,
+    0,    0,    0,   89,    0,    0,   86,    1,   65,   64,
+    0,   66,    0,    0,   11,   20,   19,   13,   14,   15,
+   16,   12,    0,    0,    0,    0,   48,    0,    0,   45,
+    0,    0,    0,    0,   55,    0,   74,   75,   88,   87,
+   63,    0,    0,    0,   22,    0,    0,    0,    0,    0,
+   47,    0,   44,    0,   34,    0,    0,   29,   28,   26,
+    0,   82,    0,    0,    0,    0,   43,    0,   30,    0,
+    0,   27,   81,   83,   84,   85,   80,    0,    0,   33,
+   23,
 };
 short yydgoto[] = {                                       2,
     7,   23,    8,    9,   10,   11,   12,   36,  104,  135,
-  136,  150,  162,  172,  146,  147,   85,   26,   27,   28,
-   29,   46,   86,   47,   48,   82,   30,   31,   49,   50,
-   51,
+  136,  150,  146,  147,   85,   26,   27,   28,   29,   46,
+   86,   47,   48,   82,   30,   31,   49,   50,   51,
 };
 short yysindex[] = {                                   -245,
  -199,    0, -176,    0,    0, -197,  171,    0,    0,    0,
@@ -96,8 +95,8 @@ short yysindex[] = {                                   -245,
     0,  152,  -18, -230,    0,  181,    4, -110, -110,  -44,
     0,  -28,    0,  158,    0,  -54,  206,    0,    0,    0,
  -230,    0,    7,   10,  159,  -39,    0,   -4,    0,  -18,
-   -1,    0,    0,    0,    0,    0,    0,    0,  165,  206,
-    0,    0,    0,
+   -1,    0,    0,    0,    0,    0,    0,  165,  206,    0,
+    0,
 };
 short yyrindex[] = {                                      0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -116,69 +115,68 @@ short yyrindex[] = {                                      0,
     0,    0,    0,  193,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,  -33,    0,    0,    0,
   210,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,  -32,
-    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,  -32,    0,
+    0,
 };
 short yygindex[] = {                                      0,
     0,    3,  266,    0,    0,    0,  114,    0,    0,    0,
-    0,  115,    0,    0,    0,  112,   15,    0,    0,    0,
-    0,  253,  -30,  231,  513,  229,    0,  250,  484,   84,
-  109,
+    0,  115,    0,  112,   15,    0,    0,    0,    0,  253,
+  -30,  231,  513,  229,    0,  250,  484,   84,  109,
 };
 #define YYTABLESIZE 653
 short yytable[] = {                                      53,
-   79,   45,   68,   89,  160,   90,   89,   89,   90,   90,
+   77,   45,   68,   89,  160,   90,   89,   89,   90,   90,
    79,   81,   80,   89,  140,   90,  134,   67,   39,   84,
-    1,   25,   75,   97,   55,   34,   33,   89,   95,   90,
+    1,   25,   73,   97,   55,   32,   31,   89,   95,   90,
    79,   81,   80,  148,  149,   96,   25,   57,   40,   84,
-   33,   79,   79,   79,   73,   79,   89,   79,   90,   89,
-   34,   90,   89,  168,   90,  121,    3,   35,   14,   79,
-   79,   79,   79,   75,  113,   75,  114,   75,   74,   57,
-  159,    4,    5,    4,    5,    6,   89,  115,   90,   93,
-  133,   75,   75,   75,   75,   73,  118,   73,  142,   73,
-   92,   34,   33,   79,    4,    5,  152,   37,   25,  164,
-   64,   38,  165,   73,   73,   73,   73,   74,   43,   74,
-   40,   74,   41,   74,   58,   75,   13,   44,   72,   15,
-   44,   42,   43,   79,   89,   79,   90,   74,   74,   74,
-   74,   44,   57,    4,    5,   59,   92,   73,   93,   43,
-   99,   93,   64,   16,   17,   75,   43,   75,   44,   92,
-   69,   70,   71,   73,   63,   44,   87,   16,   17,   64,
-   94,   74,   18,   19,  119,  120,   20,   73,  103,   73,
-   21,   55,  123,  124,  100,   43,  105,   16,   17,  139,
-  106,   56,   18,   19,   44,  107,   20,  125,   43,  132,
-   21,   74,  108,   74,   71,   54,  109,   44,   71,   71,
-  127,  128,   93,   71,   93,  110,  111,  112,   76,   77,
-   78,  155,   43,   92,   65,   92,  167,   42,   43,  102,
-  131,   44,   52,   64,   66,   64,   88,   44,   76,   77,
-   78,  117,  129,   40,  130,   40,  138,  143,  145,  151,
-  157,   16,   17,   44,  144,   44,   18,   19,  158,  161,
-   20,  166,  169,   55,   21,  171,   79,  173,   79,   79,
-   79,   79,   79,   56,    3,  163,   79,   79,   79,   79,
-   79,  170,   24,   54,   79,   83,   91,   54,   75,   61,
-   75,   75,   75,   75,   75,    0,    0,    0,   75,   75,
-   75,   75,   75,   22,    0,    0,   75,    0,    0,    0,
-   73,    0,   73,   73,   73,   73,   73,    0,    0,    0,
-   73,   73,   73,   73,   73,   24,    0,    0,   73,    0,
-    0,    0,    0,    0,   74,    0,   74,   74,   74,   74,
-   74,    0,   25,    0,   74,   74,   74,   74,   74,    0,
-   93,   93,   74,    0,    0,   93,   93,   93,   93,   93,
-   53,   92,   92,   93,    0,    0,   92,   92,   92,   92,
-   92,   64,   64,    0,   92,   52,   64,   64,   64,   64,
-   64,   40,   40,    0,   64,    0,   40,   40,   40,   40,
-   40,   44,   44,   56,   40,   98,   44,   44,   44,   44,
-   44,   55,   55,    0,   44,    0,   55,   55,    0,  141,
-   55,   56,   56,    0,   55,    0,   56,   56,    0,    0,
-   56,    0,    0,    0,   56,   54,   54,    0,    0,    0,
-   54,   54,    0,    0,   54,    0,    3,    0,   54,    0,
+   33,   77,   77,   77,   71,   77,   89,   77,   90,   89,
+   34,   90,   89,  167,   90,  121,    3,   35,   14,   77,
+   77,   77,   77,   73,  113,   73,  114,   73,   72,   57,
+  159,    4,    5,    4,    5,    6,   89,  115,   90,   91,
+  133,   73,   73,   73,   73,   71,  118,   71,  142,   71,
+   90,   32,   31,   77,    4,    5,  152,   37,   25,  163,
+   62,   38,  164,   71,   71,   71,   71,   74,   43,   72,
+   38,   72,   41,   72,   58,   73,   13,   44,   72,   15,
+   42,   42,   43,   77,   89,   77,   90,   72,   72,   72,
+   72,   44,   57,    4,    5,   59,   92,   71,   91,   43,
+   99,   93,   64,   16,   17,   73,   43,   73,   44,   90,
+   69,   70,   71,   73,   63,   44,   87,   16,   17,   62,
+   94,   72,   18,   19,  119,  120,   20,   71,  103,   71,
+   21,   53,  123,  124,  100,   43,  105,   16,   17,  139,
+  106,   54,   18,   19,   44,  107,   20,  125,   43,  132,
+   21,   72,  108,   72,   69,   52,  109,   44,   69,   69,
+  127,  128,   91,   69,   91,  110,  111,  112,   76,   77,
+   78,  155,   43,   90,   65,   90,  166,   42,   43,  102,
+  131,   44,   52,   62,   66,   62,   88,   44,   76,   77,
+   78,  117,  129,   38,  130,   38,  138,  143,  145,  151,
+  157,   16,   17,   42,  144,   42,   18,   19,  158,  161,
+   20,  165,  168,   53,   21,  170,   77,  171,   77,   77,
+   77,   77,   77,   54,    3,  162,   77,   77,   77,   77,
+   77,  169,   24,   54,   77,   83,   91,   52,   73,   61,
+   73,   73,   73,   73,   73,    0,    0,    0,   73,   73,
+   73,   73,   73,   22,    0,    0,   73,    0,    0,    0,
+   71,    0,   71,   71,   71,   71,   71,    0,    0,    0,
+   71,   71,   71,   71,   71,   24,    0,    0,   71,    0,
+    0,    0,    0,    0,   72,    0,   72,   72,   72,   72,
+   72,    0,   25,    0,   72,   72,   72,   72,   72,    0,
+   91,   91,   72,    0,    0,   91,   91,   91,   91,   91,
+   51,   90,   90,   91,    0,    0,   90,   90,   90,   90,
+   90,   62,   62,    0,   90,   50,   62,   62,   62,   62,
+   62,   38,   38,    0,   62,    0,   38,   38,   38,   38,
+   38,   42,   42,   56,   38,   98,   42,   42,   42,   42,
+   42,   53,   53,    0,   42,    0,   53,   53,    0,  141,
+   53,   54,   54,    0,   53,    0,   54,   54,    0,    0,
+   54,    0,    0,    0,   54,   52,   52,    0,    0,    0,
+   52,   52,    0,    0,   52,    0,    3,    0,   52,    0,
     0,   16,   17,    0,    0,    0,   18,   19,    0,    0,
    20,    4,    5,    0,   21,    6,    0,    0,   24,    0,
     0,    0,    0,   24,   24,    0,    0,    0,   24,   24,
     0,    0,   24,   24,   24,   25,   24,   24,    0,    0,
    25,   25,    0,    0,    0,   25,   25,    0,    0,   25,
-   25,   25,    0,   25,   25,    0,    0,    0,   53,   53,
-   32,    0,    0,   53,   53,    0,    0,   53,    0,    0,
-    0,   53,    0,   52,   52,   32,   32,    0,   52,   52,
-    0,    0,   52,    0,    0,    0,   52,    0,    0,   16,
+   25,   25,    0,   25,   25,    0,    0,    0,   51,   51,
+   32,    0,    0,   51,   51,    0,    0,   51,    0,    0,
+    0,   51,    0,   50,   50,   32,   32,    0,   50,   50,
+    0,    0,   50,    0,    0,    0,   50,    0,    0,   16,
    17,   16,   17,    0,   18,   19,   18,   19,   20,   32,
    20,    0,   21,    0,   21,   16,   17,   32,   32,    0,
    18,   19,   60,   62,   20,    0,    0,    0,   21,    0,
@@ -307,10 +305,8 @@ char *yyrule[] = {
 "dimensiones_cte : '[' CTE ']' '[' CTE ']'",
 "opcional_arreglo : ';'",
 "opcional_arreglo : inicializacion ';'",
-"$$1 :",
-"opcional_arreglo : ';' anotacion $$1",
-"$$2 :",
-"opcional_arreglo : inicializacion ';' anotacion $$2",
+"opcional_arreglo : ';' anotacion",
+"opcional_arreglo : inicializacion ';' anotacion",
 "anotacion : ARROBA_C",
 "anotacion : ARROBA_F",
 "inicializacion : '{' lista_de_listas '}'",
@@ -544,8 +540,13 @@ yyreduce:
     {
 case 1:
 #line 5 "grammar.y"
+<<<<<<< HEAD
 {addProgramComponent("Dectecto un programa!!");
                 /*falta indicar que id se usa como nombre de programa*/
+=======
+{
+                addProgramComponent("Dectecto un programa!!");
+>>>>>>> origin/master
                 }
 break;
 case 2:
@@ -569,6 +570,7 @@ case 11:
 {addErrorMessage("error de declaracion de variables: falta ';'");}
 break;
 case 12:
+<<<<<<< HEAD
 #line 26 "grammar.y"
 {if (yyvsp[-3]=="DOUBLE" && yyvsp[-1]=="INTEGER") conversionsAllowed = true;}
 break;
@@ -610,17 +612,80 @@ case 21:
 break;
 case 22:
 #line 43 "grammar.y"
+=======
+#line 27 "grammar.y"
+{
+                addProgramComponent("Declaracion de conversion entre tipos");
+                if (yyvsp[-3]=="DOUBLE" && yyvsp[-1]=="INTEGER")
+                    conversionsAllowed = true;
+                }
+break;
+case 13:
+#line 32 "grammar.y"
+{addErrorMessage("Error de declaracion de conversion: palabra allow mal escrita");}
+break;
+case 14:
+#line 33 "grammar.y"
+{addErrorMessage("Error de declaracion de conversion: falta tipo entre allow y to");}
+break;
+case 15:
+#line 34 "grammar.y"
+{addErrorMessage("Error de declaracion de conversion; palabra to mal escrita");}
+break;
+case 16:
+#line 35 "grammar.y"
+{addErrorMessage("Error de declaracion de conversion: falta tipo despues del to");}
+break;
+case 17:
+#line 39 "grammar.y"
+{
+                type="DOUBLE";
+                yyval=type;
+                }
+break;
+case 18:
+#line 44 "grammar.y"
+{
+                type="INTEGER";
+                yyval=type;
+                }
+break;
+case 19:
+#line 51 "grammar.y"
+{
+                declareVariable(getLexeme(yyvsp[0]), "var@", type,"variable");
+                }
+break;
+case 20:
+#line 55 "grammar.y"
+{
+                addErrorMessage("antes del identificador tiene que ir una coma.");
+                }
+break;
+case 21:
+#line 59 "grammar.y"
+{
+                declareVariable(getLexeme(yyvsp[0]), "var@", type,"variable");
+                }
+break;
+case 22:
+#line 65 "grammar.y"
+>>>>>>> origin/master
 {
                 /*declarar matriz,guardar limites y forma de alinearse.Si fuera necesario se inicializa*/
-                declareMatriz(yyvsp[-2],"mat@",type,"matriz",yyvsp[0]);
+                declareMatriz(getLexeme(yyvsp[-2]),"mat@",yyvsp[-4],"matriz",yyvsp[0]);
                 }
 break;
 case 23:
+<<<<<<< HEAD
 #line 50 "grammar.y"
+=======
+#line 73 "grammar.y"
+>>>>>>> origin/master
 {
-                /*chequea que sean valores enteros*/
-                if(symbolsTable->getType(yyvsp[-4])=="INTEGER" && symbolsTable->getType(yyvsp[-1])=="INTEGER"){
-                    ArrayInitializer aux(stoi(yyvsp[-4]),stoi(yyvsp[-1]));
+                /*chequea que sean valores enteros e inicializa array por si la declaracion contiene inicializacion de matriz*/
+                if(symbolsTable->getEntry(stoi(yyvsp[-4]))->type=="INTEGER" && symbolsTable->getEntry(stoi(yyvsp[-1]))->type=="INTEGER"){
+                    ArrayInitializer aux(stoi(getLexeme(yyvsp[-4])),stoi(getLexeme(yyvsp[-1])));
                     array=aux;
                 }
                 else
@@ -628,30 +693,49 @@ case 23:
                 }
 break;
 case 24:
+<<<<<<< HEAD
 #line 62 "grammar.y"
 {addProgramComponent("Declaracion de matriz");
+=======
+#line 85 "grammar.y"
+{
+                addProgramComponent("Declaracion de matriz");
+>>>>>>> origin/master
                 /*No se inicializa nada pero se guarda inicializacion por filas (opcion por defecto)*/
-                yyval="@@rows@";
+                yyval="@rows";
                 }
 break;
 case 25:
+<<<<<<< HEAD
 #line 67 "grammar.y"
 {addProgramComponent("Declaracion e inicializacion de matriz");
+=======
+#line 91 "grammar.y"
+{
+                addProgramComponent("Declaracion e inicializacion de matriz");
+>>>>>>> origin/master
                 /*Se inicializa  y guarda por filas  (opcion por defecto)*/
-                yyval="@initialization@rows@";
+                yyval="initialize@rows";
                 }
 break;
 case 26:
+<<<<<<< HEAD
 #line 71 "grammar.y"
 {addProgramComponent("Declaracion y anotacion de matriz");}
 break;
 case 27:
 #line 72 "grammar.y"
 {addProgramComponent("Declaracion y anotacion de matriz");
+=======
+#line 97 "grammar.y"
+{
+                addProgramComponent("Declaracion y anotacion de matriz");
+>>>>>>> origin/master
                 /*Se guarda alineacion por filas/columnas*/
-                yyval="@@"+yyvsp[-1]+"@";
+                yyval="@"+yyvsp[0];
                 }
 break;
+<<<<<<< HEAD
 case 28:
 #line 76 "grammar.y"
 {addProgramComponent("Declaracion, inicializacion y anotacion de matriz");}
@@ -659,85 +743,169 @@ break;
 case 29:
 #line 77 "grammar.y"
 {addProgramComponent("Declaracion, inicializacion y anotacion de matriz");
+=======
+case 27:
+#line 103 "grammar.y"
+{
+                addProgramComponent("Declaracion, inicializacion y anotacion de matriz");
+>>>>>>> origin/master
                 /*Se inicializa y guarda alineacion por filas/columnas*/
-                yyval="@initialization@"+yyvsp[-1]+"@";
+                yyval="initialize@"+yyvsp[0];
                 }
 break;
-case 30:
-#line 84 "grammar.y"
-{/*se inicializa por columnas*/
+case 28:
+#line 111 "grammar.y"
+{
+                /*se inicializa por columnas*/
                 yyval="columns";
                 }
 break;
-case 31:
-#line 88 "grammar.y"
-{/*se inicializa por filas*/
+case 29:
+#line 116 "grammar.y"
+{
+                /*se inicializa por filas*/
                 yyval="rows";
                 }
 break;
-case 34:
-#line 98 "grammar.y"
-{/*pasa de la ultima posicion de la fila i a la 1ra de la fila i+1*/
+case 31:
+<<<<<<< HEAD
+#line 88 "grammar.y"
+{/*se inicializa por filas*/
+                yyval="rows";
+=======
+#line 126 "grammar.y"
+{
+                /*pasa de la ultima posicion de la fila i a la 1ra de la fila i+1*/
                 array.setJ(0);
                 array.increaseI();
                 }
 break;
-case 35:
-#line 105 "grammar.y"
-{/*pasa de la fila i en posicion j a misma fila en posicion j+1, ademas chequea que no se vaya de rango*/
+case 32:
+#line 132 "grammar.y"
+{
+                /*pasa de la ultima posicion de la fila i a la 1ra de la fila i+1*/
+                array.setJ(0);
+                array.increaseI();
+                }
+break;
+case 33:
+#line 140 "grammar.y"
+{
+                /*pasa de la fila i en posicion j a misma fila en posicion j+1, ademas chequea que no se vaya de rango*/
                 array.increaseJ();
-                updateArray(yyvsp[0]);
+                updateArray(symbolsTable->getEntry(stoi(yyvsp[0]))->lexeme);
+>>>>>>> origin/master
+                }
+break;
+case 34:
+#line 146 "grammar.y"
+{
+                /*guarda dato y chequea que no se vaya de rango*/
+                updateArray(symbolsTable->getEntry(stoi(yyvsp[0]))->lexeme);
+                }
+break;
+case 35:
+#line 153 "grammar.y"
+{
+                /*junta la sentencia con el arbol y actualiza la raiz*/
+                string executableBlock=codeGen->crearNodo("@sentencia",yyvsp[0]);
+                codeGen->addRightNode(yyvsp[-1],executableBlock);
+                yyval=executableBlock;
                 }
 break;
 case 36:
-#line 110 "grammar.y"
-{/*guarda dato y chequea que no se vaya de rango*/
-                updateArray(yyvsp[0]);
+#line 160 "grammar.y"
+{
+                /*se inicia un nuevo bloque ejecutable*/
+                string executableBlock=codeGen->crearNodo("@sentencia",yyvsp[0]);
+                /*si da verdadero, es porque no hubo inicializacion de matriz y estoy en el bloque main del programa(no es bloque if/while)*/
+                if(codeGen->rootIsNull()){
+                    codeGen->setAsRootNode(yyvsp[0]);
+                    mainBlockConected=true;
+                }
+                else{
+                    /*si estoy en el bloque main, lo conecto con la inicializacion*/
+                    if(!mainBlockConected){
+                        codeGen->addRightNode(codeGen->getLastBlock(),executableBlock);
+                        mainBlockConected=true;
+                    }
+                }
+                codeGen->setAsBlockSentenceNode(executableBlock);
+                yyval=executableBlock;
                 }
 break;
 case 37:
-#line 116 "grammar.y"
-{/*junta la sentencia con el arbol y actualiza la raiz*/
-                string executableBlock=codeGen->crearNodo("@sentencia",yyvsp[-1],yyvsp[0]);
-                codeGen->setAsRootNode(executableBlock);
-                yyval=executableBlock;
+#line 181 "grammar.y"
+{
+                yyval=yyvsp[0];
                 }
 break;
 case 38:
-#line 122 "grammar.y"
-{/*mismo que arriba pero para cuando se inicia un bloque ejecutable*/
-                string executableBlock=codeGen->crearNodo("@sentencia",yyvsp[0]);
-                codeGen->setAsRootNode(executableBlock);
-                yyval=executableBlock;
+#line 185 "grammar.y"
+{
+                addErrorMessage("error en sentencia = falta ';' en el final de la asignacion");
+                }
+break;
+case 39:
+#line 189 "grammar.y"
+{
+                addProgramComponent("sentencia de asignacion");
+                yyval=yyvsp[-1];
                 }
 break;
 case 40:
-#line 130 "grammar.y"
-{addErrorMessage("error en sentencia = falta ';' en el final de la asignacion");}
+#line 194 "grammar.y"
+{
+                yyval=yyvsp[0];
+                }
 break;
 case 41:
-#line 131 "grammar.y"
-{addProgramComponent("sentencia de asignacion");}
+#line 198 "grammar.y"
+{
+                addProgramComponent("sentecia de impresion");
+                yyval=yyvsp[-1];
+                }
+break;
+case 42:
+#line 203 "grammar.y"
+{
+                addErrorMessage("error en sentecia = falta ';' en el final de la impresion");
+                }
 break;
 case 43:
-#line 133 "grammar.y"
-{addProgramComponent("sentecia de impresion");}
+#line 209 "grammar.y"
+{
+                addProgramComponent("Sentencia IF con bloque ELSE");
+                yyval=codeGen->crearNodo("@if",yyvsp[-4],codeGen->crearNodo("@cuerpoIf",codeGen->crearNodo("@then",yyvsp[-3]),codeGen->crearNodo("@else", yyvsp[-1])));
+                }
 break;
 case 44:
-#line 134 "grammar.y"
-{addErrorMessage("error en sentecia = falta ';' en el final de la impresion");}
+#line 214 "grammar.y"
+{
+                addErrorMessage("error en sentencia IF: falta else");
+                }
 break;
 case 45:
+<<<<<<< HEAD
 #line 138 "grammar.y"
 {addProgramComponent("Sentencia IF con bloque ELSE");
                 yyval=codeGen->crearNodo("@if",yyvsp[-4],codeGen->crearNodo("@cuerpo",codeGen->crearNodo("@then",yyvsp[-3]),codeGen->crearNodo("@else", yyvsp[-1])));
+=======
+#line 218 "grammar.y"
+{
+                addProgramComponent("Sentencia IF sin bloque ELSE");
+                yyval=codeGen->crearNodo("@if",yyvsp[-2],codeGen->crearNodo("@cuerpoIf",codeGen->crearNodo("@then",yyvsp[-1])));
+>>>>>>> origin/master
                 }
 break;
 case 46:
-#line 141 "grammar.y"
-{addErrorMessage("error en sentencia IF: falta else");}
+#line 225 "grammar.y"
+{
+                yyval=codeGen->crearNodo("@sentencia",yyvsp[0]);
+                }
 break;
 case 47:
+<<<<<<< HEAD
 #line 143 "grammar.y"
 {addProgramComponent("Sentencia IF sin bloque ELSE");
                 yyval=codeGen->crearNodo("@if",yyvsp[-2],codeGen->crearNodo("@cuerpo",codeGen->crearNodo("@then",yyvsp[-1])));
@@ -767,89 +935,222 @@ case 53:
 break;
 case 54:
 #line 162 "grammar.y"
+=======
+#line 229 "grammar.y"
+{
+                addProgramComponent("bloque ejecutable entre llaves");
+                yyval=codeGen->getLastBlock();
+                }
+break;
+case 48:
+#line 236 "grammar.y"
+{
+                yyval=codeGen->crearNodo("@condicion", yyvsp[-1]);
+                }
+break;
+case 49:
+#line 239 "grammar.y"
+{addErrorMessage("error en parentesis_condicion: falta '('");}
+break;
+case 50:
+#line 240 "grammar.y"
+{addErrorMessage("error en parentesis_condicion: falta ')' ");}
+break;
+case 51:
+#line 241 "grammar.y"
+{addErrorMessage("error en parentesis_condicion: faltan ambos parentesis ");}
+break;
+case 52:
+#line 245 "grammar.y"
 {
                 yyval=createConditionNode(yyvsp[-1],yyvsp[-2],yyvsp[0]);
                 }
 break;
-case 55:
-#line 165 "grammar.y"
+case 53:
+#line 248 "grammar.y"
 {addErrorMessage("error en condicion: problema con expresion del lado izquierdo");}
 break;
-case 56:
-#line 166 "grammar.y"
+case 54:
+#line 249 "grammar.y"
 {addErrorMessage("error en condicion: problema con el comparador");}
 break;
-case 57:
-#line 167 "grammar.y"
+case 55:
+#line 250 "grammar.y"
 {addErrorMessage("error en condicion: problema con expresion del lado derecho");}
 break;
+case 56:
+#line 254 "grammar.y"
+>>>>>>> origin/master
+{
+                yyval="<";
+                }
+break;
+case 57:
+#line 258 "grammar.y"
+{
+                yyval=">";
+                }
+break;
 case 58:
-#line 170 "grammar.y"
-{yyval="<";}
+#line 262 "grammar.y"
+{
+                yyval="<=";
+                }
 break;
 case 59:
-#line 171 "grammar.y"
-{yyval=">";}
+#line 266 "grammar.y"
+{
+                yyval=">=";
+                }
 break;
-case 62:
-#line 174 "grammar.y"
-{yyval="=";}
+case 60:
+#line 270 "grammar.y"
+{
+                yyval="=";
+                }
 break;
+<<<<<<< HEAD
 case 64:
 #line 179 "grammar.y"
+=======
+case 61:
+#line 274 "grammar.y"
+{
+                yyval="!=";
+                }
+break;
+case 62:
+#line 280 "grammar.y"
+>>>>>>> origin/master
 {
                 yyval=createAssignmentNode(yyvsp[-1],yyvsp[-2],yyvsp[0]);
                 }
 break;
-case 65:
-#line 182 "grammar.y"
+<<<<<<< HEAD
+=======
+case 63:
+#line 283 "grammar.y"
 {addErrorMessage("Error en asignacion:problema con asignacion");}
 break;
-case 66:
-#line 183 "grammar.y"
+case 64:
+#line 284 "grammar.y"
 {addErrorMessage("Error en asignacioN:problema con la expresion del lado derecho");}
 break;
-case 67:
-#line 184 "grammar.y"
+>>>>>>> origin/master
+case 65:
+#line 285 "grammar.y"
 {addErrorMessage("Error en asignacion:falta el operador de asignacion");}
 break;
-case 68:
-#line 185 "grammar.y"
+case 66:
+#line 286 "grammar.y"
 {addErrorMessage("Error en asignacion:falta variable en lado derecho");}
 break;
+case 67:
+#line 290 "grammar.y"
+{
+                yyval=":=";
+                }
+break;
+case 68:
+#line 294 "grammar.y"
+{
+                yyval="-=";
+                }
+break;
+<<<<<<< HEAD
 case 73:
 #line 197 "grammar.y"
+=======
+case 69:
+#line 300 "grammar.y"
+{
+                /*chequeo si ID fue declarado como VARIABLE*/
+                string var=mangle(getLexeme(yyvsp[0]),"variable");
+                if(var!=""){
+                    lastTypes.push(symbolsTable->getType(var));
+                    yyval=codeGen->crearNodo(var);
+                }
+                }
+break;
+case 70:
+#line 309 "grammar.y"
+{
+                yyval=yyvsp[0];
+                }
+break;
+case 71:
+#line 315 "grammar.y"
+>>>>>>> origin/master
 {
                 yyval=createOperatorNode("+",yyvsp[-2],yyvsp[0]);
                 }
 break;
+<<<<<<< HEAD
 case 74:
 #line 201 "grammar.y"
+=======
+case 72:
+#line 319 "grammar.y"
+>>>>>>> origin/master
 {
                 yyval=createOperatorNode("-",yyvsp[-2],yyvsp[0]);
                 }
 break;
+<<<<<<< HEAD
 case 76:
 #line 208 "grammar.y"
+=======
+case 73:
+#line 323 "grammar.y"
+{
+                yyval=yyvsp[0];
+                }
+break;
+case 74:
+#line 329 "grammar.y"
+>>>>>>> origin/master
 {
                 yyval=createOperatorNode("*",yyvsp[-2],yyvsp[0]);
                 }
 break;
+<<<<<<< HEAD
 case 77:
 #line 212 "grammar.y"
+=======
+case 75:
+#line 333 "grammar.y"
+>>>>>>> origin/master
 {
                 yyval=createOperatorNode("/",yyvsp[-2],yyvsp[0]);
                 }
 break;
+<<<<<<< HEAD
 case 79:
 #line 219 "grammar.y"
 {/*chequeo si ID fue declarado como VARIABLE*/
                 string var=mangle(yyvsp[0],"variable");
                 yyval=codeGen->crearNodo(var);
                 if(var!="")
-                    lastTypes.push(symbolsTable->getType(var));
+=======
+case 76:
+#line 337 "grammar.y"
+{
+                yyval=yyvsp[0];
                 }
 break;
+case 77:
+#line 343 "grammar.y"
+{
+                /*chequeo si ID fue declarado como VARIABLE*/
+                string var=mangle(getLexeme(yyvsp[0]),"variable");
+                if(var!=""){
+>>>>>>> origin/master
+                    lastTypes.push(symbolsTable->getType(var));
+                    yyval=codeGen->crearNodo(var);
+                }
+                }
+break;
+<<<<<<< HEAD
 case 80:
 #line 226 "grammar.y"
 {yyval=codeGen->crearNodo(yyvsp[0]);
@@ -859,44 +1160,72 @@ break;
 case 81:
 #line 230 "grammar.y"
 {yyval=yyvsp[0];
+=======
+case 78:
+#line 352 "grammar.y"
+{
+                /*obtengo el tipo y lo pusheo, luego creo el nodo*/
+                lastTypes.push(QString::fromStdString(symbolsTable->getEntry(stoi(yyvsp[0]))->type));
+                yyval=codeGen->crearNodo(getLexeme(yyvsp[0]));
+                }
+break;
+case 79:
+#line 358 "grammar.y"
+{
+                yyval=yyvsp[0];
+>>>>>>> origin/master
                 Node * node = codeGen->getNode(yyvsp[0]);
                 lastTypes.push(symbolsTable->getType(node->dato));
                 }
 break;
+<<<<<<< HEAD
 case 82:
 #line 237 "grammar.y"
 {
                 string mat=mangle(yyvsp[-6],"matriz");
                 QString tipo1,tipo2;
+=======
+case 80:
+#line 366 "grammar.y"
+{
+                string longMatName=mangle(getLexeme(yyvsp[-6]),"matriz");
+                QString subIndexType1,subIndexType2;
+>>>>>>> origin/master
                 if(!lastTypes.empty())
-                    tipo1=lastTypes.pop();
+                    subIndexType2=lastTypes.pop();
                 if(!lastTypes.empty())
-                    tipo2=lastTypes.pop();
+                    subIndexType1=lastTypes.pop();
                 /*chequea si existe en la tabla de simbolos y que el tipo en subindices sea correcto*/
-                if((mat!="") && integerSubindex(tipo1,tipo2))
-                    yyval=codeGen->crearNodo(mat,yyvsp[-4],yyvsp[-1]);
+                if(integerSubindex(subIndexType1,subIndexType2) && (longMatName!="")){
+                    lastTypes.push(QString::fromStdString(symbolsTable->getEntry(longMatName)->type));
+                    yyval=codeGen->crearNodo(longMatName,yyvsp[-4],yyvsp[-1]);
+                }
                 }
 break;
-case 83:
-#line 248 "grammar.y"
+<<<<<<< HEAD
+=======
+case 81:
+#line 379 "grammar.y"
 {addErrorMessage("error en celda: falta expresion en 1er dimension");}
 break;
-case 84:
-#line 249 "grammar.y"
+case 82:
+#line 380 "grammar.y"
 {addErrorMessage("error en celda: falta ']' en la 1er dimension");}
 break;
-case 85:
-#line 250 "grammar.y"
+>>>>>>> origin/master
+case 83:
+#line 381 "grammar.y"
 {addErrorMessage("error en celda: falta '[' en la 2da dimension");}
 break;
-case 86:
-#line 251 "grammar.y"
+case 84:
+#line 382 "grammar.y"
 {addErrorMessage("error en celda: falta expresion en 2da dimension");}
 break;
-case 87:
-#line 252 "grammar.y"
+case 85:
+#line 383 "grammar.y"
 {addErrorMessage("error en celda: falta ']' en 2da dimension");}
 break;
+<<<<<<< HEAD
 case 88:
 #line 256 "grammar.y"
 {addProgramComponent("Sentencia WHILE");
@@ -909,23 +1238,45 @@ case 89:
                 yyval=codeGen->crearNodo("@print",yyvsp[-1]);
                 }
 break;
-case 90:
-#line 265 "grammar.y"
+=======
+case 86:
+#line 387 "grammar.y"
+{
+                addProgramComponent("Sentencia WHILE");
+                yyval=codeGen->crearNodo("@while",yyvsp[-1],codeGen->crearNodo("@cuerpoWhile",yyvsp[0]));
+                }
+break;
+case 87:
+#line 394 "grammar.y"
+{
+                addProgramComponent("Impresion por pantalla");
+                string cadena=codeGen->crearNodo(symbolsTable->getEntry(stoi(yyvsp[-1]))->getValue());
+                yyval=codeGen->crearNodo("@print",cadena);
+                }
+break;
+case 88:
+#line 399 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: falta cadena");}
 break;
-case 91:
-#line 266 "grammar.y"
+case 89:
+#line 400 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: falta parentesis '('");}
 break;
-case 92:
-#line 267 "grammar.y"
+>>>>>>> origin/master
+case 90:
+#line 401 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: falta parentesis ')'");}
 break;
+<<<<<<< HEAD
 case 93:
 #line 268 "grammar.y"
+=======
+case 91:
+#line 402 "grammar.y"
+>>>>>>> origin/master
 {addErrorMessage("error de impresion por pantalla: faltan ambos parentesis");}
 break;
-#line 929 "y.tab.c"
+#line 1074 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

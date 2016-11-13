@@ -83,9 +83,9 @@ int main(int argc, char *argv[])
 
     Parser * parser = new Parser (&symbolsTable,lex, &codeGen, &errors);
     /*Se ejecuta el yyparse*/
-    int output = parser->yyparse();
+    int outcome = parser->yyparse();
 
-    cout <<"resultado del yyparse: "<<output<<endl;
+    cout <<"resultado del yyparse: "<<outcome<<endl;
 
     cout << "\n\nCodigo fuente analizado: " << argv[1] << endl;
 
@@ -95,10 +95,15 @@ int main(int argc, char *argv[])
     tokens = lex->getTokens();
     programComponents = parser->getProgramComponents();
 
+    /*Estos resultados ya no son requeridos
     printTokens();
-    printSymbolsTable();
     printProgramComponents();
+    */
     printLexicalErrors();
     printLexicalWarnings();
+    printSymbolsTable();
+    parser->printSintacticTree();
+
     return 0;
 }
+

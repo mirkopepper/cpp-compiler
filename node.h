@@ -11,6 +11,7 @@ public:
     Node *hijoDerecho;
 
     /*impresion pre-order del codigo intermedio*/
+    string preOrderPrint(string prefix);
     QString preOrderPrint();
 };
 

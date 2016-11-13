@@ -864,7 +864,7 @@ int LexicalAnalyzer::AS_id_pr_EOF(string * buffer, char c) {
         symbolsTable->put(*buffer, entry);
     }
 
-    yylval = symbolsTable->indexOf(*buffer);
+    yylval = to_string(symbolsTable->indexOf(*buffer));
 
     return ID;
 }
@@ -912,12 +912,12 @@ int LexicalAnalyzer::ASE_EOF (string * buffer, char c) {
 
     if (!symbolsTable->contains(*buffer)) {
         Entry * entry = new Entry (*buffer, "CTE", CTE);
-        entry->type="INT";
+        entry->type="INTEGER";
         entry->intValue=value;
         symbolsTable->put(*buffer, entry);
     }
 
-    yylval = symbolsTable->indexOf(*buffer);
+    yylval = to_string(symbolsTable->indexOf(*buffer));
 
     return CTE;
 
@@ -989,7 +989,7 @@ int LexicalAnalyzer::ASD_EOF (string * buffer, char c) {
         symbolsTable->put(*buffer,e);
     }
 
-    yylval = symbolsTable->indexOf(*buffer);
+    yylval = to_string(symbolsTable->indexOf(*buffer));
 
     return CTE;
 }
@@ -1031,7 +1031,7 @@ int LexicalAnalyzer::ASCAD (string * buffer, char c) {
         symbolsTable->put(*buffer,e);
     }
 
-    yylval = symbolsTable->indexOf(*buffer);
+    yylval = to_string(symbolsTable->indexOf(*buffer));
     return CADENA;
 }
 
