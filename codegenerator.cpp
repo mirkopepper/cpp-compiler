@@ -108,14 +108,23 @@ QList<QString> CodeGenerator::getAssemblerVariables() {
 *referencia
 */
 QString CodeGenerator::convertOperand(string op) {
-    //if op es una CTE
+
+    Entry * entry = symbolsTable->getEntry(op);
+
+    if (entry->token == "CTE")
         return constantes.value(QString::fromStdString(op));
-    //if op es una cadena
+
+    if (entry->token == "CADENA")
         return cadenas.value(QString::fromStdString(op));
-    //else (es variable)
+
+
     return QString::fromStdString(op);
 
     //ver convertirOperando de alfonso
+}
+
+QString CodeGenerator::convertOperand(QString op) {
+    this->convertOperand(op.toStdString());
 }
 
 
@@ -157,6 +166,50 @@ bool CodeGenerator::tieneHijosHoja(Node * node) {
  *dicha operacion
 */
 QList<QString> CodeGenerator::getInstructions(Node * node) {
+    QString instruccion;
+    QList<QString> instrucciones;
+    instrucciones.clear();
+
+    if (node->dato == "+") {
+        //Se verifica si es una suma de enteros o double
+
+        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
+            instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "ADD ax, " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "JO overflow";
+            instrucciones.push_back(instruccion);
+
+            //se crea variable auxiliar para guardar el resultado
+            int numeroAuxiliar = this->variablesAuxiliares.size();
+            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
+            variablesAuxiliares.push_back(varAux);
+            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
+            symbolsTable->put(varAux.toStdString(), entry);
+
+            //se copia el resultado en la nueva variable auxiliar
+            instruccion = "MOV " + varAux + ", ax";
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+
+        }
+
+    }
+    if (node->dato =="-=") {
+        //recordar que aca hay que hacer instrucciones de resta y de asignacion
+        /* creo que no necesita una auxiliar, osea
+         * a -= b
+         * generaria codigo para a-b como en cualquier otra resta
+         * despues del ultimo MOV ax,... se hace
+         * MOV a, ax
+         *
+         * (REVISAR)
+         * */
+    }
     //EJEMPLO
     /*  QString instruccion;
         if (node.operacion == "+") {
@@ -207,7 +260,19 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
     Node * aBorrar = node;
     node = NULL;
 
-    //se descolgó el sub-arbol viejo. Ahora se borra
+
+    //Ya se descolgo. Ahora se reemplaza node con el subarbol o NULL
+    string op = aBorrar->dato.toStdString();
+    if (op == "+" || op =="-" || op == "-=" || op == "*" || op == "/" || op == "@conv") {
+        node = new Node;
+        //le pone la referencia a la ultima var aux usada
+        node->dato = variablesAuxiliares.at(variablesAuxiliares.size()-1);
+        node->hijoIzquierdo=NULL;
+        node->hijoDerecho=NULL;
+    }
+    //si no se cumple, node ya vuelve NULL.
+
+    //Ahora se borra
     if (aBorrar->hijoIzquierdo!=NULL) {
         delete aBorrar->hijoIzquierdo;
         aBorrar->hijoIzquierdo = NULL;
@@ -220,16 +285,6 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
 
     delete aBorrar;
     aBorrar = NULL;
-
-    //Ahora se reemplaza node con el subarbol o NULL
-    if (true /*if es +,-,*, etc **CAMBIARLO BIEN*/) {
-        node = new Node;
-        //le pone la referencia a la ultima var aux usada
-        node->dato = variablesAuxiliares.at(variablesAuxiliares.size()-1);
-        node->hijoIzquierdo=NULL;
-        node->hijoDerecho=NULL;
-    }
-    //si no se cumple, node ya vuelve NULL.
  }
 
 /* Recorre en pre-orden buscando el sub-arbol mas a la izquierda

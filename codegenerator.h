@@ -6,6 +6,7 @@
 #include <QString>
 #include "symbolstable.h"
 #include <fstream>
+#include "y.tab.h"
 class CodeGenerator
 {
 public:
@@ -75,6 +76,7 @@ private:
     QString declareAssemblerVariable(string lexeme);
 
     QString convertOperand(string op);
+    QString convertOperand(QString op);
 
     QList<QString> generateCode();
 
