@@ -999,12 +999,10 @@ case 79:
 #line 358 "grammar.y"
 {
                 yyval=yyvsp[0];
-                Node * node = codeGen->getNode(yyvsp[0]);
-                lastTypes.push(symbolsTable->getType(node->dato));
                 }
 break;
 case 80:
-#line 366 "grammar.y"
+#line 364 "grammar.y"
 {
                 string longMatName=mangle(getLexeme(yyvsp[-6]),"matriz");
                 QString subIndexType1,subIndexType2;
@@ -1020,34 +1018,34 @@ case 80:
                 }
 break;
 case 81:
-#line 379 "grammar.y"
+#line 377 "grammar.y"
 {addErrorMessage("error en celda: falta expresion en 1er dimension");}
 break;
 case 82:
-#line 380 "grammar.y"
+#line 378 "grammar.y"
 {addErrorMessage("error en celda: falta ']' en la 1er dimension");}
 break;
 case 83:
-#line 381 "grammar.y"
+#line 379 "grammar.y"
 {addErrorMessage("error en celda: falta '[' en la 2da dimension");}
 break;
 case 84:
-#line 382 "grammar.y"
+#line 380 "grammar.y"
 {addErrorMessage("error en celda: falta expresion en 2da dimension");}
 break;
 case 85:
-#line 383 "grammar.y"
+#line 381 "grammar.y"
 {addErrorMessage("error en celda: falta ']' en 2da dimension");}
 break;
 case 86:
-#line 387 "grammar.y"
+#line 385 "grammar.y"
 {
                 addProgramComponent("Sentencia WHILE");
                 yyval=codeGen->crearNodo("@while",yyvsp[-1],codeGen->crearNodo("@cuerpoWhile",yyvsp[0]));
                 }
 break;
 case 87:
-#line 394 "grammar.y"
+#line 392 "grammar.y"
 {
                 addProgramComponent("Impresion por pantalla");
                 string cadena=codeGen->crearNodo(symbolsTable->getEntry(stoi(yyvsp[-1]))->getValue());
@@ -1055,22 +1053,22 @@ case 87:
                 }
 break;
 case 88:
-#line 399 "grammar.y"
+#line 397 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: falta cadena");}
 break;
 case 89:
-#line 400 "grammar.y"
+#line 398 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: falta parentesis '('");}
 break;
 case 90:
-#line 401 "grammar.y"
+#line 399 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: falta parentesis ')'");}
 break;
 case 91:
-#line 402 "grammar.y"
+#line 400 "grammar.y"
 {addErrorMessage("error de impresion por pantalla: faltan ambos parentesis");}
 break;
-#line 1074 "y.tab.c"
+#line 1072 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

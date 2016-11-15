@@ -140,6 +140,8 @@ bool CodeGenerator::tieneHijosHoja(Node * node) {
 
     //VERIFICAR SI LA LOGICA ESTA BIEN
 
+    //AHORA EXISTEN MAS NODOS CONTROL: @condicion,@cuerpoif,@cuerpoWhile, NOSE SI TAMBIEN ENTRAN @then,@else EN ESTA CATEGORIA
+
     //el nodo debe tener hijos al menos.
     if (node->hijoIzquierdo == NULL && node->hijoDerecho == NULL)
         return false;
@@ -173,11 +175,13 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
     if (node->dato == "+") {
         //Se verifica si es una suma de enteros o double
 
+        //Y SI HIJO IZQUIERDO ES UN NODO DE CONVERSION??? SE ROMPE TODO CREO
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "ADD ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
+            //QUE ES JO OVERFLOW??
             instruccion = "JO overflow";
             instrucciones.push_back(instruccion);
 
@@ -194,6 +198,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             return instrucciones;
 
         }
+        //MISMA PREGUNTA... SI EL HIJO IZQUIERDO ES @conv SE ROMPE TODO NO???
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
 
         }
@@ -206,6 +211,13 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
          * generaria codigo para a-b como en cualquier otra resta
          * despues del ultimo MOV ax,... se hace
          * MOV a, ax
+         *
+         * MIRANDO LOS FILMINAS CREO QUE SERIA:
+         * MOV AX,_A
+         * SUB AX,_B
+         * MOV _A,AX
+         *
+         * ENTONCES CREO QUE NO NECESITAMOS AUXILIARES
          *
          * (REVISAR)
          * */
@@ -263,6 +275,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
 
     //Ya se descolgo. Ahora se reemplaza node con el subarbol o NULL
     string op = aBorrar->dato.toStdString();
+    //SI ES @IF,@WHILE,@PRINT,ETC... QUE PASA????? ADEMAS CREO QUE FALTA := Y LOS COMPARADORES
     if (op == "+" || op =="-" || op == "-=" || op == "*" || op == "/" || op == "@conv") {
         node = new Node;
         //le pone la referencia a la ultima var aux usada
@@ -365,6 +378,8 @@ void CodeGenerator::generateAssembler(const char * ruta) {
     }
 
     //FALTA DECLARAR ACA LAS CONSTANTES MAXIMAS (DE INT, DOUBLE, ETC)
+
+    //CON ESTO TE REFERIS A LOS LIMITES PERMITIDOS??? PONELE INT:-2^15 A 2^15???? DOUBLE: MANTISA E+308???
 
     /** CODIGO **/
 
