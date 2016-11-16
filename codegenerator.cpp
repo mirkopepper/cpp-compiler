@@ -171,18 +171,136 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
     QString instruccion;
     QList<QString> instrucciones;
     instrucciones.clear();
+    //VALORES DE NODE->DATO QUE FALTAN:@CONV,@SENTENCIA,@PRINT,@IF,@CONDICION,@CUERPO,@THEN,@ELSE,@WHILE
+    if (node->dato == "!=") {
+        //Se verifica si es una comparacion de enteros o double
 
+        //----NUEVO COMENTARIO---
+        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
+        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
+            instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "JNE FALTA_PONER_ETIQUETA";
+            //ACA SE APILARIA LA ETIQUETA SUPONGO
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+        }
+    }
+    if (node->dato == ">=") {
+        //Se verifica si es una comparacion de enteros o double
+
+        //----NUEVO COMENTARIO---
+        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
+        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
+            instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "JGE FALTA_PONER_ETIQUETA";
+            //ACA SE APILARIA LA ETIQUETA SUPONGO
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+        }
+    }
+    if (node->dato == "<=") {
+        //Se verifica si es una comparacion de enteros o double
+
+        //----NUEVO COMENTARIO---
+        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
+        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
+            instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "JLE FALTA_PONER_ETIQUETA";
+            //ACA SE APILARIA LA ETIQUETA SUPONGO
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+        }
+    }
+    if (node->dato == "=") {
+        //Se verifica si es una comparacion de enteros o double
+
+        //----NUEVO COMENTARIO---
+        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
+        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
+            instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "JE FALTA_PONER_ETIQUETA";
+            //ACA SE APILARIA LA ETIQUETA SUPONGO
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+        }
+    }
+    if (node->dato == ">") {
+        //Se verifica si es una comparacion de enteros o double
+
+        //----NUEVO COMENTARIO---
+        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
+        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
+            instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "JG FALTA_PONER_ETIQUETA";
+            //ACA SE APILARIA LA ETIQUETA SUPONGO
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+        }
+    }
+    if (node->dato == "<") {
+        //Se verifica si es una comparacion de enteros o double
+
+        //----NUEVO COMENTARIO---
+        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
+        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
+            instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "JL FALTA_PONER_ETIQUETA";
+            //ACA SE APILARIA LA ETIQUETA SUPONGO
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+        }
+    }
     if (node->dato == "+") {
         //Se verifica si es una suma de enteros o double
 
-        //Y SI HIJO IZQUIERDO ES UN NODO DE CONVERSION??? SE ROMPE TODO CREO
+        //----NUEVO COMENTARIO---
+        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "ADD ax, " + convertOperand(node->hijoDerecho->dato);
-            instrucciones.push_back(instruccion);
-            //QUE ES JO OVERFLOW??
-            instruccion = "JO overflow";
             instrucciones.push_back(instruccion);
 
             //se crea variable auxiliar para guardar el resultado
@@ -190,6 +308,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             QString varAux = "@aux_" + QString::number(numeroAuxiliar);
             variablesAuxiliares.push_back(varAux);
             Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
+            entry->type="INTEGER";
             symbolsTable->put(varAux.toStdString(), entry);
 
             //se copia el resultado en la nueva variable auxiliar
@@ -198,11 +317,132 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             return instrucciones;
 
         }
-        //MISMA PREGUNTA... SI EL HIJO IZQUIERDO ES @conv SE ROMPE TODO NO???
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-
+            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
         }
 
+    }
+    if (node->dato =="-"){
+        //Se verifica si es una resta de enteros o double
+
+        //----NUEVO COMENTARIO---
+        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
+        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
+            instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "SUB ax, " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+
+            //se crea variable auxiliar para guardar el resultado
+            int numeroAuxiliar = this->variablesAuxiliares.size();
+            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
+            variablesAuxiliares.push_back(varAux);
+            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
+            entry->type="INTEGER";
+            symbolsTable->put(varAux.toStdString(), entry);
+
+            //se copia el resultado en la nueva variable auxiliar
+            instruccion = "MOV " + varAux + ", ax";
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+        }
+    }
+    if (node->dato =="*"){
+        //Se verifica si es una multiplicacion de enteros o double
+
+        //----NUEVO COMENTARIO---
+        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
+        //YO LE MANDE IMUL EN ESTE CASO, PORQUE TENEMOS NUMEROS CON SIGNO
+        //CLARAMENTE LA MULTIPLICACION NOS DA 32 BITS, NOS QUEDAMOS CON LOS 16 BAJOS QUE ESTAN EN AX
+        //HAY QUE AGREGAR ALGUNA OPERACION MAS PARA MANTENER EL SIGNO SI TENEMOS OVERFLOW???
+        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
+            instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "IMUL ax, " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+
+            //se crea variable auxiliar para guardar el resultado
+            int numeroAuxiliar = this->variablesAuxiliares.size();
+            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
+            variablesAuxiliares.push_back(varAux);
+            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
+            entry->type="INTEGER";
+            symbolsTable->put(varAux.toStdString(), entry);
+
+            //se copia el resultado en la nueva variable auxiliar
+            instruccion = "MOV " + varAux + ", ax";
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+        }
+    }
+    if (node->dato =="/"){
+        //Se verifica si es una division de enteros o double
+
+        //----NUEVO COMENTARIO---
+        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
+        //LE AGREGUE CHEQUEO POR DIVISION POR ZERO AL PRINCIPIO
+        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
+            //CHEQUEO POR DIVISION POR ZERO QUE SALTA A UNA RUTINA??
+            instruccion = "CMP "+ convertOperand(node->hijoDerecho->dato)+ ", 0";
+            instrucciones.push_back(instruccion);
+            instruccion = "JE divZero";
+            instrucciones.push_back(instruccion);
+
+            //NOSE SI ESTA SENTENCIA ESTA BIEN: PARA DIVIDIR, TENES QUE TENER EL DIVIDENDO EN DX:AX
+            //EL COCIENTE QUEDA EN AX
+            //EN LAS FILMINAS DICE: CWD EXTIENDE EL SIGNO DE AX EN DX:AX, TAL VES ESTE SEA EL QUE TENEMOS QUE USAR
+            instruccion = "MOV dx, 0";
+            instrucciones.push_back(instruccion);
+            instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "IDIV " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+
+            //se crea variable auxiliar para guardar el resultado
+            int numeroAuxiliar = this->variablesAuxiliares.size();
+            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
+            variablesAuxiliares.push_back(varAux);
+            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
+            entry->type="INTEGER";
+            symbolsTable->put(varAux.toStdString(), entry);
+
+            //se copia el resultado en la nueva variable auxiliar
+            instruccion = "MOV " + varAux + ", ax";
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+        }
+    }
+    if (node->dato ==":="){
+        //Se verifica si es una asignacion de enteros o double
+
+        //----NUEVO COMENTARIO---
+        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
+        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
+            instruccion = "MOV ax, " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+
+            //se copia el resultado en la nueva variable auxiliar
+            //TAMPOCO ESTOY SEGURO SI ESTA BIEN REFERENCIAR ASI UNA VARIABLE
+            instruccion = "MOV " + node->hijoDerecho->dato + ", ax";
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+        }
     }
     if (node->dato =="-=") {
         //recordar que aca hay que hacer instrucciones de resta y de asignacion
@@ -216,11 +456,26 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
          * MOV AX,_A
          * SUB AX,_B
          * MOV _A,AX
-         *
-         * ENTONCES CREO QUE NO NECESITAMOS AUXILIARES
-         *
-         * (REVISAR)
          * */
+        //Se verifica si es una asignacion de enteros o double
+
+        //----NUEVO COMENTARIO---
+        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
+        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
+            //ESTA ES LA RESTA
+            instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "SUB ax, " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            //ESTA SERIA LA ASIGNACION
+            instruccion = "MOV " + node->hijoIzquierdo->dato + ", ax";
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+        }
     }
     //EJEMPLO
     /*  QString instruccion;

@@ -208,7 +208,7 @@ sentencia : seleccion
 seleccion : IF parentesis_condicion bloque_de_sentencias ELSE bloque_de_sentencias ENDIF
                 {
                 addProgramComponent("Sentencia IF con bloque ELSE");
-                $$=codeGen->crearNodo("@if",$2,codeGen->crearNodo("@cuerpoIf",codeGen->crearNodo("@then",$3),codeGen->crearNodo("@else", $5)));
+                $$=codeGen->crearNodo("@if",$2,codeGen->crearNodo("@cuerpo",codeGen->crearNodo("@then",$3),codeGen->crearNodo("@else", $5)));
                 }
         | IF parentesis_condicion bloque_de_sentencias bloque_de_sentencias ENDIF
                 {
@@ -217,7 +217,7 @@ seleccion : IF parentesis_condicion bloque_de_sentencias ELSE bloque_de_sentenci
         | IF parentesis_condicion bloque_de_sentencias ENDIF
                 {
                 addProgramComponent("Sentencia IF sin bloque ELSE");
-                $$=codeGen->crearNodo("@if",$2,codeGen->crearNodo("@cuerpoIf",codeGen->crearNodo("@then",$3)));
+                $$=codeGen->crearNodo("@if",$2,codeGen->crearNodo("@cuerpo",codeGen->crearNodo("@then",$3)));
                 }
                 ;
 
@@ -384,7 +384,7 @@ celda : ID '[' expresion ']' '[' expresion ']'
 iteracion : WHILE parentesis_condicion bloque_de_sentencias
                 {
                 addProgramComponent("Sentencia WHILE");
-                $$=codeGen->crearNodo("@while",$2,codeGen->crearNodo("@cuerpoWhile",$3));
+                $$=codeGen->crearNodo("@while",$2,codeGen->crearNodo("@cuerpo",$3));
                 }
         ;
 
