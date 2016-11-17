@@ -10,6 +10,9 @@ public:
     Node *hijoIzquierdo;
     Node *hijoDerecho;
 
+    /*para matriz*/
+    QString offset;
+
     /*impresion pre-order del codigo intermedio*/
     string preOrderPrint(string prefix);
     QString preOrderPrint();

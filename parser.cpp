@@ -104,16 +104,23 @@ void Parser::generateInitializationMatrixTree(string storage, string longMatName
 void Parser::declareMatriz(string matName, string prefix, string type, string use, string optional){
     declareVariable(matName,prefix,type,use);
     Entry * e=symbolsTable->getEntry(prefix+matName);
+
+    /*la paso los limites*/
+    e->limit1=array.getLimitI();
+    e->limit2=array.getLimitJ();
+
     /*extraigo la forma de almacenamiento (filas o columnas): inicializacion+@+almacenamiento*/
     int posArroba=optional.find('@');
     e->storage=optional.substr(posArroba+1,optional.size());
+
     /*extraigo la inicializacion de optional y chequeo si efectivamente se hace o no*/
-    if(optional.substr(0,posArroba)=="initialize")
+    if(optional.substr(0,posArroba)=="initialize"){
         if(!array.matrixComplete())
             addErrorMessage("error de inicializacion: el formato de la inicializacion no se corresponde con los limites de la matriz");
         else{
             generateInitializationMatrixTree(e->storage,prefix+matName);
         }
+    }
 }
 
 string Parser::mangle (string varName, string type) {

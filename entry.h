@@ -20,7 +20,7 @@ public:
     int token_id;
 
     /*solo se usa para matrices*/
-    int limit1,limit2,base;
+    int limit1,limit2,row,column;
     string storage;
 
     string getValue();

@@ -88,9 +88,16 @@ QString CodeGenerator::declareAssemblerVariable(string lexeme) {
         string use=symbolsTable->getUse(lexeme);
         if(use=="variable"){
             if(e->type=="INTEGER")
-                return QString::fromStdString(e->lexeme + " dw " + e->getValue());
+                return QString::fromStdString(e->lexeme + " dw ");
             else
-                return QString::fromStdString(e->lexeme + " dd " + e->getValue());
+                return QString::fromStdString(e->lexeme + " dd ");
+        }
+        if(use=="matriz"){
+            int limit=(e->limit1-1)*(e->limit2-1);
+            if(e->type=="INTEGER")
+                return QString::fromStdString(e->lexeme + " dw " + to_string(limit) + " DUP(?)");
+            else
+                return QString::fromStdString(e->lexeme + " dd " + to_string(limit) + " DUP(?)");
         }
     }
     if(e->token=="CTE"){
@@ -135,8 +142,7 @@ QString CodeGenerator::convertOperand(string op) {
     if (entry->token == "CADENA")
         return cadenas.value(QString::fromStdString(op));
 
-    /*entonces es un id*/
-    /*---MIRAR PARA EL CASO MATRICES*/
+    /*entonces es una variable*/
     return QString::fromStdString(op);
 
     //ver convertirOperando de alfonso
@@ -295,6 +301,46 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             return instrucciones;
 
         }
+    }
+
+    if(node->dato.contains("mat@")){
+            /*chequeo de limites*/
+            instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            int limite = symbolsTable->getEntry(node->dato.toStdString())->limit1;
+            instruccion = "CMP ax, " + limite;
+            instrucciones.push_back(instruccion);
+            instruccion = "JGE matrixOutOfRange";
+            instrucciones.push_back(instruccion);
+
+            instruccion = "MOV ax, " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            limite = symbolsTable->getEntry(node->dato.toStdString())->limit2;
+            instruccion = "CMP ax, " + limite;
+            instrucciones.push_back(instruccion);
+            instruccion = "JGE matrixOutOfRange";
+            instrucciones.push_back(instruccion);
+
+            /*calculo posicion*/
+            if(symbolsTable->getEntry(node->dato.toStdString())->storage == "rows"){
+                instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
+                instrucciones.push_back(instruccion);
+                instruccion = "MUL ax, " + symbolsTable->getEntry(node->dato.toStdString())->limit1;
+                instrucciones.push_back(instruccion);
+                instruccion = "ADD ax, " + convertOperand(node->hijoDerecho->dato);
+                instrucciones.push_back(instruccion);
+            }
+            else if(symbolsTable->getEntry(node->dato.toStdString())->storage == "columns"){
+                instruccion = "MOV ax, " + convertOperand(node->hijoDerecho->dato);
+                instrucciones.push_back(instruccion);
+                instruccion = "MUL ax, " + symbolsTable->getEntry(node->dato.toStdString())->limit2;
+                instrucciones.push_back(instruccion);
+                instruccion = "ADD ax, " + convertOperand(node->hijoIzquierdo->dato);
+                instrucciones.push_back(instruccion);
+            }
+            instruccion = "MOV " + node->offset +", ax";
+            instrucciones.push_back(instruccion);
+            return instrucciones;
     }
 
     if (node->dato == ">=") {
