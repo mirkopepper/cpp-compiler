@@ -54,8 +54,8 @@ void Parser::declareVariable (string varName, string prefix, string type, string
         e->type = type;
         e->intValue = 0;
         e->doubleValue = 0;
-        symbolsTable->setUse(varName,use);
         symbolsTable->modifyLexeme(varName, longVarName);
+        symbolsTable->setUse(longVarName,use);
     }
 }
 

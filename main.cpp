@@ -96,9 +96,9 @@ int main(int argc, char *argv[])
     programComponents = parser->getProgramComponents();
 
     /*Estos resultados ya no son requeridos
-    */
     printTokens();
     printProgramComponents();
+    */
     printLexicalErrors();
     printLexicalWarnings();
     printSymbolsTable();

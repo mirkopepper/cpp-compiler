@@ -917,7 +917,7 @@ int LexicalAnalyzer::ASE_EOF (string * buffer, char c) {
         symbolsTable->put(aux, entry);
     }
 
-    yylval = to_string(symbolsTable->indexOf(*buffer));
+    yylval = to_string(symbolsTable->indexOf(aux));
 
     return CTE;
 
@@ -989,7 +989,7 @@ int LexicalAnalyzer::ASD_EOF (string * buffer, char c) {
         symbolsTable->put(std::to_string(aux),e);
     }
 
-    yylval = to_string(symbolsTable->indexOf(*buffer));
+    yylval = to_string(symbolsTable->indexOf(std::to_string(aux)));
 
     return CTE;
 }
@@ -1095,8 +1095,6 @@ return recognizedTokens;
 /* Modificar cuando se usen las constantes dadas por el parser */
 
 void LexicalAnalyzer::addRecognized(string * buffer, int token) {
-    cout << "entra      " << *buffer << endl;
-    cout << symbolsTable->getEntry(symbolsTable->size()-1)->lexeme << endl;
     string description = "";
     /*despues del if estan solo las palabras reservadas, siendo if la 1ra*/
     if (token >=IF)
@@ -1111,7 +1109,6 @@ void LexicalAnalyzer::addRecognized(string * buffer, int token) {
            else if (token == CTE) {
                 Entry *e=symbolsTable->getEntry(symbolsTable->size()-1);
                 if(symbolsTable->contains(e->lexeme)){
-                    cout << "valor de ultimo lexema en addrecognized y buffer: " << e->lexeme << "//" << *buffer << endl;
                     Entry * entry=symbolsTable->getEntry(symbolsTable->size()-1);
 
                     /*integer*/
@@ -1128,7 +1125,6 @@ void LexicalAnalyzer::addRecognized(string * buffer, int token) {
                     cout<<"Error!! "<<*buffer<<" no esta en la TS."<<endl;
 
            /*cadenas multilinea*/
-                cout << "sale de CTE en recognized" << endl;
            } else if (token == CADENA){
                        description="Cadena: "+symbolsTable->getEntry(*buffer)->lexeme+"\n";
                   }

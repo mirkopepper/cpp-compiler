@@ -4,6 +4,7 @@
 programa : ID bloque_declarativo '{' bloque_ejecutable '}'
                 {
                 addProgramComponent("Dectecto un programa!!");
+                symbolsTable->setUse(getLexeme($1),"nombre programa");
                 }
         | ID bloque_declarativo bloque_ejecutable '}'    {addErrorMessage("error: falta llave de inicio. Programa Compilado!");}
         | ID bloque_declarativo '{' bloque_ejecutable    {addErrorMessage("error: falta llave de cierre. Programa Compilado!");}
