@@ -240,6 +240,10 @@ void Parser::updateArray(string lexeme){
         addErrorMessage("error en inicializacion matriz: el tipo de dato es diferente al declarado.");
 }
 
+void Parser::generateAssembler(const char *ruta){
+    codeGen->generateAssembler(ruta);
+}
+
 #define yyparse Parser::yyparse
 #define yyerror Parser::yyerror
 #include "y.tab.c" // yypase()

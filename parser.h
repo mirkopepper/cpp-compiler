@@ -83,6 +83,8 @@ public:
     /*imprime el arbol*/
     void printSintacticTree();
 
+    /*genera assembler*/
+    void generateAssembler(const char * ruta);
 };
 
 #endif // PARSER_H

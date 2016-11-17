@@ -58,6 +58,11 @@ private:
      * en la posicion 0. La variable @aux_1 estara en la 1*/
     QList<QString> variablesAuxiliares;
 
+    /*pila de etiquetas para saltos:guarda @label_i*/
+    QList<QString> labels;
+
+    /*permite que no haya 2 etiquetas iguales, aumenta cada ves que se debe generar una nueva*/
+    int labelsCounter;
 
     SymbolsTable * symbolsTable;
 
@@ -65,11 +70,16 @@ private:
 
     bool firstSentence();
 
-    void setAsRoot(string tree);
-
     QList<QString> getAssemblerVariables();
 
+    /*genera una etiqueta nueva y la pone en la pila de etiquetas*/
+    QString generateLabel();
+
     QList<QString> getInstructions(Node * node);
+
+    QList<QString> getIfInstructions(Node * node);
+
+    QList<QString> getWhileInstructions(Node * node);
 
     void processNode(Node * &node);
 

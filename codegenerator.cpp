@@ -50,10 +50,6 @@ bool CodeGenerator::firstSentence() {
     return (root==NULL);
 }
 
-void CodeGenerator::setAsRoot(string tree) {
-    root = this->getNode(tree);
-}
-
 Node * CodeGenerator::getNode(string key){
     return this->pointersTable.getNode(key);
 }
@@ -66,15 +62,20 @@ void CodeGenerator::mapearConstantesYCadenas() {
     constantes.clear();
     cadenas.clear();
     QList<string> entries = symbolsTable->getKeys();
+    cout << endl << "NUEVOS VALORES EN CADENAS, CONTANTES Y LOS IDS:" << endl;
     for (int i=0; i<entries.size(); i++){
         Entry * entry = symbolsTable->getEntry(entries.at(i));
         if (entry->token == "CTE") {
             QString nombreCte = "@cte" + QString::number(constantes.size());
+            cout << "constantes " << i << " " << entry->lexeme << ", " << nombreCte.toStdString() << endl;
             constantes.insert(QString::fromStdString(entry->lexeme), nombreCte);
         } else if (entry->token == "CADENA") {
             QString nombreCad = "@cadena" + QString::number(cadenas.size());
+            cout << "cadenas " << i << " " << entry->lexeme << ", " << nombreCad.toStdString() << endl;
             cadenas.insert(QString::fromStdString(entry->lexeme),nombreCad);
         }
+        else
+            cout << "id " << i << " " << entry->lexeme << endl;
     }
     /*Verificar que los nombres @cte y @cadena sean validos. Osea que no choquen
     con otra cosa y eso */
@@ -87,6 +88,24 @@ QString CodeGenerator::declareAssemblerVariable(string lexeme) {
     //ver GeneradorDeCodigo::declaracionVariable de alfonso para saber bien QUE devuelve
     /*
     */
+    Entry * e=symbolsTable->getEntry(lexeme);
+    if(e->token=="ID"){
+        if(e->type=="INTEGER")
+            return QString::fromStdString(e->lexeme + " dw " + e->getValue());
+        else
+            return QString::fromStdString(e->lexeme + " dd " + e->getValue());
+    }
+    if(e->token=="CTE"){
+        if(e->type=="INTEGER")
+            return constantes.value(QString::fromStdString(lexeme)) + QString::fromStdString(" dw " + e->getValue());
+        else
+            return constantes.value(QString::fromStdString(lexeme)) + QString::fromStdString(" dd " + e->getValue());
+    }
+    if(e->token=="CADENA"){
+        return cadenas.value(QString::fromStdString(lexeme)) + QString::fromStdString(" db " + lexeme + ", 0");
+    }
+
+    return "";
 }
 
 /* Devuelve TODAS las instrucciones assembler de declaracion
@@ -109,15 +128,19 @@ QList<QString> CodeGenerator::getAssemblerVariables() {
 */
 QString CodeGenerator::convertOperand(string op) {
 
-    Entry * entry = symbolsTable->getEntry(op);
+    cout << "valor op: "<< op << endl;
+    Entry * entry = symbolsTable->getEntry("_i0");
+    cout << "entry lexema" << entry->lexeme << endl;
 
-    if (entry->token == "CTE")
-        return constantes.value(QString::fromStdString(op));
+    if (entry->token == "CTE"){
+        return constantes.value(QString::fromStdString("_i0"));
+    }
 
     if (entry->token == "CADENA")
         return cadenas.value(QString::fromStdString(op));
 
-
+    /*entonces es un id*/
+    /*---MIRAR PARA EL CASO MATRICES*/
     return QString::fromStdString(op);
 
     //ver convertirOperando de alfonso
@@ -132,15 +155,11 @@ QString CodeGenerator::convertOperand(QString op) {
  *para generar código.
  * Devuelve verdadero si sus hijos son hoja y si NO se trata de un
  * nodo de "@sentencia", ya que estos se deben IGNORAR
+ * IMPORTANTE: los nodos relacionados con if y while se procesan en otro lado
  */
 bool CodeGenerator::tieneHijosHoja(Node * node) {
     if ((node==NULL) || (node->dato == "@sentencia"))
         return false;
-    //despues de esto verificar si tiene sus hijos hoja o no
-
-    //VERIFICAR SI LA LOGICA ESTA BIEN
-
-    //AHORA EXISTEN MAS NODOS CONTROL: @condicion,@cuerpoif,@cuerpoWhile, NOSE SI TAMBIEN ENTRAN @then,@else EN ESTA CATEGORIA
 
     //el nodo debe tener hijos al menos.
     if (node->hijoIzquierdo == NULL && node->hijoDerecho == NULL)
@@ -163,6 +182,13 @@ bool CodeGenerator::tieneHijosHoja(Node * node) {
 
 }
 
+QString CodeGenerator::generateLabel(){
+    labelsCounter++;
+    QString label="@label_"+labelsCounter;
+    labels.push_back(label);
+    return label;
+}
+
 /*Asume que lo que recibe es un nodo con dos hijos hoja
  *Devuelve todas las instrucciones assembler asociadas a
  *dicha operacion
@@ -171,132 +197,224 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
     QString instruccion;
     QList<QString> instrucciones;
     instrucciones.clear();
-    //VALORES DE NODE->DATO QUE FALTAN:@CONV,@SENTENCIA,@PRINT,@IF,@CONDICION,@CUERPO,@THEN,@ELSE,@WHILE
+    //VALORES DE NODE->DATO QUE FALTAN:,mat@id
+
+    if (node->dato == "@print"){
+        QString cadena=convertOperand(node->hijoIzquierdo->dato);
+        instruccion = "invoke MessageBox, NULL, addr " + cadena + ", addr " + cadena + ", MB_OK";
+        instrucciones.push_back(instruccion);
+        return instrucciones;
+    }
+    if (node->dato == "@conv"){
+        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
+            instruccion = "FILD " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+
+            //se crea variable auxiliar para guardar el resultado
+            int numeroAuxiliar = this->variablesAuxiliares.size();
+            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
+            variablesAuxiliares.push_back(varAux);
+            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
+            entry->type="DOUBLE";
+            symbolsTable->put(varAux.toStdString(), entry);
+
+            //guarda la variable
+            instruccion = "FST "+ varAux;
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+        }else if(symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE"){
+            instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            //ACA TENGO QUE CHEQUEAR QUE EL DOUBLE ESTE ENTRE -2^15 y +2^15
+            instruccion = "FCOM 32768";
+            instrucciones.push_back(instruccion);
+            instruccion = "FSTSW ax";
+            instrucciones.push_back(instruccion);
+            instruccion = "SAHF";
+            instrucciones.push_back(instruccion);
+            instruccion = "JGE conversionFailed";
+            instrucciones.push_back(instruccion);
+
+            instruccion = "FCOM -32768";
+            instrucciones.push_back(instruccion);
+            instruccion = "FSTSW ax";
+            instrucciones.push_back(instruccion);
+            instruccion = "SAHF";
+            instrucciones.push_back(instruccion);
+            instruccion = "JLE conversionFailed";
+            instrucciones.push_back(instruccion);
+
+            //se crea variable auxiliar para guardar el resultado
+            int numeroAuxiliar = this->variablesAuxiliares.size();
+            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
+            variablesAuxiliares.push_back(varAux);
+            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
+            entry->type="INTEGER";
+            symbolsTable->put(varAux.toStdString(), entry);
+
+            //CONVIERTO
+            instruccion = "FIST " + varAux;
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+        }
+
+    }
     if (node->dato == "!=") {
-        //Se verifica si es una comparacion de enteros o double
-
-        //----NUEVO COMENTARIO---
-        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
-            instruccion = "JNE FALTA_PONER_ETIQUETA";
-            //ACA SE APILARIA LA ETIQUETA SUPONGO
+            instruccion = "JE " + generateLabel();
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+            instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FCOM " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FSTSW ax";
+            instrucciones.push_back(instruccion);
+            instruccion = "SAHF";
+            instrucciones.push_back(instruccion);
+            instruccion = "JE " + generateLabel();
             instrucciones.push_back(instruccion);
             return instrucciones;
 
         }
-        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
-        }
     }
+
     if (node->dato == ">=") {
-        //Se verifica si es una comparacion de enteros o double
-
-        //----NUEVO COMENTARIO---
-        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
-            instruccion = "JGE FALTA_PONER_ETIQUETA";
-            //ACA SE APILARIA LA ETIQUETA SUPONGO
+            instruccion = "JL " + generateLabel();
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+            instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FCOM " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FSTSW ax";
+            instrucciones.push_back(instruccion);
+            instruccion = "SAHF";
+            instrucciones.push_back(instruccion);
+            instruccion = "JB " + generateLabel();
             instrucciones.push_back(instruccion);
             return instrucciones;
 
         }
-        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
-        }
     }
+
     if (node->dato == "<=") {
-        //Se verifica si es una comparacion de enteros o double
-
-        //----NUEVO COMENTARIO---
-        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
-            instruccion = "JLE FALTA_PONER_ETIQUETA";
-            //ACA SE APILARIA LA ETIQUETA SUPONGO
+            instruccion = "JG " + generateLabel();
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+        }
+        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
+            instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FCOM " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FSTSW ax";
+            instrucciones.push_back(instruccion);
+            instruccion = "SAHF";
+            instrucciones.push_back(instruccion);
+            instruccion = "JA " +generateLabel();
             instrucciones.push_back(instruccion);
             return instrucciones;
 
         }
-        else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
-        }
     }
+
     if (node->dato == "=") {
-        //Se verifica si es una comparacion de enteros o double
-
-        //----NUEVO COMENTARIO---
-        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
-            instruccion = "JE FALTA_PONER_ETIQUETA";
-            //ACA SE APILARIA LA ETIQUETA SUPONGO
+            instruccion = "JNE "+ generateLabel();
             instrucciones.push_back(instruccion);
             return instrucciones;
-
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+            instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FCOM " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FSTSW ax";
+            instrucciones.push_back(instruccion);
+            instruccion = "SAHF";
+            instrucciones.push_back(instruccion);
+            instruccion = "JB "+ generateLabel();
+            instrucciones.push_back(instruccion);
+            instruccion = "JA " + generateLabel();
+            instrucciones.push_back(instruccion);
+            return instrucciones;
         }
     }
+
     if (node->dato == ">") {
-        //Se verifica si es una comparacion de enteros o double
-
-        //----NUEVO COMENTARIO---
-        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
-            instruccion = "JG FALTA_PONER_ETIQUETA";
-            //ACA SE APILARIA LA ETIQUETA SUPONGO
+            instruccion = "JLE " + generateLabel();
             instrucciones.push_back(instruccion);
             return instrucciones;
-
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+            instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FCOM " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FSTSW ax";
+            instrucciones.push_back(instruccion);
+            instruccion = "SAHF";
+            instrucciones.push_back(instruccion);
+            instruccion = "JBE " + generateLabel();
+            instrucciones.push_back(instruccion);
+            return instrucciones;
         }
     }
+
     if (node->dato == "<") {
-        //Se verifica si es una comparacion de enteros o double
-
-        //----NUEVO COMENTARIO---
-        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
-            instruccion = "JL FALTA_PONER_ETIQUETA";
-            //ACA SE APILARIA LA ETIQUETA SUPONGO
+            instruccion = "JGE " + generateLabel();
             instrucciones.push_back(instruccion);
             return instrucciones;
-
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+            instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FCOM " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FSTSW ax";
+            instrucciones.push_back(instruccion);
+            instruccion = "SAHF";
+            instrucciones.push_back(instruccion);
+            instruccion = "JAE " + generateLabel();
+            instrucciones.push_back(instruccion);
+            return instrucciones;
         }
     }
-    if (node->dato == "+") {
-        //Se verifica si es una suma de enteros o double
 
-        //----NUEVO COMENTARIO---
-        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
+    if (node->dato == "+") {
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
@@ -315,18 +433,29 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instruccion = "MOV " + varAux + ", ax";
             instrucciones.push_back(instruccion);
             return instrucciones;
-
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+            instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FADD " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+
+            //se crea variable auxiliar para guardar el resultado
+            int numeroAuxiliar = this->variablesAuxiliares.size();
+            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
+            variablesAuxiliares.push_back(varAux);
+            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
+            entry->type="DOUBLE";
+            symbolsTable->put(varAux.toStdString(), entry);
+
+            //guarda la variable
+            instruccion = "FST "+ varAux;
+            instrucciones.push_back(instruccion);
+            return instrucciones;
         }
-
     }
-    if (node->dato =="-"){
-        //Se verifica si es una resta de enteros o double
 
-        //----NUEVO COMENTARIO---
-        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
+    if (node->dato =="-"){
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
@@ -345,20 +474,29 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instruccion = "MOV " + varAux + ", ax";
             instrucciones.push_back(instruccion);
             return instrucciones;
-
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+            instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FSUB " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+
+            //se crea variable auxiliar para guardar el resultado
+            int numeroAuxiliar = this->variablesAuxiliares.size();
+            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
+            variablesAuxiliares.push_back(varAux);
+            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
+            entry->type="DOUBLE";
+            symbolsTable->put(varAux.toStdString(), entry);
+
+            //guarda la variable
+            instruccion = "FST "+ varAux;
+            instrucciones.push_back(instruccion);
+            return instrucciones;
         }
     }
-    if (node->dato =="*"){
-        //Se verifica si es una multiplicacion de enteros o double
 
-        //----NUEVO COMENTARIO---
-        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
-        //YO LE MANDE IMUL EN ESTE CASO, PORQUE TENEMOS NUMEROS CON SIGNO
-        //CLARAMENTE LA MULTIPLICACION NOS DA 32 BITS, NOS QUEDAMOS CON LOS 16 BAJOS QUE ESTAN EN AX
-        //HAY QUE AGREGAR ALGUNA OPERACION MAS PARA MANTENER EL SIGNO SI TENEMOS OVERFLOW???
+    if (node->dato =="*"){
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
@@ -377,28 +515,36 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instruccion = "MOV " + varAux + ", ax";
             instrucciones.push_back(instruccion);
             return instrucciones;
-
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+            instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FMUL " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+
+            //se crea variable auxiliar para guardar el resultado
+            int numeroAuxiliar = this->variablesAuxiliares.size();
+            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
+            variablesAuxiliares.push_back(varAux);
+            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
+            entry->type="DOUBLE";
+            symbolsTable->put(varAux.toStdString(), entry);
+
+            //se copia el resultado en la nueva variable auxiliar
+            instruccion = "FST " + varAux;
+            instrucciones.push_back(instruccion);
+            return instrucciones;
         }
     }
-    if (node->dato =="/"){
-        //Se verifica si es una division de enteros o double
 
-        //----NUEVO COMENTARIO---
-        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
-        //LE AGREGUE CHEQUEO POR DIVISION POR ZERO AL PRINCIPIO
+    if (node->dato =="/"){
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            //CHEQUEO POR DIVISION POR ZERO QUE SALTA A UNA RUTINA??
+            //chequeo de division por cero
             instruccion = "CMP "+ convertOperand(node->hijoDerecho->dato)+ ", 0";
             instrucciones.push_back(instruccion);
             instruccion = "JE divZero";
             instrucciones.push_back(instruccion);
 
-            //NOSE SI ESTA SENTENCIA ESTA BIEN: PARA DIVIDIR, TENES QUE TENER EL DIVIDENDO EN DX:AX
-            //EL COCIENTE QUEDA EN AX
-            //EN LAS FILMINAS DICE: CWD EXTIENDE EL SIGNO DE AX EN DX:AX, TAL VES ESTE SEA EL QUE TENEMOS QUE USAR
             instruccion = "MOV dx, 0";
             instrucciones.push_back(instruccion);
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
@@ -418,49 +564,64 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instruccion = "MOV " + varAux + ", ax";
             instrucciones.push_back(instruccion);
             return instrucciones;
-
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
-        }
-    }
-    if (node->dato ==":="){
-        //Se verifica si es una asignacion de enteros o double
-
-        //----NUEVO COMENTARIO---
-        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
-        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            instruccion = "MOV ax, " + convertOperand(node->hijoDerecho->dato);
+            //chequea division por cero
+            instruccion = "FLDZ ";
+            instrucciones.push_back(instruccion);
+            instruccion = "FLD " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FCOM";
+            instrucciones.push_back(instruccion);
+            instruccion = "FSTSW ax";
+            instrucciones.push_back(instruccion);
+            instruccion = "SAHF";
+            instrucciones.push_back(instruccion);
+            instruccion = "JE divZero";
             instrucciones.push_back(instruccion);
 
+            instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FDIV ST, ST(1)";
+            instrucciones.push_back(instruccion);
+
+            //se crea variable auxiliar para guardar el resultado
+            int numeroAuxiliar = this->variablesAuxiliares.size();
+            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
+            variablesAuxiliares.push_back(varAux);
+            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
+            entry->type="DOUBLE";
+            symbolsTable->put(varAux.toStdString(), entry);
+
             //se copia el resultado en la nueva variable auxiliar
-            //TAMPOCO ESTOY SEGURO SI ESTA BIEN REFERENCIAR ASI UNA VARIABLE
-            instruccion = "MOV " + node->hijoDerecho->dato + ", ax";
+            instruccion = "FST " + varAux;
+            instrucciones.push_back(instruccion);
+            return instrucciones;
+        }
+    }
+
+    if (node->dato ==":="){
+        cout << "entro en :=" << endl;
+        if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
+            cout << "es integer!!" << node->hijoDerecho->dato.toStdString() << endl;
+            instruccion = "MOV ax, " + convertOperand(node->hijoDerecho->dato);
+            cout << "ENTRO1" << endl;
+            instrucciones.push_back(instruccion);
+            instruccion = "MOV " + node->hijoIzquierdo->dato + ", ax";
+            cout << "ENTRO2" << endl;
             instrucciones.push_back(instruccion);
             return instrucciones;
 
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
+            instruccion = "FLD " + convertOperand(node->hijoDerecho->dato);
+            instrucciones.push_back(instruccion);
+            instruccion = "FSTP " + convertOperand(node->hijoIzquierdo->dato);
+            instrucciones.push_back(instruccion);
+            return instrucciones;
         }
     }
     if (node->dato =="-=") {
-        //recordar que aca hay que hacer instrucciones de resta y de asignacion
-        /* creo que no necesita una auxiliar, osea
-         * a -= b
-         * generaria codigo para a-b como en cualquier otra resta
-         * despues del ultimo MOV ax,... se hace
-         * MOV a, ax
-         *
-         * MIRANDO LOS FILMINAS CREO QUE SERIA:
-         * MOV AX,_A
-         * SUB AX,_B
-         * MOV _A,AX
-         * */
-        //Se verifica si es una asignacion de enteros o double
-
-        //----NUEVO COMENTARIO---
-        //LE AGREGUE EL TIPO, QUE NO SE LO ASIGNABA EN NINGUN LADO HASTA DONDE VI YO
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
             //ESTA ES LA RESTA
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
@@ -474,64 +635,77 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
 
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            //ACA QUE TAMAÑO DE DATO TENEMOS QUE USAR?? 8,16,32,64,80,...??
-        }
-    }
-    //EJEMPLO
-    /*  QString instruccion;
-        if (node.operacion == "+") {
-
-        if (symbolsTable->getType(node->hijoIzquierdo.dato) = "INT") {
-            //SOLO HACE FALTA VER UNO DE LOS DOS PARA SABER EL TIPO
-            instruccion = "MOV ax, " + convertirOperando(node->hijoIzquierdo.dato);
+            instruccion = "FLD " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
-            instruccion = "ADD ax, " + convertirOperando(node->hijoDerecho.dato);
+            instruccion = "FSUB " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
-            instruccion = "JO overflow";
-            instrucciones.push_back(instruccion);
-
-            //Crea la nueva variable auxiliar
-            int id = variablesAuxiliares.size();
-            QString varAux = "@aux_" + QString::number(id);
-            variablesAuxiliares.push_back(varAux)
-
-            //TAMBIEN HAY QUE DARLA DE ALTA EN LA TABLA DE SIMBOLOS!
-            //CON EL TIPO QUE CORRESPONDA
-
-            instruccion = "MOV " + varAux + ", ax";
+            instruccion = "FSTP " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             return instrucciones;
         }
-            if (node.tipoOperacion=="FLOAT")
-            ...
-            VER ALFONSO
-        }
+    }
+}
 
-        if (node.operacion == "*") {
-            BLA BLA
-        }
+/*genera el conjunto de instrucciones contenidas por el if:condicion, bloque if y else si existe*/
+QList<QString> CodeGenerator::getIfInstructions(Node *node){
+    QList<QString> * instructions;
+    instructions->clear();
 
-        Y ASI SUCESIVAMENTE
+    /*instructions vuelve con las instrucciones de condicion, mas el salto*/
+    recorrerArbol(node->hijoIzquierdo->hijoIzquierdo,instructions);
 
+    /*ahora vuelve con las instrucciones del bloque then, sin el salto*/
+    recorrerArbol(node->hijoDerecho->hijoIzquierdo->hijoIzquierdo,instructions);
 
-        OSEA, SE DEBE DEVOLVER LA LISTA DE INSTRUCCIONES PERO TAMBIEN SE VAN
-        CREANDO LAS VARIABLES AUXILIARES EN EL CAMINO (SE AGREGAN A LA LISTA Y A LA TS)
-    */
+    /*ahora se generan las instrucciones del bloque else si existe*/
+    QString falseConditionLabel = labels.at(labels.size()-1) + ":";
+    labels.pop_back();
+    if(node->hijoDerecho->hijoDerecho!=NULL){
+        /*existe el else*/
+        QString endIfLabel = "JMP " + generateLabel();
+        instructions->push_back(falseConditionLabel);
+        recorrerArbol(node->hijoDerecho->hijoDerecho->hijoIzquierdo,instructions);
+        instructions->push_back(endIfLabel);
+    }
+    else
+        /*no existe*/
+        instructions->push_back(falseConditionLabel);
+    return *instructions;
+}
+
+/*genera el conjunto de instrucciones contenidas por el while:condicion y bloque*/
+QList<QString> CodeGenerator::getWhileInstructions(Node *node){
+    QList<QString> * instructions;
+    instructions->clear();
+
+    /*inicio de while: genera y apila la etiqueta de comienzo de while*/
+    instructions->push_back(generateLabel()+":");
+
+    /*instructions vuelve con las instrucciones de la condicion mas el salto*/
+    recorrerArbol(node->hijoIzquierdo->hijoIzquierdo,instructions);
+
+    /*instructions vuelve con las instrucciones del cuerpo sin el salto hacia el comienzo*/
+    recorrerArbol(node->hijoDerecho->hijoIzquierdo,instructions);
+    QString endWhileLabel = labels.at(labels.size()-1)+":";
+    labels.pop_back();
+    QString startWhileLabel = "JMP " + labels.at(labels.size()-1);
+    labels.pop_back();
+    instructions->push_back(startWhileLabel);
+    instructions->push_back(endWhileLabel);
+    return *instructions;
+
 }
 
 /*Reemplaza el sub-arbol por otro con la ultima variable auxiliar creada
  *o lo cambia por NULL si la operacion no devolvia resultado
  */
-
- void CodeGenerator::processNode(Node * &node) {
+void CodeGenerator::processNode(Node * &node) {
     Node * aBorrar = node;
     node = NULL;
 
-
     //Ya se descolgo. Ahora se reemplaza node con el subarbol o NULL
     string op = aBorrar->dato.toStdString();
-    //SI ES @IF,@WHILE,@PRINT,ETC... QUE PASA????? ADEMAS CREO QUE FALTA := Y LOS COMPARADORES
-    if (op == "+" || op =="-" || op == "-=" || op == "*" || op == "/" || op == "@conv") {
+    if (op == "+" || op =="-" || op == "*" || op == "/" || op == "@conv") {
         node = new Node;
         //le pone la referencia a la ultima var aux usada
         node->dato = variablesAuxiliares.at(variablesAuxiliares.size()-1);
@@ -561,19 +735,33 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
  */
 void  CodeGenerator::recorrerArbol (Node * &root, QList<QString> * instructions) {
     if (root!=NULL) {
-
-        if (tieneHijosHoja(root)) {
-            instructions->append(getInstructions(root)); //se genera codigo y se agrega
-            processNode(root); //se cambia el sub-arbol
-        } else {
-            recorrerArbol(root->hijoIzquierdo, instructions);
-            recorrerArbol(root->hijoDerecho, instructions);
-            //vuelta de la recursion
-            if (tieneHijosHoja(root)) {
-                instructions->append(getInstructions(root)); //se genera codigo y se agrega
-                processNode(root); //se cambia el sub-arbol
-             }
+        cout << "valor raiz: " << root->dato.toStdString() << endl;
+        if (root->dato == "@if"){
+            instructions->append(getIfInstructions(root));
+            processNode(root);
         }
+        else
+            if (root->dato == "@while"){
+                instructions->append(getWhileInstructions(root));
+                processNode(root);
+            }
+            else
+                if (tieneHijosHoja(root)) {
+                    cout << "tiene hijos hoja!" << endl;
+                    instructions->append(getInstructions(root)); //se genera codigo y se agrega
+                    cout << "instrucciones conseguidas!" << endl;
+                    processNode(root); //se cambia el sub-arbol
+                    cout << "nodo procesado!" << endl;
+                } else {
+                    cout << " no tiene hijos hoja!" << endl;
+                    recorrerArbol(root->hijoIzquierdo, instructions);
+                    recorrerArbol(root->hijoDerecho, instructions);
+                    //vuelta de la recursion
+                    if (tieneHijosHoja(root)) {
+                        instructions->append(getInstructions(root)); //se genera codigo y se agrega
+                        processNode(root); //se cambia el sub-arbol
+                     }
+                }
     }
 }
 
@@ -581,9 +769,12 @@ void  CodeGenerator::recorrerArbol (Node * &root, QList<QString> * instructions)
  * la lista de instrucciones assembler (parte ejecutable)
  */
 QList<QString> CodeGenerator::generateCode() {
+    labels.clear();
     QList<QString> instructions;
     instructions.clear();
+    cout << "antes de recorrer arbol" << endl;
     recorrerArbol(root, &instructions);
+    cout << "despues de recorrer arbol" << endl;
     return instructions;
 }
 
@@ -596,7 +787,7 @@ void CodeGenerator::generateAssembler(const char * ruta) {
     //Se recorre el arbol y se genera codigo Assembler, dando lugar tambien a nuevas
     //variables auxiliares en la TS
     QList<QString> code = generateCode();
-
+/*
     //Ya se tiene la TS completa y no habrá mas cambios. Se obtienen todas las
     //declaraciones de dichas variables en Assembler
     QList<QString> variables = getAssemblerVariables();
@@ -606,7 +797,7 @@ void CodeGenerator::generateAssembler(const char * ruta) {
     out.open (ruta);
 
     /** ENCABEZADO **/
-    out << ".386";
+/*    out << ".386";
     out << "\n";
     out << ".model flat, stdcall";
     out << "\n";
@@ -624,7 +815,7 @@ void CodeGenerator::generateAssembler(const char * ruta) {
     out << "\n";
 
     /** DECLARACION DE VARIABLES **/
-
+/*
     out << ".data";
     out << "\n";
     for (int i=0; i<variables.size(); i++) {
@@ -632,16 +823,30 @@ void CodeGenerator::generateAssembler(const char * ruta) {
         out << "\n";
     }
 
-    //FALTA DECLARAR ACA LAS CONSTANTES MAXIMAS (DE INT, DOUBLE, ETC)
+    out << "divZero db \"error de ejecucion: no se puede dividir por cero\", 0";
+    out << "\n";
+    out << "conversionFailed db \"error de ejecucion: no se puede realizar la conversion\", 0";
+    out << "\n";
 
-    //CON ESTO TE REFERIS A LOS LIMITES PERMITIDOS??? PONELE INT:-2^15 A 2^15???? DOUBLE: MANTISA E+308???
 
     /** CODIGO **/
-
+/*
     out << ".code";
     out << "\n";
 
-    //FALTAN DEFINICIONES DE RUTINAS ACA
+    out << "divZero:";
+    out << "\n";
+    out << "invoke MessageBox, NULL, addr divZero, addr divZero, MB_OK";
+    out << "\n";
+    out << "invoke ExitProcess, 0";
+    out << "\n";
+
+    out << "conversionFailed:";
+    out << "\n";
+    out << "invoke MessageBox, NULL, addr conversionFailed, addr conversionFailed, MB_OK";
+    out << "\n";
+    out << "invoke ExitProcess, 0";
+    out << "\n";
 
     out << "start:";
     out << "\n";
@@ -654,6 +859,7 @@ void CodeGenerator::generateAssembler(const char * ruta) {
     out << "end start";
 
     out.close();
+    */
 }
 
 void CodeGenerator::setAsRootNode(string keyNode){

@@ -162,7 +162,7 @@ bloque_ejecutable : bloque_ejecutable sentencia
                 string executableBlock=codeGen->crearNodo("@sentencia",$1);
                 /*si da verdadero, es porque no hubo inicializacion de matriz y estoy en el bloque main del programa(no es bloque if/while)*/
                 if(codeGen->rootIsNull()){
-                    codeGen->setAsRootNode($1);
+                    codeGen->setAsRootNode(executableBlock);
                     mainBlockConected=true;
                 }
                 else{
@@ -228,7 +228,8 @@ bloque_de_sentencias : sentencia
         | '{' bloque_ejecutable '}'
                 {
                 addProgramComponent("bloque ejecutable entre llaves");
-                $$=codeGen->getLastBlock();
+                string aux=codeGen->getLastBlock();
+                $$=aux;
                 }
         ;
 
