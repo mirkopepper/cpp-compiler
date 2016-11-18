@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     printSymbolsTable();
     parser->printSintacticTree();
 
-    parser->generateAssembler("assembler");
+    parser->generateAssembler("assembler.asm");
 
     return 0;
 }

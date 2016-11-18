@@ -88,9 +88,9 @@ QString CodeGenerator::declareAssemblerVariable(string lexeme) {
         string use=symbolsTable->getUse(lexeme);
         if(use=="variable"){
             if(e->type=="INTEGER")
-                return QString::fromStdString(e->lexeme + " dw ");
+                return QString::fromStdString(e->lexeme + " dw ?" );
             else
-                return QString::fromStdString(e->lexeme + " dd ");
+                return QString::fromStdString(e->lexeme + " dd ?");
         }
         if(use=="matriz"){
             int limit=(e->limit1-1)*(e->limit2-1);
@@ -202,16 +202,16 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
     //VALORES DE NODE->DATO QUE FALTAN:,mat@id
 
     if (node->dato == "@print"){
-        instrucciones.push_back("INICIO PRINT");
+        instrucciones.push_back(";INICIO PRINT");
         QString cadena=convertOperand(node->hijoIzquierdo->dato);
         instruccion = "invoke MessageBox, NULL, addr " + cadena + ", addr " + cadena + ", MB_OK";
         instrucciones.push_back(instruccion);
-        instrucciones.push_back("FINAL PRINT");
+        instrucciones.push_back(";FINAL PRINT");
         return instrucciones;
     }
     if (node->dato == "@conv"){
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            instrucciones.push_back("INICIO CONV INTEGER A DOUBLE");
+            instrucciones.push_back(";INICIO CONV INTEGER A DOUBLE");
             instruccion = "FILD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
 
@@ -227,34 +227,13 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             //guarda la variable
             instruccion = "FST "+ varAux;
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL CONV INTEGER A DOUBLE");
+            instrucciones.push_back(";FINAL CONV INTEGER A DOUBLE");
             return instrucciones;
         }else if(symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE"){
-            instrucciones.push_back("INICIO CONV DOUBLE A INTEGER");
-            instrucciones.push_back("INICIO CHEQUEO POR RANGO POSITIVO");
+            instrucciones.push_back(";INICIO CONV DOUBLE A INTEGER");
+            instrucciones.push_back(";INICIO CHEQUEO POR RANGO POSITIVO");
             instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
-            //ACA TENGO QUE CHEQUEAR QUE EL DOUBLE ESTE ENTRE -2^15 y +2^15
-            instruccion = "FCOM 32768";
-            instrucciones.push_back(instruccion);
-            instruccion = "FSTSW ax";
-            instrucciones.push_back(instruccion);
-            instruccion = "SAHF";
-            instrucciones.push_back(instruccion);
-            instruccion = "JG conversionFailed";
-            instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL CHEQUEO POR RANGO POSITIVO");
-
-            instrucciones.push_back("INICIO CHEQUEO POR RANGO NEGATIVO");
-            instruccion = "FCOM -32768";
-            instrucciones.push_back(instruccion);
-            instruccion = "FSTSW ax";
-            instrucciones.push_back(instruccion);
-            instruccion = "SAHF";
-            instrucciones.push_back(instruccion);
-            instruccion = "JL conversionFailed";
-            instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL CHEQUEO POR RANGO NEGATIVO");
 
             //se crea variable auxiliar para guardar el resultado
             int numeroAuxiliar = this->variablesAuxiliares.size();
@@ -268,25 +247,25 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             //CONVIERTO
             instruccion = "FIST " + varAux;
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL CONV DOUBLE A INTEGER");
+            instrucciones.push_back(";FINAL CONV DOUBLE A INTEGER");
             return instrucciones;
         }
 
     }
     if (node->dato == "!=") {
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            instrucciones.push_back("INICIO COMP DISTINTO INTEGER");
+            instrucciones.push_back(";INICIO COMP DISTINTO INTEGER");
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
             instruccion = "JE " + generateLabel();
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL COMP DISTINTO INTEGER");
+            instrucciones.push_back(";FINAL COMP DISTINTO INTEGER");
             return instrucciones;
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            instrucciones.push_back("INICIO COMP DISTINTO DOUBLE");
+            instrucciones.push_back(";INICIO COMP DISTINTO DOUBLE");
             instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "FCOM " + convertOperand(node->hijoDerecho->dato);
@@ -297,7 +276,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
             instruccion = "JE " + generateLabel();
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL COM DISTINTO DOUBLE");
+            instrucciones.push_back(";FINAL COM DISTINTO DOUBLE");
             return instrucciones;
 
         }
@@ -338,6 +317,16 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
                 instruccion = "ADD ax, " + convertOperand(node->hijoIzquierdo->dato);
                 instrucciones.push_back(instruccion);
             }
+
+            //se crea variable auxiliar para guardar el resultado
+            int numeroAuxiliar = this->variablesAuxiliares.size();
+            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
+            variablesAuxiliares.push_back(varAux);
+            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
+            entry->type="INTEGER";
+            symbolsTable->put(varAux.toStdString(), entry);
+            symbolsTable->setUse(varAux.toStdString(),"variable");
+
             instruccion = "MOV " + node->offset +", ax";
             instrucciones.push_back(instruccion);
             return instrucciones;
@@ -345,18 +334,18 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
 
     if (node->dato == ">=") {
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            instrucciones.push_back("INICIO COMP MAYOR IGUAL INTEGER");
+            instrucciones.push_back(";INICIO COMP MAYOR IGUAL INTEGER");
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
             instruccion = "JL " + generateLabel();
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL COMP MAYOR IGUAL INTEGER");
+            instrucciones.push_back(";FINAL COMP MAYOR IGUAL INTEGER");
             return instrucciones;
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            instrucciones.push_back("INICIO COMP MAYOR IGUAL DOUBLE");
+            instrucciones.push_back(";INICIO COMP MAYOR IGUAL DOUBLE");
             instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "FCOM " + convertOperand(node->hijoDerecho->dato);
@@ -367,7 +356,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
             instruccion = "JB " + generateLabel();
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL COMP MAYOR IGUAL DOUBLE");
+            instrucciones.push_back(";FINAL COMP MAYOR IGUAL DOUBLE");
             return instrucciones;
 
         }
@@ -375,18 +364,18 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
 
     if (node->dato == "<=") {
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            instrucciones.push_back("INICIO COMP MENOR IGUAL INTEGER");
+            instrucciones.push_back(";INICIO COMP MENOR IGUAL INTEGER");
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
             instruccion = "JG " + generateLabel();
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL COMP MENOR IGUAL INTEGER");
+            instrucciones.push_back(";FINAL COMP MENOR IGUAL INTEGER");
             return instrucciones;
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            instrucciones.push_back("INICIO COMP MENOR IGUAL DOUBLE");
+            instrucciones.push_back(";INICIO COMP MENOR IGUAL DOUBLE");
             instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "FCOM " + convertOperand(node->hijoDerecho->dato);
@@ -397,7 +386,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
             instruccion = "JA " +generateLabel();
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL COMP MENOR IGUAL DOUBLE");
+            instrucciones.push_back(";FINAL COMP MENOR IGUAL DOUBLE");
             return instrucciones;
 
         }
@@ -405,18 +394,18 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
 
     if (node->dato == "=") {
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            instrucciones.push_back("INICIO COMP IGUAL INTEGER");
+            instrucciones.push_back(";INICIO COMP IGUAL INTEGER");
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
             instruccion = "JNE "+ generateLabel();
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("INICIO COMP IGUAL INTEGER");
+            instrucciones.push_back(";INICIO COMP IGUAL INTEGER");
             return instrucciones;
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            instrucciones.push_back("INICIO COMP IGUAL DOUBLE");
+            instrucciones.push_back(";INICIO COMP IGUAL DOUBLE");
             instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "FCOM " + convertOperand(node->hijoDerecho->dato);
@@ -430,25 +419,25 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
             instruccion = "JA " + label;
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL COMP IGUAL DOUBLE");
+            instrucciones.push_back(";FINAL COMP IGUAL DOUBLE");
             return instrucciones;
         }
     }
 
     if (node->dato == ">") {
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            instrucciones.push_back("INICIO COMP MAYOR INTEGER");
+            instrucciones.push_back(";INICIO COMP MAYOR INTEGER");
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
             instruccion = "JLE " + generateLabel();
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL COMP MAYOR INTEGER");
+            instrucciones.push_back(";FINAL COMP MAYOR INTEGER");
             return instrucciones;
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            instrucciones.push_back("INICIO COMP MAYOR DOUBLE");
+            instrucciones.push_back(";INICIO COMP MAYOR DOUBLE");
             instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "FCOM " + convertOperand(node->hijoDerecho->dato);
@@ -459,25 +448,25 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
             instruccion = "JBE " + generateLabel();
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL COMP MAYOR DOUBLE");
+            instrucciones.push_back(";FINAL COMP MAYOR DOUBLE");
             return instrucciones;
         }
     }
 
     if (node->dato == "<") {
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            instrucciones.push_back("INICIO COMP MENOR INTEGER");
+            instrucciones.push_back(";INICIO COMP MENOR INTEGER");
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "CMP ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
             instruccion = "JGE " + generateLabel();
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL COMP MENOR INTEGER");
+            instrucciones.push_back(";FINAL COMP MENOR INTEGER");
             return instrucciones;
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            instrucciones.push_back("INICIO COMP MENOR DOUBLE");
+            instrucciones.push_back(";INICIO COMP MENOR DOUBLE");
             instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "FCOM " + convertOperand(node->hijoDerecho->dato);
@@ -488,14 +477,14 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
             instruccion = "JAE " + generateLabel();
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL COMP MENOR DOUBLE");
+            instrucciones.push_back(";FINAL COMP MENOR DOUBLE");
             return instrucciones;
         }
     }
 
     if (node->dato == "+") {
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            instrucciones.push_back("INICIO SUMA INTEGER");
+            instrucciones.push_back(";INICIO SUMA INTEGER");
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "ADD ax, " + convertOperand(node->hijoDerecho->dato);
@@ -513,11 +502,11 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             //se copia el resultado en la nueva variable auxiliar
             instruccion = "MOV " + varAux + ", ax";
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL SUMA INTEGER");
+            instrucciones.push_back(";FINAL SUMA INTEGER");
             return instrucciones;
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            instrucciones.push_back("INICIO SUMA DOUBLE");
+            instrucciones.push_back(";INICIO SUMA DOUBLE");
             instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "FADD " + convertOperand(node->hijoDerecho->dato);
@@ -535,14 +524,14 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             //guarda la variable
             instruccion = "FST "+ varAux;
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL SUMA DOUBLE");
+            instrucciones.push_back(";FINAL SUMA DOUBLE");
             return instrucciones;
         }
     }
 
     if (node->dato =="-"){
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            instrucciones.push_back("INICIO RESTA INTEGER");
+            instrucciones.push_back(";INICIO RESTA INTEGER");
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "SUB ax, " + convertOperand(node->hijoDerecho->dato);
@@ -560,11 +549,11 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             //se copia el resultado en la nueva variable auxiliar
             instruccion = "MOV " + varAux + ", ax";
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL RESTA INTEGER");
+            instrucciones.push_back(";FINAL RESTA INTEGER");
             return instrucciones;
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            instrucciones.push_back("INICIO RESTA DOUBLE");
+            instrucciones.push_back(";INICIO RESTA DOUBLE");
             instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "FSUB " + convertOperand(node->hijoDerecho->dato);
@@ -582,14 +571,14 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             //guarda la variable
             instruccion = "FST "+ varAux;
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL RESTA DOUBLE");
+            instrucciones.push_back(";FINAL RESTA DOUBLE");
             return instrucciones;
         }
     }
 
     if (node->dato =="*"){
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            instrucciones.push_back("INICIO MUL INTEGER");
+            instrucciones.push_back(";INICIO MUL INTEGER");
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "IMUL ax, " + convertOperand(node->hijoDerecho->dato);
@@ -607,11 +596,11 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             //se copia el resultado en la nueva variable auxiliar
             instruccion = "MOV " + varAux + ", ax";
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL MUL INTEGER");
+            instrucciones.push_back(";FINAL MUL INTEGER");
             return instrucciones;
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            instrucciones.push_back("INICIO MUL DOUBLE");
+            instrucciones.push_back(";INICIO MUL DOUBLE");
             instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "FMUL " + convertOperand(node->hijoDerecho->dato);
@@ -629,21 +618,21 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             //se copia el resultado en la nueva variable auxiliar
             instruccion = "FST " + varAux;
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL MUL DOUBLE");
+            instrucciones.push_back(";FINAL MUL DOUBLE");
             return instrucciones;
         }
     }
 
     if (node->dato =="/"){
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            instrucciones.push_back("INICIO DIV INTEGER");
-            instrucciones.push_back("INICIO CHEQUEO CERO INTEGER");
+            instrucciones.push_back(";INICIO DIV INTEGER");
+            instrucciones.push_back(";INICIO CHEQUEO CERO INTEGER");
             //chequeo de division por cero
             instruccion = "CMP "+ convertOperand(node->hijoDerecho->dato)+ ", 0";
             instrucciones.push_back(instruccion);
             instruccion = "JE divZero";
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL CHEQUEO CERO INTEGER");
+            instrucciones.push_back(";FINAL CHEQUEO CERO INTEGER");
 
             instruccion = "MOV dx, 0";
             instrucciones.push_back(instruccion);
@@ -664,12 +653,12 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             //se copia el resultado en la nueva variable auxiliar
             instruccion = "MOV " + varAux + ", ax";
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL DIV INTEGER");
+            instrucciones.push_back(";FINAL DIV INTEGER");
             return instrucciones;
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            instrucciones.push_back("INICIO DIV DOUBLE");
-            instrucciones.push_back("INICIO CHQUEO CERO DOUBLE");
+            instrucciones.push_back(";INICIO DIV DOUBLE");
+            instrucciones.push_back(";INICIO CHQUEO CERO DOUBLE");
             //chequea division por cero
             instruccion = "FLDZ ";
             instrucciones.push_back(instruccion);
@@ -683,7 +672,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
             instruccion = "JE divZero";
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL CHEQUEP CERO DOUBLE");
+            instrucciones.push_back(";FINAL CHEQUEP CERO DOUBLE");
 
             instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
@@ -702,35 +691,35 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             //se copia el resultado en la nueva variable auxiliar
             instruccion = "FST " + varAux;
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL DIV DOUBLE");
+            instrucciones.push_back(";FINAL DIV DOUBLE");
             return instrucciones;
         }
     }
 
     if (node->dato ==":="){
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            instrucciones.push_back("INICIO ASIGNACION INTEGER");
+            instrucciones.push_back(";INICIO ASIGNACION INTEGER");
             instruccion = "MOV ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
             instruccion = "MOV " + node->hijoIzquierdo->dato + ", ax";
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL ASIGNACION INTEGER");
+            instrucciones.push_back(";FINAL ASIGNACION INTEGER");
             return instrucciones;
 
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            instrucciones.push_back("INICIO ASIGNACION DOUBLE");
+            instrucciones.push_back(";INICIO ASIGNACION DOUBLE");
             instruccion = "FLD " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
             instruccion = "FSTP " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL ASIGNACION DOUBLE");
+            instrucciones.push_back(";FINAL ASIGNACION DOUBLE");
             return instrucciones;
         }
     }
     if (node->dato =="-=") {
         if (symbolsTable->getType(node->hijoIzquierdo->dato) == "INTEGER") {
-            instrucciones.push_back("INICIO ASIGNACION RESTA INTEGER");
+            instrucciones.push_back(";INICIO ASIGNACION RESTA INTEGER");
             //ESTA ES LA RESTA
             instruccion = "MOV ax, " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
@@ -739,19 +728,19 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             //ESTA SERIA LA ASIGNACION
             instruccion = "MOV " + node->hijoIzquierdo->dato + ", ax";
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL ASIGNACION RESTA INTEGER");
+            instrucciones.push_back(";FINAL ASIGNACION RESTA INTEGER");
             return instrucciones;
 
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
-            instrucciones.push_back("INICIO ASIGNACION RESTA DOUBLE");
+            instrucciones.push_back(";INICIO ASIGNACION RESTA DOUBLE");
             instruccion = "FLD " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
             instruccion = "FSUB " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
             instruccion = "FSTP " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
-            instrucciones.push_back("FINAL ASIGNACION RESTA DOUBLE");
+            instrucciones.push_back(";FINAL ASIGNACION RESTA DOUBLE");
             return instrucciones;
         }
     }
@@ -761,17 +750,17 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
 QList<QString> CodeGenerator::getIfInstructions(Node *node){
     QList<QString> instructions;
     instructions.clear();
-    instructions.push_back("INICIO DE IF");
+    instructions.push_back(";INICIO DE IF");
 
     /*instructions vuelve con las instrucciones de condicion, mas el salto*/
-    instructions.push_back("INICIO DE COND IF");
+    instructions.push_back(";INICIO DE COND IF");
     recorrerArbol(node->hijoIzquierdo->hijoIzquierdo,&instructions);
-    instructions.push_back("FIN DE COND IF");
+    instructions.push_back(";FIN DE COND IF");
 
     /*ahora vuelve con las instrucciones del bloque then, sin el salto*/
-    instructions.push_back("INICIO BLOQUE THEN");
+    instructions.push_back(";INICIO BLOQUE THEN");
     recorrerArbol(node->hijoDerecho->hijoIzquierdo->hijoIzquierdo,&instructions);
-    instructions.push_back("FIN BLOQUE THEN");
+    instructions.push_back(";FIN BLOQUE THEN");
 
     /*ahora se generan las instrucciones del bloque else si existe*/
     QString falseConditionLabel = labels.at(labels.size()-1) + ":";
@@ -781,16 +770,16 @@ QList<QString> CodeGenerator::getIfInstructions(Node *node){
         QString endIfLabel = "JMP " + generateLabel();
         instructions.push_back(endIfLabel);
         instructions.push_back(falseConditionLabel);
-        instructions.push_back("INICIO BLOQUE ELSE");
+        instructions.push_back(";INICIO BLOQUE ELSE");
         recorrerArbol(node->hijoDerecho->hijoDerecho->hijoIzquierdo,&instructions);
-        instructions.push_back("FIN BLOQUE ELSE");
+        instructions.push_back(";FIN BLOQUE ELSE");
         instructions.push_back(labels.at(labels.size()-1) + ":");
         labels.pop_back();
     }
     else
         /*no existe*/
         instructions.push_back(falseConditionLabel);
-    instructions.push_back("FIN IF");
+    instructions.push_back(";FIN IF");
     return instructions;
 }
 
@@ -798,27 +787,27 @@ QList<QString> CodeGenerator::getIfInstructions(Node *node){
 QList<QString> CodeGenerator::getWhileInstructions(Node *node){
     QList<QString> instructions;
     instructions.clear();
-    instructions.push_back("INICIO DE WHILE");
+    instructions.push_back(";INICIO DE WHILE");
 
     /*inicio de while: genera y apila la etiqueta de comienzo de while*/
     instructions.push_back(generateLabel()+":");
 
     /*instructions vuelve con las instrucciones de la condicion mas el salto*/
-    instructions.push_back("INICIO DE SENTENCIAS CONDICION WHILE");
+    instructions.push_back(";INICIO DE SENTENCIAS CONDICION WHILE");
     recorrerArbol(node->hijoIzquierdo->hijoIzquierdo,&instructions);
-    instructions.push_back("FIN DE SENTENCIAS CONDICION WHILE");
+    instructions.push_back(";FIN DE SENTENCIAS CONDICION WHILE");
 
     /*instructions vuelve con las instrucciones del cuerpo sin el salto hacia el comienzo*/
-    instructions.push_back("INICIO DE SENTENCIAS CUERPO WHILE");
+    instructions.push_back(";INICIO DE SENTENCIAS CUERPO WHILE");
     recorrerArbol(node->hijoDerecho->hijoIzquierdo,&instructions);
-    instructions.push_back("FIN DE SENTENCIAS CUERPO WHILE");
+    instructions.push_back(";FIN DE SENTENCIAS CUERPO WHILE");
     QString endWhileLabel = labels.at(labels.size()-1)+":";
     labels.pop_back();
     QString startWhileLabel = "JMP " + labels.at(labels.size()-1);
     labels.pop_back();
     instructions.push_back(startWhileLabel);
     instructions.push_back(endWhileLabel);
-    instructions.push_back("FIN DE WHILE");
+    instructions.push_back(";FIN DE WHILE");
     return instructions;
 
 }
@@ -944,6 +933,9 @@ void CodeGenerator::generateAssembler(const char * ruta) {
         out << "\n";
     }
 
+    out << "maxInt dd 32768";
+    out << "\n";
+    out << "minInt dd -32768";
     out << "\n";
     out << "DivZero db \"error de ejecucion: no se puede dividir por cero\", 0";
     out << "\n";
