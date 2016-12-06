@@ -1,0 +1,164 @@
+assembler
+
+double unoDouble,dosDouble,resSumaDouble,resRestaDouble,resMulDouble,resDivDouble;
+integer unoInteger,dosInteger,resSumaInteger,resRestaInteger,resMulInteger,resDivInteger;
+allow double to integer;
+
+{
+
+    && asignacion de valores a variables doubles
+    unoDouble:=_i1;
+    dosDouble:=_i2;
+
+    && asignaciones sin conversion -> mirar en sus respectivos if al fondo del arhivo
+    resSumaDouble:=_i3;
+    resRestaDouble:=_i4;
+
+    && asignacion con conversion
+    resMulDouble:=_i5;
+    resDivDouble:=_i6;
+
+    && chequeos de conversion en asignacion
+    if(unoDouble=_d1.0)
+        print("unoDouble: conversion en asignacion de entero a double correcta");
+    else
+        print("unoDouble: conversion en asignacion de entero a double incorrecta");
+    endif
+
+    if(dosDouble=_d2.0)
+        print("dosDouble: conversion en asignacion de entero a double correcta");
+    else
+        print("dosDouble: conversion en asignacion de entero a double incorrecta");
+    endif
+
+    if(resMulDouble=_d5.0)
+        print("resMulDouble: conversion en asignacion de entero a double correcta");
+    else
+        print("resMulDouble: conversion en asignacion de entero a double incorrecta");
+    endif
+
+    if(resDivDouble=_d6.0)
+        print("resDivDouble: conversion en asignacion de entero a double correcta");
+    else
+        print("resDivDouble: conversion en asignacion de entero a double incorrecta");
+    endif
+
+    && asignaciones con sumas, restas, multiplicaciones y divisiones, solo con doubles
+
+    resSumaDouble:=resSumaDouble+unoDouble;
+    && resultado: 4.0
+
+    && chequeo si la suma funciona correctamente, con conversion incluida
+    if(resSumaDouble=_i4)
+        print("la suma entre doubles se efectuo de manera exitosa. Tambien la conversion funciona");
+    else
+        print("la suma entre doubles no funciona");
+    endif
+
+    resRestaDouble-=unoDouble;
+    && resultado: 3.0
+
+    && chequeo si la resta funciona correctamente, con conversion incluida
+    if(resRestaDouble=_i3)
+        print("la resta entre doubles se efectuo de manera exitosa. Tambien la conversion funciona");
+    else
+        print("la resta entre doubles no funciona");
+    endif
+
+    resMulDouble:=resMulDouble*dosDouble;
+    && resultado: 10.0
+
+    && chequeo si la multiplicacion funciona correctamente
+    if(resMulDouble=_d10.0)
+        print("la multiplicacion entre doubles se efectuo de manera exitosa");
+    else
+        print("la multiplicacion entre doubles no funciona");
+    endif
+
+    resDivDouble:=resDivDouble/dosDouble;
+    && resultado: 3.0
+
+    && chequeo si la division funciona correctamente
+    if(resDivDouble=_d3.0)
+        print("la division entre doubles se efectuo de manera exitosa");
+    else
+        print("la division entre doubles no funciona");
+    endif
+
+&& asignacion de valores a variables integer
+unoInteger:=_d1.0;
+dosInteger:=_d2.0;
+
+&& conversion en asignacion
+resSumaInteger:=_d30.0;
+resRestaInteger:=_d40.0;
+
+&& sin conversion en asignacion -> mirar en sus respectivos if al fondo del archivo
+resMulInteger:=_i50;
+resDivInteger:=_i60;
+
+&& chequeo de conversiones
+if(unoInteger=_i1)
+    print("unoInteger: conversion en asignacion de double a entero correcta");
+else
+    print("unoInteger: conversion en asignacion de double a entero incorrecta");
+endif
+if(dosInteger=_i2)
+    print("dosInteger: conversion en asignacion de double a entero correcta");
+else
+    print("dosInteger: conversion en asignacion de double a entero incorrecta");
+endif
+if(resSumaInteger=_i30)
+    print("resSumaInteger: conversion en asignacion de double a entero correcta");
+else
+    print("resSumaInteger: conversion en asignacion de double a entero incorrecta");
+endif
+if(resRestaInteger=_i40)
+    print("resRestaInteger: conversion en asignacion de double a entero correcta");
+else
+    print("resRestaInteger: conversion en asignacion de double a entero incorrecta");
+endif
+
+&& asignaciones con sumas, restas, multiplicaciones y divisiones, solo con enteros
+
+resSumaInteger:=resSumaInteger+unoInteger;
+&& resultado: 31
+
+resRestaInteger-=unoInteger;
+&& resultado: 39
+
+resMulInteger:=resMulInteger*dosInteger;
+&& resultado: 100
+
+resDivInteger:=resDivInteger/dosInteger;
+&& resultado: 30
+
+&& chequeo si la suma funciona correctamente
+if(resSumaInteger=_i31)
+    print("la suma entre enteros se efectuo de manera exitosa");
+else
+    print("la suma entre enteros no funciona");
+endif
+
+&& chequeo si la resta funciona correctamente
+if(resRestaInteger=_i39)
+    print("la resta entre enteros se efectuo de manera exitosa");
+else
+    print("la resta entre enteros no funciona");
+endif
+
+&& chequeo si la multiplicacion funciona correctamente, con conversion en condicion
+if(resMulInteger=_d100.0)
+    print("la multiplicacion entre enteros se efectuo de manera exitosa. Tambien la conversion funciona");
+else
+    print("la multiplicacion entre enteros no funciona");
+endif
+
+&& chequeo si la division funciona correctamente, con conversion en condicion
+if(resDivInteger=_d30.0)
+    print("la division entre enteros se efectuo de manera exitosa. Tambien la conversion funciona");
+else
+    print("la division entre enteros no funciona");
+endif
+
+}

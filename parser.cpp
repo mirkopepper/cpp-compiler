@@ -248,7 +248,10 @@ void Parser::updateArray(string lexeme){
 }
 
 void Parser::generateAssembler(const char *ruta){
-    codeGen->generateAssembler(ruta);
+    if(!hasError())
+        codeGen->generateAssembler(ruta);
+    else
+        cout << "No habra generacion de codigo assembler, porque existen errores en el archivo base." << endl;
 }
 
 #define yyparse Parser::yyparse

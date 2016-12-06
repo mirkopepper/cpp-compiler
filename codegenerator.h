@@ -75,23 +75,34 @@ private:
     /*genera una etiqueta nueva y la pone en la pila de etiquetas*/
     QString generateLabel();
 
+    /*genera una variable auxiliar y la agrega a la TS*/
+    QString getVarAux(string type);
+
+    /*genera las instrucciones assembler correspondientes para el nodo en cuestion*/
     QList<QString> getInstructions(Node * node);
 
+    /*genera las instrucciones assembler de estructuras if*/
     QList<QString> getIfInstructions(Node * node);
 
+    /*genera las instrucciones assembler de estructuras while*/
     QList<QString> getWhileInstructions(Node * node);
 
+    /*poda el arbol desde el nodo pasado por parametro, si genera var auxiliares, cambia dicho nodo por uno nuevo*/
     void processNode(Node * &node);
 
+    /*genera las sentencias declarativas en assembler*/
     QString declareAssemblerVariable(string lexeme);
 
+    /*obtiene el nombre de la variable assembler asociado a op, que es el nombre de codigo intermedio*/
     QString convertOperand(string op);
     QString convertOperand(QString op);
 
     QList<QString> generateCode();
 
+    /*recorre el arbol buscando siempre primero el nodo mas a la izquierda cuyos hijos son hojas, genera assembler y lo procesa*/
     void  recorrerArbol (Node * &root, QList<QString> * instructions);
 
+    /*da true si los hijos son hoja*/
     bool tieneHijosHoja(Node * node);
 
 

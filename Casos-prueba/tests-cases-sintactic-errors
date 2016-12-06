@@ -1,0 +1,102 @@
+errores
+
+double aux;
+&&sentencias declarativas devariables
+
+&&variables: falta punto y coma, se come la sig sentencia
+integer a
+integer b;
+
+&&lista mal escrita
+integer _i1 ;
+
+&&faltan comas para separar ids
+integer d e;
+
+&&conversiones: falta punto y coma, se come la sig sentencia
+allow integer to
+integer c;
+
+&&allow mal escrito
+alow integer to double;
+
+&&1er tipo mal escrito
+allow int to double;
+
+&& palabra to mal escrito
+allow integer TO double;
+
+&&falta 1er tipo
+allow to double;
+
+&&falta el ultimo tipo
+allow integer to ;
+
+{
+&&impresiones
+
+&&falta punyo y coma al final
+print("nada")
+a:=a;
+
+&&falta parentesis (
+print "cadena2");
+
+&&falta parentesis )
+print ("cadena3"
+
+&&faltan ambos parentesis
+print "cadena4";
+
+&&no hay cadena
+print ();
+
+&&cadena mal escrita
+print (cadena5);
+
+&&errores de parentesis condiciones mal escritos
+if (a <= b
+a:=b;
+endif
+
+while a<b)
+a:=b;
+
+while a<b
+a:=b;
+
+&&condiciones mal escritas
+if(a b)
+a:=b;
+endif
+
+while(double<=b)
+a:=b;
+
+&&bloque mal escrito: falta la llave de cierre de bloque
+while(a=a)
+{
+a:=a;
+b:=b;
+
+while(a!= double)
+b:=c;
+
+&&falta la palabra reservada else
+if(a=a)
+a:=c;
+{
+a:=d;
+a:=e;
+}
+endif
+
+&&no hay nada del lado derecho
+b:=;
+a:=a;
+
+&&falta operador de asignacion
+t _i1;
+a:=a;
+
+}

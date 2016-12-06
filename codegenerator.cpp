@@ -88,16 +88,16 @@ QString CodeGenerator::declareAssemblerVariable(string lexeme) {
         string use=symbolsTable->getUse(lexeme);
         if(use=="variable"){
             if(e->type=="INTEGER")
-                return QString::fromStdString(e->lexeme + " dw ?" );
+                return QString::fromStdString(e->lexeme + " dw 0" );
             else
-                return QString::fromStdString(e->lexeme + " dd ?");
+                return QString::fromStdString(e->lexeme + " dd 0");
         }
         if(use=="matriz"){
             int limit=(e->limit1-1)*(e->limit2-1);
             if(e->type=="INTEGER")
-                return QString::fromStdString(e->lexeme + " dw " + to_string(limit) + " DUP(?)");
+                return QString::fromStdString(e->lexeme + " dw " + to_string(limit) + " DUP(0)");
             else
-                return QString::fromStdString(e->lexeme + " dd " + to_string(limit) + " DUP(?)");
+                return QString::fromStdString(e->lexeme + " dd " + to_string(limit) + " DUP(0)");
         }
     }
     if(e->token=="CTE"){
@@ -143,6 +143,17 @@ QString CodeGenerator::convertOperand(string op) {
         return cadenas.value(QString::fromStdString(op));
 
     /*entonces es una variable*/
+/*    if(entry->token == "ID" && MATRIX){
+        if(si tengo que usar ebx)
+            tranformo entry->matInstructions
+            agrego a instrucciones
+            return [ebx]
+        else
+            no tranformo
+            agrego a instrucciones
+            return [ebx]
+    }
+*/
     return QString::fromStdString(op);
 
     //ver convertirOperando de alfonso
@@ -191,6 +202,17 @@ QString CodeGenerator::generateLabel(){
     return label;
 }
 
+QString CodeGenerator::getVarAux(string type){
+    int numeroAuxiliar = this->variablesAuxiliares.size();
+    QString varAux = "@aux_" + QString::number(numeroAuxiliar);
+    variablesAuxiliares.push_back(varAux);
+    Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
+    entry->type=type;
+    symbolsTable->put(varAux.toStdString(), entry);
+    symbolsTable->setUse(varAux.toStdString(),"variable");
+    return varAux;
+}
+
 /*Asume que lo que recibe es un nodo con dos hijos hoja
  *Devuelve todas las instrucciones assembler asociadas a
  *dicha operacion
@@ -216,13 +238,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
 
             //se crea variable auxiliar para guardar el resultado
-            int numeroAuxiliar = this->variablesAuxiliares.size();
-            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
-            variablesAuxiliares.push_back(varAux);
-            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
-            entry->type="DOUBLE";
-            symbolsTable->put(varAux.toStdString(), entry);
-            symbolsTable->setUse(varAux.toStdString(),"variable");
+            QString varAux = getVarAux("DOUBLE");
 
             //guarda la variable
             instruccion = "FST "+ varAux;
@@ -232,17 +248,24 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
         }else if(symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE"){
             instrucciones.push_back(";INICIO CONV DOUBLE A INTEGER");
             instrucciones.push_back(";INICIO CHEQUEO POR RANGO POSITIVO");
+            instruccion = "FICOM maxInt";
+            instrucciones.push_back(instruccion);
+            instruccion = "JNE conversionFailed";
+            instrucciones.push_back(instruccion);
+            instrucciones.push_back(";FIN CHEQUEO POR RANGO NEGATIVO");
+
+            instrucciones.push_back(";INICIO CHEQUEO POR RANGO NEGATIVO");
+            instruccion = "FICOM minInt";
+            instrucciones.push_back(instruccion);
+            instruccion = "JL conversionFailed";
+            instrucciones.push_back(instruccion);
+            instrucciones.push_back(";FIN CHEQUEO POR RANGO NEGATIVO");
+
             instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
 
             //se crea variable auxiliar para guardar el resultado
-            int numeroAuxiliar = this->variablesAuxiliares.size();
-            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
-            variablesAuxiliares.push_back(varAux);
-            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
-            entry->type="INTEGER";
-            symbolsTable->put(varAux.toStdString(), entry);
-            symbolsTable->setUse(varAux.toStdString(),"variable");
+            QString varAux = getVarAux("INTEGER");
 
             //CONVIERTO
             instruccion = "FIST " + varAux;
@@ -308,6 +331,9 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
                 instrucciones.push_back(instruccion);
                 instruccion = "ADD ax, " + convertOperand(node->hijoDerecho->dato);
                 instrucciones.push_back(instruccion);
+                /*los enteros ocupan 2 bytes*/
+                instruccion = "MUL ax, 2";
+                instrucciones.push_back(instruccion);
             }
             else if(symbolsTable->getEntry(node->dato.toStdString())->storage == "columns"){
                 instruccion = "MOV ax, " + convertOperand(node->hijoDerecho->dato);
@@ -316,18 +342,24 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
                 instrucciones.push_back(instruccion);
                 instruccion = "ADD ax, " + convertOperand(node->hijoIzquierdo->dato);
                 instrucciones.push_back(instruccion);
+                /*los doubles ocupan 4 bytes*/
+                instruccion = "MUL ax, 4";
+                instrucciones.push_back(instruccion);
             }
 
-            //se crea variable auxiliar para guardar el resultado
-            int numeroAuxiliar = this->variablesAuxiliares.size();
-            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
-            variablesAuxiliares.push_back(varAux);
-            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
-            entry->type="INTEGER";
-            symbolsTable->put(varAux.toStdString(), entry);
-            symbolsTable->setUse(varAux.toStdString(),"variable");
+            /*encuentro la direccion base de la mat*/
+            instruccion = "MOV ebx, OFFSET " + convertOperand(node->dato);
+            instrucciones.push_back(instruccion);
+            /*le agrego el desplazamiento recien calculado*/
+            instruccion = "ADD ebx, ax";
+            instrucciones.push_back(instruccion);
 
-            instruccion = "MOV " + node->offset +", ax";
+            /*genero variable auxiliar*/
+            QString varAux = getVarAux(symbolsTable->getEntry(node->dato.toStdString())->type);
+
+
+            /*paso a la car aux la celda de la matriz*/
+            instruccion = "MOV " + varAux + ", [ebx]";
             instrucciones.push_back(instruccion);
             return instrucciones;
     }
@@ -491,13 +523,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
 
             //se crea variable auxiliar para guardar el resultado
-            int numeroAuxiliar = this->variablesAuxiliares.size();
-            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
-            variablesAuxiliares.push_back(varAux);
-            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
-            entry->type="INTEGER";
-            symbolsTable->put(varAux.toStdString(), entry);
-            symbolsTable->setUse(varAux.toStdString(),"variable");
+            QString varAux = getVarAux("INTEGER");
 
             //se copia el resultado en la nueva variable auxiliar
             instruccion = "MOV " + varAux + ", ax";
@@ -513,13 +539,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
 
             //se crea variable auxiliar para guardar el resultado
-            int numeroAuxiliar = this->variablesAuxiliares.size();
-            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
-            variablesAuxiliares.push_back(varAux);
-            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
-            entry->type="DOUBLE";
-            symbolsTable->put(varAux.toStdString(), entry);
-            symbolsTable->setUse(varAux.toStdString(),"variable");
+            QString varAux = getVarAux("DOUBLE");
 
             //guarda la variable
             instruccion = "FST "+ varAux;
@@ -538,13 +558,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
 
             //se crea variable auxiliar para guardar el resultado
-            int numeroAuxiliar = this->variablesAuxiliares.size();
-            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
-            variablesAuxiliares.push_back(varAux);
-            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
-            entry->type="INTEGER";
-            symbolsTable->put(varAux.toStdString(), entry);
-            symbolsTable->setUse(varAux.toStdString(),"variable");
+            QString varAux = getVarAux("INTEGER");
 
             //se copia el resultado en la nueva variable auxiliar
             instruccion = "MOV " + varAux + ", ax";
@@ -560,13 +574,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
 
             //se crea variable auxiliar para guardar el resultado
-            int numeroAuxiliar = this->variablesAuxiliares.size();
-            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
-            variablesAuxiliares.push_back(varAux);
-            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
-            entry->type="DOUBLE";
-            symbolsTable->put(varAux.toStdString(), entry);
-            symbolsTable->setUse(varAux.toStdString(),"variable");
+            QString varAux = getVarAux("DOUBLE");
 
             //guarda la variable
             instruccion = "FST "+ varAux;
@@ -585,13 +593,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
 
             //se crea variable auxiliar para guardar el resultado
-            int numeroAuxiliar = this->variablesAuxiliares.size();
-            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
-            variablesAuxiliares.push_back(varAux);
-            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
-            entry->type="INTEGER";
-            symbolsTable->put(varAux.toStdString(), entry);
-            symbolsTable->setUse(varAux.toStdString(),"variable");
+            QString varAux = getVarAux("INTEGER");
 
             //se copia el resultado en la nueva variable auxiliar
             instruccion = "MOV " + varAux + ", ax";
@@ -607,13 +609,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
 
             //se crea variable auxiliar para guardar el resultado
-            int numeroAuxiliar = this->variablesAuxiliares.size();
-            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
-            variablesAuxiliares.push_back(varAux);
-            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
-            entry->type="DOUBLE";
-            symbolsTable->put(varAux.toStdString(), entry);
-            symbolsTable->setUse(varAux.toStdString(),"variable");
+            QString varAux = getVarAux("DOUBLE");
 
             //se copia el resultado en la nueva variable auxiliar
             instruccion = "FST " + varAux;
@@ -642,13 +638,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
 
             //se crea variable auxiliar para guardar el resultado
-            int numeroAuxiliar = this->variablesAuxiliares.size();
-            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
-            variablesAuxiliares.push_back(varAux);
-            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
-            entry->type="INTEGER";
-            symbolsTable->put(varAux.toStdString(), entry);
-            symbolsTable->setUse(varAux.toStdString(),"variable");
+            QString varAux = getVarAux("INTEGER");
 
             //se copia el resultado en la nueva variable auxiliar
             instruccion = "MOV " + varAux + ", ax";
@@ -672,7 +662,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
             instruccion = "JE divZero";
             instrucciones.push_back(instruccion);
-            instrucciones.push_back(";FINAL CHEQUEP CERO DOUBLE");
+            instrucciones.push_back(";FINAL CHEQUEO CERO DOUBLE");
 
             instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
@@ -680,13 +670,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(instruccion);
 
             //se crea variable auxiliar para guardar el resultado
-            int numeroAuxiliar = this->variablesAuxiliares.size();
-            QString varAux = "@aux_" + QString::number(numeroAuxiliar);
-            variablesAuxiliares.push_back(varAux);
-            Entry * entry = new Entry (varAux.toStdString(), "ID", ID);
-            entry->type="DOUBLE";
-            symbolsTable->put(varAux.toStdString(), entry);
-            symbolsTable->setUse(varAux.toStdString(),"variable");
+            QString varAux = getVarAux("DOUBLE");
 
             //se copia el resultado en la nueva variable auxiliar
             instruccion = "FST " + varAux;
@@ -701,6 +685,8 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
             instrucciones.push_back(";INICIO ASIGNACION INTEGER");
             instruccion = "MOV ax, " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
+
+
             instruccion = "MOV " + node->hijoIzquierdo->dato + ", ax";
             instrucciones.push_back(instruccion);
             instrucciones.push_back(";FINAL ASIGNACION INTEGER");
@@ -734,7 +720,7 @@ QList<QString> CodeGenerator::getInstructions(Node * node) {
         }
         else if (symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE") {
             instrucciones.push_back(";INICIO ASIGNACION RESTA DOUBLE");
-            instruccion = "FLD " + convertOperand(node->hijoDerecho->dato);
+            instruccion = "FLD " + convertOperand(node->hijoIzquierdo->dato);
             instrucciones.push_back(instruccion);
             instruccion = "FSUB " + convertOperand(node->hijoDerecho->dato);
             instrucciones.push_back(instruccion);
@@ -893,7 +879,6 @@ QList<QString> CodeGenerator::generateCode() {
 void CodeGenerator::generateAssembler(const char * ruta) {
     //Se mapean las constantes y cadena a nuevo nombres de assembler
     mapearConstantesYCadenas();
-
     //Se recorre el arbol y se genera codigo Assembler, dando lugar tambien a nuevas
     //variables auxiliares en la TS
     QList<QString> code = generateCode();
@@ -973,6 +958,7 @@ void CodeGenerator::generateAssembler(const char * ruta) {
         out << "\n";
     }
 
+    out << "invoke ExitProcess, 0";
     out << "\n";
     out << "end start";
 

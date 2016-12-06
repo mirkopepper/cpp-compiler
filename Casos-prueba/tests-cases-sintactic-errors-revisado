@@ -1,7 +1,7 @@
 errores
 
 double aux;
-&&sentencias declarativas de variables
+&&sentencias declarativas devariables
 
 &&variables: falta punto y coma, se come la sig sentencia
 integer a
@@ -85,7 +85,7 @@ b:=c;
 &&falta la palabra reservada else
 if(a=a)
 a:=c;
-else{
+{
 a:=d;
 a:=e;
 }

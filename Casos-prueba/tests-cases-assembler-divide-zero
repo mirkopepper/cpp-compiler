@@ -1,0 +1,9 @@
+assembler
+
+double i;
+
+{
+    print("division por cero en enteros: 1.0/0");
+    i:=_d1.0/_d0.0;
+
+}

@@ -20,8 +20,11 @@ public:
     int token_id;
 
     /*solo se usa para matrices*/
-    int limit1,limit2,row,column;
+    int limit1,limit2;
     string storage;
+
+    /*matrices en assembler*/
+    string matInstructions;
 
     string getValue();
 };

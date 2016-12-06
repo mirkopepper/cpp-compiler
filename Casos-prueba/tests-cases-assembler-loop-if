@@ -1,0 +1,48 @@
+assembler
+
+double i,j,whileExterior,whileInterior,ifExterior,ifInterior;
+allow double to integer;
+
+{
+    i:=_d1.0;
+    j:=_d2.0;
+    whileExterior:=_d3.0;
+    ifExterior:=_d4.0;
+    whileInterior:=_d5.0;
+
+    print("while exterior de 2 iteraciones con if anidado (1ra iteracion entra al then, en la 2da al else");
+    while(whileExterior!=_d1.0){
+
+        print("entro whileExterior");
+
+        print("if interior");
+        if(whileExterior=_d3.0)
+            print("entro al then del if interior");
+        else
+            print("entro al else del if interior");
+        endif
+        print("salio if interior");
+
+        whileExterior-=i;
+    }
+    print("salio whileExterior");
+
+    print("if exterior entra al then con un while de 2 iteraciones anidado");
+    if(ifExterior=_d4.0){
+
+        print("entro al then del if exterior");
+
+        print("while interior");
+        while(whileInterior!=_d3.0){
+
+            print("entro whileInterior");
+            whileInterior-=i;
+
+        }
+        print("salio whileInterior");
+
+    }
+    endif
+    print("salio if exterior");
+
+}
