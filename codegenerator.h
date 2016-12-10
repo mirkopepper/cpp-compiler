@@ -79,13 +79,13 @@ private:
     QString getVarAux(string type);
 
     /*genera las instrucciones assembler correspondientes para el nodo en cuestion*/
-    QList<QString> getInstructions(Node * node);
+    void generateInstructions(Node * node);
 
     /*genera las instrucciones assembler de estructuras if*/
-    QList<QString> getIfInstructions(Node * node);
+    void generateIfInstructions(Node * node);
 
     /*genera las instrucciones assembler de estructuras while*/
-    QList<QString> getWhileInstructions(Node * node);
+    void generateWhileInstructions(Node * node);
 
     /*poda el arbol desde el nodo pasado por parametro, si genera var auxiliares, cambia dicho nodo por uno nuevo*/
     void processNode(Node * &node);
@@ -97,15 +97,18 @@ private:
     QString convertOperand(string op);
     QString convertOperand(QString op);
 
-    QList<QString> generateCode();
+    void generateCode();
 
     /*recorre el arbol buscando siempre primero el nodo mas a la izquierda cuyos hijos son hojas, genera assembler y lo procesa*/
-    void  recorrerArbol (Node * &root, QList<QString> * instructions);
+    void  recorrerArbol (Node * &root);
 
     /*da true si los hijos son hoja*/
     bool tieneHijosHoja(Node * node);
 
+    /*guarda las intrucciones assembler*/
+    QList<QString> code;
 
+    bool useDirReg=false;
 
     Node * root;
 

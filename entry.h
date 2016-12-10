@@ -2,6 +2,8 @@
 #define ENTRY_H
 
 #include <string>
+#include <qstring.h>
+#include <qlist.h>
 
 using namespace std;
 
@@ -24,7 +26,7 @@ public:
     string storage;
 
     /*matrices en assembler*/
-    string matInstructions;
+    QList<QString> matInstructions;
 
     string getValue();
 };

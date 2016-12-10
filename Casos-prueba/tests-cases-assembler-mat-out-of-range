@@ -1,0 +1,16 @@
+assembler
+
+&&bloque declarativo
+
+&&sentencias de conversion de tipos
+&&allow double to integer;
+
+&&sentencias de declaracion de matrices
+integer matrix matInt [_i1][_i1]; &&@C esto es una anotacion de matriz arrobaF
+
+&&bloque ejecutable
+{
+
+    matInt[_i1][_i2]:=_i3;
+    print("si se imprime esto, no funciona el chequeo por limites de arreglo");
+}

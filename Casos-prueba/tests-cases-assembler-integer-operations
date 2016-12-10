@@ -1,56 +1,32 @@
 assembler
 
-integer unoInteger,dosInteger,resSumaInteger,resRestaInteger,resMulInteger,resDivInteger;
+integer resSumaInteger,resRestaInteger,resMulInteger,resDivInteger;
 allow double to integer;
 
 {
 
     && asignacion de valores a variables integer
-    unoInteger:=_d1.0;
-    dosInteger:=_d2.0;
 
     && conversion en asignacion
     resSumaInteger:=_d30.0;
     resRestaInteger:=_d40.0;
 
-    && sin conversion en asignacion -> mirar en sus respectivos if al fondo del archivo
+    && sin conversion en asignacion
     resMulInteger:=_i50;
     resDivInteger:=_i60;
 
-    && chequeo de conversiones
-    if(unoInteger=_i1)
-        print("unoInteger: conversion en asignacion de double a entero correcta");
-    else
-        print("unoInteger: conversion en asignacion de double a entero incorrecta");
-    endif
-    if(dosInteger=_i2)
-        print("dosInteger: conversion en asignacion de double a entero correcta");
-    else
-        print("dosInteger: conversion en asignacion de double a entero incorrecta");
-    endif
-    if(resSumaInteger=_i30)
-        print("resSumaInteger: conversion en asignacion de double a entero correcta");
-    else
-        print("resSumaInteger: conversion en asignacion de double a entero incorrecta");
-    endif
-    if(resRestaInteger=_i40)
-        print("resRestaInteger: conversion en asignacion de double a entero correcta");
-    else
-        print("resRestaInteger: conversion en asignacion de double a entero incorrecta");
-    endif
-
     && asignaciones con sumas, restas, multiplicaciones y divisiones, solo con enteros
 
-    resSumaInteger:=resSumaInteger+unoInteger;
+    resSumaInteger:=resSumaInteger+_i1;
     && resultado: 31
 
-    resRestaInteger-=unoInteger;
+    resRestaInteger-=_i1;
     && resultado: 39
 
-    resMulInteger:=resMulInteger*dosInteger;
+    resMulInteger:=resMulInteger*_i2;
     && resultado: 100
 
-    resDivInteger:=resDivInteger/dosInteger;
+    resDivInteger:=resDivInteger/_i2;
     && resultado: 30
 
     && chequeo si la suma funciona correctamente
