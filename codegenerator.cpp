@@ -246,28 +246,42 @@ void CodeGenerator::generateInstructions(Node * node) {
         }else if(symbolsTable->getType(node->hijoIzquierdo->dato) == "DOUBLE"){
             code.push_back(";INICIO CONV DOUBLE A INTEGER");
             QString hijoIzq=convertOperand(node->hijoIzquierdo->dato);
+            code.push_back(";INICIO CHEQUEO POR RANGO");
             instruccion = "FLD " + hijoIzq;
             code.push_back(instruccion);
-            code.push_back(";INICIO CHEQUEO POR RANGO POSITIVO");
-            instruccion = "FICOM maxInt";
+            instruccion = "FABS";
             code.push_back(instruccion);
-            instruccion = "JG conversionFailed";
+            instruccion = "FCOMP maxInt";
             code.push_back(instruccion);
-            code.push_back(";FIN CHEQUEO POR RANGO POSITIVO");
-
-            code.push_back(";INICIO CHEQUEO POR RANGO NEGATIVO");
-            instruccion = "FICOM minInt";
+            instruccion = "FSTSW ax";
             code.push_back(instruccion);
-            instruccion = "JL conversionFailed";
+            instruccion = "SAHF";
             code.push_back(instruccion);
-            code.push_back(";FIN CHEQUEO POR RANGO NEGATIVO");
+            instruccion = "JAE conversionFailed";
+            code.push_back(instruccion);
+            code.push_back(";FIN CHEQUEO POR RANGO");
 
             //se crea variable auxiliar para guardar el resultado
             QString varAux = getVarAux("INTEGER");
 
             //CONVIERTO
-            instruccion = "FISTP " + varAux;
+            instruccion = "FLD " + hijoIzq;
             code.push_back(instruccion);
+            instruccion = "FIST " + varAux;
+            code.push_back(instruccion);
+
+            code.push_back(";INICIO CHEQUEO PARTE DECIMAL");
+            instruccion = "FABS";
+            code.push_back(instruccion);
+            instruccion = "FICOMP " + varAux;
+            code.push_back(instruccion);
+            instruccion = "FSTSW ax";
+            code.push_back(instruccion);
+            instruccion = "SAHF";
+            code.push_back(instruccion);
+            instruccion = "JNE conversionFailed";
+            code.push_back(instruccion);
+            code.push_back(";FIN CHEQUEO PARTE DECIMAL");
 
             code.push_back(";FINAL CONV DOUBLE A INTEGER");
 
@@ -331,7 +345,7 @@ void CodeGenerator::generateInstructions(Node * node) {
             if(symbolsTable->getEntry(node->dato.toStdString())->storage == "rows"){
                 instruccion = "MOV ax, " + hijoIzq;
                 instructions.push_back(instruccion);
-                instruccion = "IMUL ax, " + QString::number(symbolsTable->getEntry(node->dato.toStdString())->limit1);
+                instruccion = "IMUL ax, " + QString::number(symbolsTable->getEntry(node->dato.toStdString())->limit2);
                 instructions.push_back(instruccion);
                 instruccion = "ADD ax, " + hijoDer;
                 instructions.push_back(instruccion);
@@ -339,7 +353,7 @@ void CodeGenerator::generateInstructions(Node * node) {
             else if(symbolsTable->getEntry(node->dato.toStdString())->storage == "columns"){
                 instruccion = "MOV ax, " + hijoDer;
                 instructions.push_back(instruccion);
-                instruccion = "IMUL ax, " + QString::number(symbolsTable->getEntry(node->dato.toStdString())->limit2);
+                instruccion = "IMUL ax, " + QString::number(symbolsTable->getEntry(node->dato.toStdString())->limit1);
                 instructions.push_back(instruccion);
                 instruccion = "ADD ax, " + hijoIzq;
                 instructions.push_back(instruccion);
@@ -944,15 +958,15 @@ void CodeGenerator::generateAssembler(const char * ruta) {
         out << "\n";
     }
 
-    out << "maxInt dd 32768";
+    out << "maxInt dd 32768.0";
     out << "\n";
-    out << "minInt dd -32768";
+    out << "minInt dd -32768.0";
     out << "\n";
     out << "DivZero db \"error de ejecucion: no se puede dividir por cero\", 0";
     out << "\n";
     out << "ConversionFailed db \"error de ejecucion: no se puede realizar la conversion\", 0";
     out << "\n";
-    out << " MatOutOfRange db \"error de ejecucion: matriz fuera de rango\", 0";
+    out << "MatOutOfRange db \"error de ejecucion: matriz fuera de rango\", 0";
     out << "\n";
     out << "\n";
 

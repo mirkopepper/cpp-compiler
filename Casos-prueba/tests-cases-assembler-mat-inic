@@ -1,22 +1,32 @@
 assembler
 
 &&sentencias de declaracion de matrices
-double matrix matDou [_i1][_i1] {_d3.,_d4.;_d5.,_d6.}; &&@F esto es una anotacion de matriz arrobaF
+integer a;
+double matrix matDou [_i1][_i2] {_d1.,_d2.,_d3.;_d4.,_d5.,_d6.}; &&@F esto es una anotacion de matriz arrobaF
+
+allow double to integer;
 
 &&bloque ejecutable
 {
 
-    if(matDou[_i0][_i0]=_d3.)
-        print("cargo 3 en 0,0 !!!");
+    if(matDou[_i0][_i0]=_d1.)
+        print("cargo 1 en 0,0 !!!");
     endif
-    if(matDou[_i0][_i1]=_d4.)
-        print("cargo 4 en 0,1 !!!");
+    if(matDou[_i0][_i1]=_d2.)
+        print("cargo 2 en 0,1 !!!");
     endif
-    if(matDou[_i1][_i0]=_d5.)
-        print("cargo 5 en 1,0 !!!");
+    if(matDou[_i0][_i2]=_d3.)
+        print("cargo 3 en 0,2 !!!");
     endif
-    if(matDou[_i1][_i1]=_d6.)
-        print("cargo 6 en 1,1 !!!");
+
+    if(matDou[_i1][_i0]=_d4.)
+        print("cargo 4 en 1,0 !!!");
+    endif
+    if(matDou[_i1][_i1]=_d5.)
+        print("cargo 5 en 1,1 !!!");
+    endif
+    if(matDou[_i1][_i2]=_d6.)
+        print("cargo 6 en 1,2 !!!");
     endif
 
     print("termino");

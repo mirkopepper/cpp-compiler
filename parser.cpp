@@ -59,22 +59,19 @@ void Parser::declareVariable (string varName, string prefix, string type, string
     }
 }
 
-void Parser::generateInitializationMatrixTree(string storage, string longMatName){
+void Parser::generateInitializationMatrixTree(string longMatName){
     string sentence="";
     string lastSentence="";
     for (int i = 0; i < array.getLimitI(); ++i) {
-        for (int j = 0; j < array.getLimitI(); ++j) {
+        for (int j = 0; j < array.getLimitJ(); ++j) {
             /*genero arbol de: celda[expresion][expresion]*/
             string subIndex1=codeGen->crearNodo(std::to_string(i));
             string subIndex2=codeGen->crearNodo(std::to_string(j));
             string celda;
-            if(storage=="rows")
-                celda=codeGen->crearNodo(longMatName,subIndex1,subIndex2);
-            else
-                celda=codeGen->crearNodo(longMatName,subIndex2,subIndex1);
-            /*genero subarbol de: sentencia de asignacion con ':='*/
+            celda=codeGen->crearNodo(longMatName,subIndex1,subIndex2);
             array.setI(i);
             array.setJ(j);
+            /*genero subarbol de: sentencia de asignacion con ':='*/
             string expression=codeGen->crearNodo(symbolsTable->getEntry(array.getValue())->getValue());
             string assignment=codeGen->crearNodo(":=",celda,expression);
             if(sentence==""){
@@ -118,7 +115,7 @@ void Parser::declareMatriz(string matName, string prefix, string type, string us
         if(!array.matrixComplete())
             addErrorMessage("error de inicializacion: el formato de la inicializacion no se corresponde con los limites de la matriz");
         else{
-            generateInitializationMatrixTree(e->storage,prefix+matName);
+            generateInitializationMatrixTree(prefix+matName);
         }
     }
 }

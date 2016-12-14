@@ -1,0 +1,19 @@
+assembler
+
+&&sentencias de declaracion
+integer a;
+
+allow double to integer;
+
+&&bloque ejecutable
+{
+    a:=_d3.0;
+    if(a=_i3)
+        print("conversion exitosa!");
+    else
+        print("conversion fallida");
+    endif
+
+    a:=_d3.1;
+    print("si se imprime esta linea, entonces no funciona el chequeo de conversiones de doubles con parte decimal!!");
+}

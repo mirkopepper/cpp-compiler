@@ -49,7 +49,7 @@ private:
     void declareMatriz(string matName, string prefix, string type, string use,string optional);
 
     /*convierte la inicializacion de una matriz de nxm en una concatenacion de nxm asignaciones que conforman un arbol sintactico*/
-    void generateInitializationMatrixTree(string storage, string longMatName);
+    void generateInitializationMatrixTree(string longMatName);
 
     /*se le pasa por parametro +,-,*,/ o op de asignacion. Para todos funciona igual. Crea el nodo padre con las
      * expresiones/terminos/factores como hijos, agregando cuando sea necesario un nodo de conversion a DOUBLE*/

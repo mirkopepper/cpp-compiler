@@ -9,15 +9,15 @@ includelib \masm32\lib\user32.lib
 
 .data
 @cadena0 db "si se imprime esto, no funciona el chequeo por perdida de informacion en conversiones", 0
-@cte0 dd -32768.000000
+@cte0 dd -40000.000000
 @aux_0 dw ?
 
 var@i dw ?
-maxInt dd 32768
-minInt dd -32768
+maxInt dd 32768.0
+minInt dd -32768.0
 DivZero db "error de ejecucion: no se puede dividir por cero", 0
 ConversionFailed db "error de ejecucion: no se puede realizar la conversion", 0
- MatOutOfRange db "error de ejecucion: matriz fuera de rango", 0
+MatOutOfRange db "error de ejecucion: matriz fuera de rango", 0
 
 .code
 divZero:
@@ -34,21 +34,23 @@ invoke ExitProcess, 0
 
 start:
 ;INICIO CONV DOUBLE A INTEGER
+;INICIO CHEQUEO POR RANGO
 FLD @cte0
-;INICIO CHEQUEO POR RANGO POSITIVO
-FICOM maxInt
-JG conversionFailed
-;FIN CHEQUEO POR RANGO POSITIVO
-;INICIO CHEQUEO POR RANGO NEGATIVO
-FICOM minInt
-JL conversionFailed
-;FIN CHEQUEO POR RANGO NEGATIVO
-FISTP @aux_0
-;INICIO DE CHEQUEO DE PARTE DECIMAL
+FABS
+FCOMP maxInt
+FSTSW ax
+SAHF
+JAE conversionFailed
+;FIN CHEQUEO POR RANGO
 FLD @cte0
-FICOM @aux_0
-JE conversionFailed
-;FIN DE CHEQUEO DE PARTE DECIMAL
+FIST @aux_0
+;INICIO CHEQUEO PARTE DECIMAL
+FABS
+FICOMP @aux_0
+FSTSW ax
+SAHF
+JNE conversionFailed
+;FIN CHEQUEO PARTE DECIMAL
 ;FINAL CONV DOUBLE A INTEGER
 ;INICIO ASIGNACION INTEGER
 MOV dx, @aux_0

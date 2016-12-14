@@ -6,6 +6,6 @@ allow double to integer;
 &&bloque ejecutable
 {
 
-    i:=_d-32768.;
+    i:=_d-40000.;
     print("si se imprime esto, no funciona el chequeo por perdida de informacion en conversiones");
 }
