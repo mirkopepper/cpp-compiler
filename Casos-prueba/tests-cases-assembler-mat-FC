@@ -1,0 +1,13 @@
+assembler
+
+&&sentencias de declaracion de matrices
+double matrix matDou [_i1][_i2]; &&@F esto es una anotacion de matriz arrobaF
+double matrix matDou1 [_i1][_i2]; &&@C esto es una anotacion de matriz arrobaF
+
+&&bloque ejecutable
+{
+
+    matDou[_i0][_i2]:=_d2.;
+    matDou1[_i0][_i2]:=_d2.;
+    print("termino");
+}

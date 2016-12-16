@@ -343,6 +343,7 @@ void CodeGenerator::generateInstructions(Node * node) {
             /*calculo posicion*/
             instructions.push_back(";INICIO CALCULO POS ARRAY");
             if(symbolsTable->getEntry(node->dato.toStdString())->storage == "rows"){
+                instructions.push_back(";FILAS!!!!!!!!!!!!!!!!");
                 instruccion = "MOV ax, " + hijoIzq;
                 instructions.push_back(instruccion);
                 instruccion = "IMUL ax, " + QString::number(symbolsTable->getEntry(node->dato.toStdString())->limit2);
@@ -351,6 +352,7 @@ void CodeGenerator::generateInstructions(Node * node) {
                 instructions.push_back(instruccion);
             }
             else if(symbolsTable->getEntry(node->dato.toStdString())->storage == "columns"){
+                instructions.push_back(";COLUMNAS!!!!!!!!!!!!!!!!");
                 instruccion = "MOV ax, " + hijoDer;
                 instructions.push_back(instruccion);
                 instruccion = "IMUL ax, " + QString::number(symbolsTable->getEntry(node->dato.toStdString())->limit1);

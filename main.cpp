@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     printSymbolsTable();
     parser->printSintacticTree();
 
-    parser->generateAssembler("assembler.asm");
+    parser->generateAssembler("tests-cases-assembler-mat-FC.asm");
 
     return 0;
 }
